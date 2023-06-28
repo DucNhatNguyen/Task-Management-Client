@@ -20,5 +20,13 @@ export { default as DndCanvas } from "./DndCanvas";
 export { default as InviteUserMenu } from "./InviteUserMenu";
 export { default as AddListModal } from "./AddListModal";
 export { default as AddTaskModal } from "./AddTaskModal";
+export { default as EditTaskModal } from "./EditTaskModal";
+export { default as Label } from "./Label";
+export { default as Attachment } from "./Attachment";
+export { default as CommentInput } from "./CommentInput";
+export { default as Comment } from "./Comment";
+export { default as GrayButton } from "./GrayButton";
+export { default as AssignMemberMenu } from "./AssignMemberMenu";
+export { default as LabelsMenu } from "./LabelsMenu";
 
 

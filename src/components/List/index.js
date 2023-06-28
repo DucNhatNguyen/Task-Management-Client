@@ -99,7 +99,7 @@ class List extends React.Component {
                                 }}>
                                     {this.props.list.title}
                                 </Grid>
-                                <Grid item container xs={3} justify="flex-end">
+                                <Grid item container xs={3} justifyContent="end">
                                     <IconButton
                                         onClick={this.handleListMenuButtonClick}
                                         style={{ padding: "8px" }}

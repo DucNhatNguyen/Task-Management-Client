@@ -112,7 +112,7 @@ const AddBoardModal = ({ open, setOpen }) => {
                         }}
                         item
                         container
-                        justify="flex-end"
+                        justifyContent="end"
                         xs={12}
                     >
                         <IconButton
@@ -285,7 +285,7 @@ const AddBoardModal = ({ open, setOpen }) => {
                             display: "flex",
                             justifyContent: "flex-end",
                         }}
-                        justify="flex-end"
+                        justifyContent="end"
                     >
                         {error && (
                             <Grid item xs={12}>

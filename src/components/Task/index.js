@@ -3,7 +3,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { withStyles } from "@mui/styles";
 import { Add, AttachFile, Comment } from "@mui/icons-material";
 import { Paper, Grid, Typography, IconButton } from "@mui/material";
-import { UserAvatar } from "components";
+import { UserAvatar, EditTaskModal } from "components";
 //import { UIContext } from "provider/UIProvider";
 import { TaskHelpers } from "helpers";
 import { taskStyles } from "./styles";
@@ -22,17 +22,14 @@ class Task extends React.Component {
             assigments: [],
         };
     }
-
     //static contextType = UIContext;
 
     handleTaskClick = () => {
         this.setState({ modalVisible: true });
     };
-
     closeEditModal = () => {
         this.setState({ modalVisible: false });
     };
-
     handleTitleChange = (title) => {
         this.setState({ title: title });
         TaskHelpers.HandleTaskPropertyUpdate(
@@ -42,7 +39,6 @@ class Task extends React.Component {
             title
         ).catch((err) => console.log(err));
     };
-
     handleDescriptionChange = (description) => {
         this.setState({ description: description });
         TaskHelpers.HandleTaskPropertyUpdate(
@@ -52,7 +48,6 @@ class Task extends React.Component {
             description
         ).catch((err) => console.log(err));
     };
-
     submitComment = (comment) =>
         new Promise((resolve, reject) => {
             this.setState(
@@ -109,7 +104,6 @@ class Task extends React.Component {
             }
         }
     };
-
     addAttachment = (file) => {
         // new Promise(async (resolve, reject) => {
         //     const id = await GetUniqueId();
@@ -145,8 +139,6 @@ class Task extends React.Component {
         //     }
         // });
     }
-
-
     deleteAttachment = (attachmentId) => {
         let attachments = this.state.attachments;
         for (let i = 0; i < attachments.length; i++) {
@@ -165,7 +157,6 @@ class Task extends React.Component {
             }
         }
     };
-
     handleSearchedImageClick = (regular) => {
         this.setState(
             {
@@ -181,7 +172,6 @@ class Task extends React.Component {
             }
         );
     };
-
     addLabel = (label) => {
         this.setState(
             {
@@ -197,7 +187,6 @@ class Task extends React.Component {
             }
         );
     };
-
     deleteLabel = (labelId) => {
         let labels = this.state.labels;
         for (let i = 0; i < labels.length; i++) {
@@ -216,7 +205,6 @@ class Task extends React.Component {
             }
         }
     };
-
     assignMemberToTask = (uid) => {
         this.setState(
             {
@@ -231,8 +219,7 @@ class Task extends React.Component {
                 );
             }
         );
-    };
-
+    }
     removeAssignedMember = (uid) => {
         let assigments = this.state.assigments;
         for (let i = 0; i < assigments.length; i++) {
@@ -247,7 +234,6 @@ class Task extends React.Component {
             });
         }
     };
-
     componentDidMount() {
         const {
             coverImage,
@@ -279,7 +265,7 @@ class Task extends React.Component {
             labels,
             assigments,
         } = this.state;
-        //const { renderedBoard } = this.context;
+        const { renderedBoard } = this.context;
 
         let avatarCounter = 0;
 
@@ -411,7 +397,7 @@ class Task extends React.Component {
                                     item
                                     container
                                     xs
-                                    justify="flex-end"
+                                    justifyContent="end"
                                     className={classes.propertyCounter}
                                 >
                                     {comments && comments.length > 0 && (
@@ -443,7 +429,7 @@ class Task extends React.Component {
                                 </Grid>
                             </Grid>
                         </Paper>
-                        {/* <EditTaskModal
+                        <EditTaskModal
                             open={this.state.modalVisible}
                             handleClose={this.closeEditModal}
                             editTitle={this.handleTitleChange}
@@ -466,7 +452,7 @@ class Task extends React.Component {
                             deleteLabel={this.deleteLabel}
                             assignMemberToTask={this.assignMemberToTask}
                             removeAssignedMember={this.removeAssignedMember}
-                        /> */}
+                        />
                     </div>
                 )}
             </Draggable>

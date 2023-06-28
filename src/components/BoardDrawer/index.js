@@ -136,7 +136,7 @@ const BoardDrawer = ({ board, admin }) => {
                                 Menu
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} container justify="flex-end">
+                        <Grid item xs={2} container justifyContent="end">
                             <IconButton
                                 className={classes.closeButton}
                             //onClick={() => changeDrawerVisibility("set", false)}

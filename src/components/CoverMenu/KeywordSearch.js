@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, IconButton, Typography } from "@mui/material";
 import { Search } from "@mui/icons-material";
-//import { SearchImages, GetRandomImages, GetImages } from "api/unsplash";
+import { SearchImages, GetRandomImages, GetImages } from "api/unsplash";
 
 const KeywordSearch = ({
     setSearchedImages,
@@ -11,22 +11,22 @@ const KeywordSearch = ({
 }) => {
     const [error, setError] = useState();
 
-    // useEffect(() => {
-    //     // GetRandomImages(12)
-    //     //   .then((result) => {
-    //     //     setRandomImages(result);
-    //     //   })
-    //     //   .catch((err) => {
-    //     //     console.log(err);
-    //     //   });
-    //     GetImages()
-    //         .then((response) => {
-    //             setRandomImages(response.data);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }, []);
+    useEffect(() => {
+        GetRandomImages(12)
+          .then((result) => {
+            setRandomImages(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        GetImages()
+            .then((response) => {
+                setRandomImages(response.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
     // useEffect(() => {
     //     setError();
@@ -40,17 +40,17 @@ const KeywordSearch = ({
 
     const handleSearch = () => {
         setError();
-        // if (searchInput.trim().length > 0) {
-        //     SearchImages(searchInput)
-        //         .then((result) => {
-        //             setSearchedImages(result.results);
-        //         })
-        //         .catch((err) => {
-        //             setError(err);
-        //         });
-        // } else {
-        //     setError("Input field cannot be empty!");
-        // }
+        if (searchInput.trim().length > 0) {
+            SearchImages(searchInput)
+                .then((result) => {
+                    setSearchedImages(result.results);
+                })
+                .catch((err) => {
+                    setError(err);
+                });
+        } else {
+            setError("Input field cannot be empty!");
+        }
     };
 
     return (
@@ -84,7 +84,7 @@ const KeywordSearch = ({
                         }}
                     />
                 </Grid>
-                <Grid container alignItems="center" justify="flex-end" item xs={2}>
+                <Grid container alignItems="center" justifyContent="end" item xs={2}>
                     <IconButton
                         onClick={handleSearch}
                         style={{
