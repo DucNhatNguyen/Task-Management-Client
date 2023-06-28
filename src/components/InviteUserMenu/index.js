@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Typography, Grid, Button, Menu } from "@mui/material";
+import { Typography, Grid, Button } from "@mui/material";
 //import { UserContext } from "provider/UserProvider";
 import { BoardHelpers } from "helpers";
 import { PopMenu } from "./styles";
@@ -89,7 +89,7 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
 
     return (
         <div>
-            <Menu
+            <PopMenu
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
@@ -205,7 +205,7 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
                         </Button>
                     </Grid>
                 </Grid>
-            </Menu>
+            </PopMenu>
         </div>
     );
 };

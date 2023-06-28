@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid, Menu, MenuItem } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import { Public, Lock } from "@mui/icons-material";
 import { PopMenu, PopMenuItem } from "./styles";
 
@@ -11,7 +11,7 @@ const VisibilityMenu = ({
     boardVisibility,
 }) => {
     return (
-        <Menu
+        <PopMenu
             id="customized-menu"
             anchorEl={anchorEl}
             keepMounted
@@ -44,7 +44,7 @@ const VisibilityMenu = ({
                     </Typography>
                 </Grid>
             </Grid>
-            <MenuItem
+            <PopMenuItem
                 style={{ backgroundColor: boardVisibility === "Public" && "#e2f7df" }}
                 onClick={() => setBoardVisibility("Public")}
             >
@@ -84,8 +84,8 @@ const VisibilityMenu = ({
                         </Typography>
                     </Grid>
                 </Grid>
-            </MenuItem>
-            <MenuItem
+            </PopMenuItem>
+            <PopMenuItem
                 style={{
                     backgroundColor: boardVisibility === "Private" && "#ffe2de",
                 }}
@@ -127,8 +127,8 @@ const VisibilityMenu = ({
                         </Typography>
                     </Grid>
                 </Grid>
-            </MenuItem>
-        </Menu>
+            </PopMenuItem>
+        </PopMenu>
     );
 };
 

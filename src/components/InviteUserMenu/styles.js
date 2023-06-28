@@ -1,5 +1,6 @@
-import { createStyles, makeStyles, withStyles } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import { Menu } from "@mui/material";
+import { styled } from "@mui/material/styles"
 
 export const menuStyles = makeStyles((theme) => ({
     header: {
@@ -66,15 +67,8 @@ export const menuStyles = makeStyles((theme) => ({
     }
 }));
 
-export const PopMenu = withStyles({
-    paper: {
-        border: "1px solid #E0E0E0",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
-        borderRadius: "12px",
-        width: "300px",
-    },
-})((props) => createStyles(
-    <Menu
+export const PopMenu = styled((props) => (
+  <Menu
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
@@ -88,4 +82,11 @@ export const PopMenu = withStyles({
         {...props}
         MenuListProps={{ disablePadding: true }}
     />
-));
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+        border: "1px solid #E0E0E0",
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
+        borderRadius: "12px",
+        width: "300px",
+  },
+}));

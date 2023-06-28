@@ -4,7 +4,7 @@ import {
     styled,
 } from "@mui/material/styles";
 import { withStyles, makeStyles } from "@mui/styles";
-import { AppBar, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { AppBar, Button, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
 
 export const AppTheme = createTheme({
     typography: {
@@ -83,7 +83,7 @@ export const footerStyles = makeStyles((theme) => ({
 
 //******************headerStyles*********************** */
 export const useToolbar = () => {
-    const styledToolbar = styled(Button)(({ theme }) => ({
+    const styledToolbar = styled(Toolbar)(({ theme }) => ({
         [theme.breakpoints.down("xs")]: {
             padding: "0px",
         },
@@ -293,17 +293,8 @@ export const menuStyles = makeStyles((theme) => createTheme({
     },
 }), { index: 1 });
 
-export const PopMenu = withStyles((theme) => ({
-    paper: {
-        border: "1px solid #E0E0E0",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
-        borderRadius: "12px",
-        [theme.breakpoints.down('xs')]: {
-            width: "250px"
-        },
-    },
-}))((props) => (
-    <Menu
+export const PopMenu = styled((props) => (
+  <Menu
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
@@ -317,10 +308,23 @@ export const PopMenu = withStyles((theme) => ({
         {...props}
         MenuListProps={{ disablePadding: true }}
     />
-));
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+        border: "1px solid #E0E0E0",
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
+        borderRadius: "12px",
+        [theme.breakpoints.down('xs')]: {
+            width: "250px"
+        },
+  },
+}));
 
-export const PopMenuItem = withStyles((theme) => ({
-    root: {
+export const PopMenuItem = styled((props) => (
+  <MenuItem
+        {...props}
+    />
+))(({ theme }) => ({
+  '&.MuiMenuItem-root': {
         borderRadius: "8px",
         marginLeft: theme.spacing(1.5),
         marginRight: theme.spacing(1.5),
@@ -336,5 +340,5 @@ export const PopMenuItem = withStyles((theme) => ({
             fontWeight: "bold",
             fontSize: "0.9rem",
         },
-    },
-}))(MenuItem);
+  },
+}));

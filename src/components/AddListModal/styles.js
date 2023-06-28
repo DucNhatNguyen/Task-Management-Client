@@ -1,5 +1,6 @@
 import { withStyles, makeStyles, createStyles } from "@mui/styles";
 import { Menu, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles"
 
 export const modalStyles = makeStyles((theme) => ({
     addList: {
@@ -10,30 +11,6 @@ export const modalStyles = makeStyles((theme) => ({
         padding: "8px",
     },
 }));
-
-export const PopMenu = withStyles({
-    paper: {
-        border: "1px solid #E0E0E0",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
-        borderRadius: "8px",
-        width: "250px",
-    },
-})((props) => createStyles(
-    <Menu
-        elevation={0}
-        getContentAnchorEl={null}
-        anchorOrigin={{
-            vertical: "top",
-            horizontal: "center",
-        }}
-        transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-        }}
-        {...props}
-        MenuListProps={{ disablePadding: true }}
-    />
-));
 
 export const NameInput = withStyles({
     root: {
@@ -65,3 +42,27 @@ export const NameInput = withStyles({
         fontSize: "0.875rem"
     }
 })(TextField);
+
+export const PopMenu = styled((props) => (
+  <Menu
+        elevation={0}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+        }}
+        transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+        }}
+        {...props}
+        MenuListProps={{ disablePadding: true }}
+    />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+        border: "1px solid #E0E0E0",
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
+        borderRadius: "8px",
+        width: "250px",
+  },
+}));

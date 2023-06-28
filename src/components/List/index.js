@@ -152,7 +152,7 @@ class List extends React.Component {
                                 padding: "8px",
                                 fontWeight: "600"
                             }}>
-                                <Grid container justify="space-between" alignItems="center">
+                                <div style={{ padding: "0px 6px"}}>
                                     <IconButton
                                         style={{
                                             maxHeight: "45px",
@@ -190,7 +190,7 @@ class List extends React.Component {
                                         createNewTask={createNewTask}
                                         list={list}
                                     />
-                                </Grid>
+                                </div>
                             </div>
                         </div>
                     </div>

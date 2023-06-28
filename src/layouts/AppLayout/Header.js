@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IconButton, Typography } from "@mui/material";
 import { Dashboard, Apps } from "@mui/icons-material";
 import Menu from "./Menu";
-import { headerStyles, useToolbar, useIconButton, useMenuTitle, useTypography, useAppBar, useAllBoardsButton, useTitle } from "./styles";
+import { useToolbar, useIconButton, useMenuTitle, useAppBar, useTitle } from "./styles";
 //import { UIContext } from "provider/UIProvider";
 
 const Header = () => {

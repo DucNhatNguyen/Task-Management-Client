@@ -1,6 +1,6 @@
 import { makeStyles, withStyles, createStyles } from "@mui/styles";
 import { Menu, MenuItem } from "@mui/material";
-
+import { styled } from "@mui/material/styles"
 export const visibilityStyles = makeStyles((theme) => ({
     header: {
         paddingLeft: theme.spacing(1.5),
@@ -36,8 +36,12 @@ export const visibilityStyles = makeStyles((theme) => ({
     },
 }));
 
-export const PopMenuItem = withStyles((theme) => createStyles({
-    root: {
+export const PopMenuItem = styled((props) => (
+  <MenuItem
+        {...props}
+    />
+))(({ theme }) => ({
+  '&.MuiMenuItem-root': {
         whiteSpace: "inherit",
         borderRadius: "8px",
         marginLeft: theme.spacing(1.5),
@@ -53,18 +57,12 @@ export const PopMenuItem = withStyles((theme) => createStyles({
         "& .MuiListItemIcon-root": {
             minWidth: "40px",
         },
-    },
-}))(MenuItem);
+  },
+}));
 
-export const PopMenu = withStyles({
-    paper: {
-        border: "1px solid #E0E0E0",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
-        borderRadius: "12px",
-        width: "300px",
-    },
-})((props) => createStyles(
-    <Menu
+
+export const PopMenu = styled((props) => (
+  <Menu
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
@@ -78,4 +76,11 @@ export const PopMenu = withStyles({
         {...props}
         MenuListProps={{ disablePadding: true }}
     />
-));
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+        border: "1px solid #E0E0E0",
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
+        borderRadius: "12px",
+        width: "300px",
+  },
+}));

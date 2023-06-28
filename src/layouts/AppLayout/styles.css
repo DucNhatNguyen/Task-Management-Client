@@ -1,0 +1,19 @@
+.root {
+    border-radius: "8px";
+    margin-left: "12px";
+    margin-right: "12px";
+    margin-top: "14.4px";
+    margin-bottom: "14.4px";
+}
+:focus {
+    background-color: "#F2F2F2",
+}
+
+.MuiListItemIcon-root {
+    min-width: "40px";
+}
+
+.MuiTypography-body1 {
+    font-weight: "bold";
+    font-size: "0.9rem";
+}
