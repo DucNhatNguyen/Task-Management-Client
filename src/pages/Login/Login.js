@@ -4,23 +4,20 @@ import { AuthLayout, AuthTheme } from "layouts";
 import { AuthForm, Alert } from "components";
 import { Container, CssBaseline, Snackbar } from "@mui/material";
 import { loginStyles } from "./styles";
+import { Authentication } from "provider/AuthProvider";
 
 const Login = () => {
     const classes = loginStyles(AuthTheme);
     const navigate = useNavigate();
-    // const {
-    //     handleLogin,
-    //     handleGoogleLogin,
-    //     handleTwitterLogin,
-    //     handleGithubLogin,
-    //     setInputs,
-    //     errors,
-    //     token,
-    // } = useContext(FirebaseAuth);
+    const {
+        handleLogin,
+        setInputs,
+        errors,
+        token,
+    } = useContext(Authentication);
 
     const [alertOpen, setAlertOpen] = useState(false);
     const [alert, setAlert] = useState("");
-    const token = false;
     const constants = {
         title: "Login",
         buttonText: "LOGIN",
@@ -37,21 +34,21 @@ const Login = () => {
         }
     }, [token]);
 
-    // useEffect(() => {
-    //     if (errors.length > 0) {
-    //         setAlertOpen(true);
-    //         setAlert(errors[errors.length - 1]);
-    //     }
-    // }, [errors]);
+    useEffect(() => {
+        if (errors.length > 0) {
+            setAlertOpen(true);
+            setAlert(errors[errors.length - 1]);
+        }
+    }, [errors]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //handleLogin();
+        handleLogin();
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        //etInputs((prev) => ({ ...prev, [name]: value }));
+        setInputs((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleClose = (event, reason) => {
