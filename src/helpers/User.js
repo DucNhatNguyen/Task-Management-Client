@@ -1,12 +1,11 @@
-//import { FetchUserData } from "api/User";
+import { FetchUserData } from "api/User";
 import { BoardHelpers } from "helpers/";
 
 const HandleUserData = (uid, setUserData, setBoards, setOpenBackdrop, userData) =>
     new Promise(async (resolve, reject) => {
         try {
             if (!userData) setOpenBackdrop(true);
-            //const data = await FetchUserData(uid, setUserData, setOpenBackdrop);
-            const data = null;
+            const data = await FetchUserData(uid, setUserData, setOpenBackdrop);
             const response = await BoardHelpers.HandleUserRelatedBoards(
                 data,
                 setBoards,
@@ -16,8 +15,7 @@ const HandleUserData = (uid, setUserData, setBoards, setOpenBackdrop, userData) 
             resolve(response);
         } catch (err) {
             setTimeout(async () => {
-                //const data = await FetchUserData(uid, setUserData, setOpenBackdrop);
-                const data = null;
+                const data = await FetchUserData(uid, setUserData, setOpenBackdrop);
                 if (!userData) {
                     setOpenBackdrop(true)
                     const response = await BoardHelpers.HandleUserRelatedBoards(

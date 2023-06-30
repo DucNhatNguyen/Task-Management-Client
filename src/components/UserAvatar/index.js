@@ -2,12 +2,13 @@ import React from "react";
 import { Avatar } from "@mui/material";
 
 const UserAvatar = ({ user, styles, isTask }) => {
+
     return (
         <div>
-            {user && user.picture ? (
+            {user && user.avatar ? (
                 <Avatar
-                    src={user.picture}
-                    alt={user.name + " avatar"}
+                    src={user.avatar}
+                    alt={user.fullname + " avatar"}
                     style={{
                         borderRadius: "8px",
                         width: isTask && "35px",
@@ -16,16 +17,16 @@ const UserAvatar = ({ user, styles, isTask }) => {
                 />
             ) : (
                 <Avatar
-                    className={styles}
+                    //className={styles}
                     alt="user avatar"
-                    src={user && user.picture}
+                    src={user && user.avatar}
                     style={{
                         borderRadius: "8px",
-                        width: isTask && "35px",
-                        height: isTask && "35px",
+                        width: isTask && "36px",
+                        height: isTask && "36px",
                     }}
                 >
-                    {user && user.name && user.name[0].toUpperCase()}
+                    {user && user.fullname && user.fullname[0].toUpperCase()}
                 </Avatar>
             )}
         </div>

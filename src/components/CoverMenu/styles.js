@@ -111,7 +111,6 @@ export const PopMenu = withStyles({
 })((props) => (
     <Menu
         elevation={0}
-        getContentAnchorEl={null}
         anchorOrigin={{
             vertical: "bottom",
             horizontal: "center",

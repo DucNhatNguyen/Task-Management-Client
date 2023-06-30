@@ -1,5 +1,7 @@
 //import { handleSignIn, manualSignIn } from "../functions/UserFunctions";
 
+import { UIHelpers } from "helpers";
+
 const SignUp = (
     email,
     password,
@@ -21,7 +23,7 @@ const Login = (
 ) => {
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch("https://localhost:44385/api/v1/user/login", {
+            await fetch("https://localhost:44385/api/v1/user/login", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -30,10 +32,19 @@ const Login = (
                 body: JSON.stringify({
                     username: email,
                     password: password
-                }),
-            });
-            //resolve(await response.json());
-            console.log(password)
+                })
+            })
+            .then(res => res.json())
+            .then(async data => {
+                const token = data.responseData.token;
+                localStorage.setItem("pmt_token", token);
+                localStorage.setItem("pmt_userid", data.responseData.user.id);
+                setToken(token);
+                setUserData(data.responseData);
+                UIHelpers.HandleBackdropClose(setOpenBackdrop)
+
+                resolve(data.responseData)
+            })
         } catch (err) {
             reject(err);
         }

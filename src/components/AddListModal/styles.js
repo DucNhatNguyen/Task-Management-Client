@@ -46,7 +46,6 @@ export const NameInput = withStyles({
 export const PopMenu = styled((props) => (
   <Menu
         elevation={0}
-        getContentAnchorEl={null}
         anchorOrigin={{
             vertical: "top",
             horizontal: "center",

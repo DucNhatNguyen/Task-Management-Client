@@ -296,7 +296,6 @@ export const menuStyles = makeStyles((theme) => createTheme({
 export const PopMenu = styled((props) => (
   <Menu
         elevation={0}
-        getContentAnchorEl={null}
         anchorOrigin={{
             vertical: "bottom",
             horizontal: "center",

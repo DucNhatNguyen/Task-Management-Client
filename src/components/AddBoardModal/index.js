@@ -8,8 +8,8 @@ import {
     CircularProgress,
 } from "@mui/material";
 import { Clear, Image, Lock, Add, Public } from "@mui/icons-material";
-//import { UserContext } from "provider/UserProvider";
-//import { CreateNewBoard } from "api/Board";
+import { UserContext } from "provider/UserProvider";
+import { CreateNewBoard } from "api/Board";
 //import { BoardHelpers } from "helpers/";
 import { VisibilityMenu, CoverMenu } from "components";
 import { green } from "@mui/material/colors";
@@ -19,9 +19,9 @@ const placeholder =
     "https://images.unsplash.com/photo-1613085628218-d08b3a264f86?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80";
 
 const AddBoardModal = ({ open, setOpen }) => {
-    // const { userData, setUserData, setBoards, setOpenBackdrop } = useContext(
-    //     UserContext
-    // );
+    const { userData, setUserData, setBoards, setOpenBackdrop } = useContext(
+        UserContext
+    );
 
     const [visibilityAnchorEl, setVisibilityAnchorEl] = useState(null);
     const [openVisibility, setOpenVisibilty] = useState(false);
@@ -46,6 +46,23 @@ const AddBoardModal = ({ open, setOpen }) => {
         } else {
             setLoading(true);
             setError("");
+
+            const boardData = {
+                title: boardTitle,
+                coverPhoto: coverImageRaw,
+                visibility: boardVisibility,
+                userid: userData.id,
+            };
+
+            CreateNewBoard(boardData).then((response) => {
+                if (response.statusCode === 200) {
+            
+                } 
+            }).catch((err) => {
+            setLoading(false);
+            setError(err);
+            console.log(err);
+            });
         }
     };
 

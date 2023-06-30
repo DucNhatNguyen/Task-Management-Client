@@ -6,6 +6,7 @@
 // } from "api/Board";
 // import { CreateNewTask, ReorderTasks, SwitchTasks } from "api/Task";
 // import { CreateNewList, ReorderLists } from "api/List";
+import { GetUserRelatedBoards } from "api/Board";
 import { UIHelpers, UserHelpers } from "helpers/";
 
 const ParseBoardId = (
@@ -43,28 +44,29 @@ const HandleUserRelatedBoards = (
             Object.keys(userData.boards).length > 0
         ) {
             UIHelpers.HandleBackdropOpen(setOpenBackdrop);
-            ParseBoardId(Object.values(userData.boards))
-                .then((response) => {
-                    const body = {
-                        boardList: response,
-                    };
-                    // GetUserRelatedBoards(body)
-                    //     .then((response) => {
-                    //         if (response.statusCode === 200) {
-                    //             setBoards(response.boardData);
-                    //             UIHelpers.HandleBackdropClose(setOpenBackdrop);
-                    //             resolve(true);
-                    //         }
-                    //     })
-                    //     .catch((err) => {
-                    //         UIHelpers.HandleBackdropClose(setOpenBackdrop);
-                    //         reject(err);
-                    //     });
-                })
-                .catch((err) => {
+            GetUserRelatedBoards(userData.id)
+            .then((response) => {
+                if (response.responseCode === 200) {
+                    setBoards(response.responseData);
                     UIHelpers.HandleBackdropClose(setOpenBackdrop);
-                    reject(err);
-                });
+                    resolve(true);
+                }
+            })
+            .catch((err) => {
+                UIHelpers.HandleBackdropClose(setOpenBackdrop);
+                reject(err);
+            });
+            // ParseBoardId(Object.values(userData.boards))
+            //     .then((response) => {
+            //         const userid = {
+            //             boardList: response,
+            //         };
+                    
+            //     })
+            //     .catch((err) => {
+            //         UIHelpers.HandleBackdropClose(setOpenBackdrop);
+            //         reject(err);
+            //     });
         } else {
             if (userData !== undefined) {
                 UIHelpers.HandleBackdropClose(setOpenBackdrop);
