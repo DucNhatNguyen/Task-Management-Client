@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-//import { UIContext } from "provider/UIProvider";
-//import { UserContext } from "provider/UserProvider";
-//import { BoardHelpers } from "helpers";
+import { UIContext } from "provider/UIProvider";
+import { UserContext } from "provider/UserProvider";
+import { BoardHelpers } from "helpers";
 import {
     Drawer,
     Grid,
@@ -19,10 +19,10 @@ import { drawerStyles } from "./styles";
 
 const BoardDrawer = ({ board, admin }) => {
     const classes = drawerStyles();
-    // const { drawerOpen, changeDrawerVisibility, setRenderedBoard } = useContext(
-    //     UIContext
-    // );
-    // const { boards, setBoards } = useContext(UserContext);
+    const { drawerOpen, changeDrawerVisibility, setRenderedBoard } = useContext(
+        UIContext
+    );
+    const { boards, setBoards } = useContext(UserContext);
 
     const [displayDescriptionEditArea, setDisplayDescriptionEditArea] = useState(
         false

@@ -14,20 +14,39 @@ export const CreateNewBoard = (boardData) =>
     }
   });
 
-  export const GetUserRelatedBoards = (userid) =>
+export const GetUserRelatedBoards = (userid) =>
   new Promise(async (resolve, reject) => {
     try {
       await fetch(`https://localhost:44385/api/v1/user/${userid}/boards`, {
-                method: "GET",
-                headers: {
-                    "Content-type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                }
-            })
-            .then(res => res.json())
-            .then(async data => {
-                resolve(data)
-            })
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        }
+      })
+        .then(res => res.json())
+        .then(async data => {
+          resolve(data)
+        })
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+export const GetBoardAdmin = (boardId) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      await fetch(`https://localhost:44385/api/v1/boards/${boardId}/admin`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        }
+      })
+        .then(res => res.json())
+        .then(async data => {
+          resolve(data)
+        })
     } catch (err) {
       reject(err);
     }

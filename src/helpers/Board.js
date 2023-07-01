@@ -5,7 +5,7 @@
 //     RemoveUser,
 // } from "api/Board";
 // import { CreateNewTask, ReorderTasks, SwitchTasks } from "api/Task";
-// import { CreateNewList, ReorderLists } from "api/List";
+import { CreateNewList, ReorderLists } from "api/List";
 import { GetUserRelatedBoards } from "api/Board";
 import { UIHelpers, UserHelpers } from "helpers/";
 
@@ -45,23 +45,23 @@ const HandleUserRelatedBoards = (
         ) {
             UIHelpers.HandleBackdropOpen(setOpenBackdrop);
             GetUserRelatedBoards(userData.id)
-            .then((response) => {
-                if (response.responseCode === 200) {
-                    setBoards(response.responseData);
+                .then((response) => {
+                    if (response.responseCode === 200) {
+                        setBoards(response.responseData);
+                        UIHelpers.HandleBackdropClose(setOpenBackdrop);
+                        resolve(true);
+                    }
+                })
+                .catch((err) => {
                     UIHelpers.HandleBackdropClose(setOpenBackdrop);
-                    resolve(true);
-                }
-            })
-            .catch((err) => {
-                UIHelpers.HandleBackdropClose(setOpenBackdrop);
-                reject(err);
-            });
+                    reject(err);
+                });
             // ParseBoardId(Object.values(userData.boards))
             //     .then((response) => {
             //         const userid = {
             //             boardList: response,
             //         };
-                    
+
             //     })
             //     .catch((err) => {
             //         UIHelpers.HandleBackdropClose(setOpenBackdrop);
@@ -80,7 +80,9 @@ const FindExactBoard = (
     boards,
     setRenderedBoard,
     setShowAllBoards,
-    setOpenBackdrop
+    setOpenBackdrop,
+    setAdmin,
+    userData
 ) => {
     UIHelpers.HandleBackdropOpen(setOpenBackdrop);
 
@@ -92,6 +94,10 @@ const FindExactBoard = (
                 setShowAllBoards
             );
             UIHelpers.HandleBackdropClose(setOpenBackdrop);
+
+            if (board.createdby === userData.id) {
+                setAdmin(true)
+            }
             break;
         }
     }
@@ -149,11 +155,11 @@ const HandleListCreation = (board, lists, list, listOrder) =>
         if ((board && lists, list, listOrder)) {
             board.lists = lists;
             board.listOrder = listOrder;
-            // CreateNewList({
-            //     boardId: board.id,
-            //     list: list,
-            //     listOrder: listOrder,
-            // });
+            CreateNewList({
+                boardId: board.id,
+                list: list,
+                listOrder: listOrder,
+            });
             resolve(board);
         } else {
             reject("Boards or boardId is empty!");

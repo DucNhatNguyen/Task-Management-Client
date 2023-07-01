@@ -3,39 +3,30 @@ import React, { useContext, useState } from "react";
 import { Grid, Typography, IconButton, Button } from "@mui/material";
 import { Public, Lock, MoreHoriz, Add } from "@mui/icons-material";
 import { VisibilityMenu, UserAvatar, InviteUserMenu } from "components";
-import { topSectionStyles } from "./styles";
 import { styled } from '@mui/material/styles';
 
 const TopSection = ({ board, admin }) => {
-    const classes = topSectionStyles();
-
     //const { changeDrawerVisibility } = useContext(UIContext);
 
     const [visibilityAnchorEl, setVisibilityAnchorEl] = useState(null);
     const [openVisibility, setOpenVisibilty] = useState(false);
-
     const [boardVisibility, setBoardVisibility] = useState("Private");
-
     const [inviteAnchorEl, setInviteAnchorEl] = useState(null);
 
     const handleVisibilityClick = (event) => {
         setVisibilityAnchorEl(event.currentTarget);
         setOpenVisibilty(true);
     };
-
     const handleVisibilityClose = () => {
         setVisibilityAnchorEl(null);
         setOpenVisibilty(false);
     };
-
     const handleInviteButtonClick = (event) => {
         setInviteAnchorEl(event.currentTarget);
     };
-
     const handleInviteMenuClose = () => {
         setInviteAnchorEl(null);
     };
-
     const Root = styled('div')(({ theme }) => ({
         marginTop: "40px",
         [theme.breakpoints.down("xs")]: {
@@ -60,7 +51,6 @@ const TopSection = ({ board, admin }) => {
             marginBottom: theme.spacing(0.5),
         },
     }));
-
     const MenuButton = styled(IconButton)(({ theme }) => ({
         width: "100%",
         maxWidth: "150px",
@@ -72,7 +62,22 @@ const TopSection = ({ board, admin }) => {
             marginBottom: theme.spacing(2),
         },
     }));
-
+    const VisibilityText = (value) => {
+        var text = "";
+        switch (value) {
+            case 1:
+                text = "Private";
+                break;
+            case 2:
+                text = "Public";
+                break;
+            case 3:
+                text = "Cancel";
+                break;
+            default:
+        }
+        return text;
+    }
     return (
         <Root>
             <GridContainer container>
@@ -96,7 +101,7 @@ const TopSection = ({ board, admin }) => {
                             sx={{ "&:hover": { backgroundColor: "#e6e5e5" } }}
                             disabled={!admin}
                         >
-                            {board && board.visibility === "Private" ? (
+                            {board && board.visibility === 1 ? (
                                 <Lock style={{
                                     width: "1rem",
                                     height: "1rem",
@@ -117,7 +122,7 @@ const TopSection = ({ board, admin }) => {
                                 lineHeight: "18px",
                                 fontFamily: "Poppins"
                             }} component="p">
-                                {board && board.visibility}
+                                {board && VisibilityText(board.visibility)}
                             </Typography>
                         </IconButton>
                         <VisibilityMenu
@@ -130,7 +135,7 @@ const TopSection = ({ board, admin }) => {
                     </GridVisibilityMenuContainer>
                     <Grid item container xs>
                         {board !== undefined &&
-                            board.userData.map((user, key) => {
+                            board.members.map((user, key) => {
                                 return (
                                     <GridIconGrid item key={key}>
                                         <UserAvatar user={user} styles={{ borderRadius: "8px" }} />

@@ -5,7 +5,7 @@ import { UIContext } from "provider/UIProvider";
 import { UserContext } from "provider/UserProvider";
 import { AppLayout } from "layouts";
 import { BoardDrawer } from "components";
-// import { BoardHelpers, UIHelpers } from "helpers/";
+import { BoardHelpers, UIHelpers } from "helpers/";
 import TopSection from "./TopSection";
 import ListArea from "./ListArea";
 
@@ -21,53 +21,57 @@ const Board = () => {
     const { boards, userData } = useContext(UserContext);
     const { id } = useParams();
 
-    const [adminPerm, setAdmin] = useState(true);
+    const [adminPerm, setAdmin] = useState(false);
 
-    // useEffect(() => {
-    //     BoardHelpers.FindExactBoard(
-    //         id,
-    //         boards,
-    //         setRenderedBoard,
-    //         setShowAllBoards,
-    //         setOpenBackdrop
-    //     );
-    //     setShowFooter(false);
-    //     return () => {
-    //         UIHelpers.HideShowAllBoards(
-    //             renderedBoard,
-    //             setRenderedBoard,
-    //             setShowAllBoards
-    //         );
-    //         setShowFooter(true);
-    //     };
-    // }, []);
+    useEffect(() => {
+        BoardHelpers.FindExactBoard(
+            id,
+            boards,
+            setRenderedBoard,
+            setShowAllBoards,
+            setOpenBackdrop,
+            setAdmin,
+            userData
+        );
+        setShowFooter(false);
+        return () => {
+            UIHelpers.HideShowAllBoards(
+                renderedBoard,
+                setRenderedBoard,
+                setShowAllBoards
+            );
+            setShowFooter(true);
+        };
+    }, []);
 
-    // useEffect(() => {
-    //     BoardHelpers.FindExactBoard(
-    //         id,
-    //         boards,
-    //         setRenderedBoard,
-    //         setShowAllBoards,
-    //         setOpenBackdrop
-    //     );
-    // }, [boards]);
+    useEffect(() => {
+        BoardHelpers.FindExactBoard(
+            id,
+            boards,
+            setRenderedBoard,
+            setShowAllBoards,
+            setOpenBackdrop,
+            setAdmin,
+            userData
+        );
+    }, [boards]);
 
-    // useEffect(() => {
-    //     if (renderedBoard && renderedBoard.admin) {
-    //         if (userData.uid === renderedBoard.admin.uid) {
-    //             setAdmin(true);
+    useEffect(() => {
+        // if (renderedBoard && renderedBoard.admin) {
+        //     if (userData.uid === renderedBoard.admin.uid) {
+        //         setAdmin(true);
+        //     }
+        // }
+    }, [renderedBoard]);
+
+    // const findAdminIndex = (userData, adminUid) =>
+    //     new Promise((resolve) => {
+    //         if (userData) {
+    //             userData.map((user, index) => {
+    //                 if (user.uid === adminUid) resolve(index);
+    //             });
     //         }
-    //     }
-    // }, [renderedBoard, userData]);
-
-    const findAdminIndex = (userData, adminUid) =>
-        new Promise((resolve) => {
-            if (userData) {
-                userData.map((user, index) => {
-                    if (user.uid === adminUid) resolve(index);
-                });
-            }
-        });
+    //     });
 
     // useEffect(() => {
     //     if (renderedBoard) {

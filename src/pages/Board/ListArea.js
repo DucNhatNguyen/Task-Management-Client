@@ -32,7 +32,7 @@ const ListArea = ({ board }) => {
             <GridContainer
                 style={{
                     backgroundImage:
-                        board !== undefined && `url(${board.coverPhoto}&w=1920)`,
+                        board !== undefined && `url(${board.coverphoto}&w=1920)`,
                     backgroundColor: board === undefined && "#F8F9FD",
                 }}
                 container
