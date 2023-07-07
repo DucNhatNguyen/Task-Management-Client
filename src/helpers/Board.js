@@ -5,7 +5,8 @@
 //     RemoveUser,
 // } from "api/Board";
 // import { CreateNewTask, ReorderTasks, SwitchTasks } from "api/Task";
-import { CreateNewList, ReorderLists } from "api/List";
+import { CreateNewList } from "api/List";
+import { ReorderColumnLists } from "api/Board"
 import { GetUserRelatedBoards } from "api/Board";
 import { UIHelpers, UserHelpers } from "helpers/";
 
@@ -151,14 +152,15 @@ const HandleInvitingUser = (boardId, input) =>
     });
 
 const HandleListCreation = (board, lists, list, listOrder) =>
-    new Promise((resolve, reject) => {
-        if ((board && lists, list, listOrder)) {
+new Promise((resolve, reject) => {
+        if ((board && lists, list)) {
             board.lists = lists;
-            board.listOrder = listOrder;
+            //board.listOrder = listOrder;
             CreateNewList({
-                boardId: board.id,
-                list: list,
-                listOrder: listOrder,
+                id: list.id,
+                boardid: board.id,
+                title: list.title,
+                //listOrder: listOrder,
             });
             resolve(board);
         } else {
@@ -185,11 +187,17 @@ const HandleTaskCreation = (board, listId, tasks, task, taskIds) =>
 const HandleListReordering = (board, listOrder) =>
     new Promise((resolve, reject) => {
         if (board && listOrder) {
-            board.listOrder = listOrder;
-            // ReorderLists({
-            //     boardId: board.id,
-            //     listOrder: listOrder,
-            // });
+            ReorderColumnLists({
+                boardId: board.id,
+                listOrder: listOrder,
+                })
+                .then((response) => {
+                    if (response.responseCode === 200) {
+                        board.boardcolumns = response.responseData;
+                        resolve(true);
+                    }
+                })
+            
             resolve(board);
         } else {
             reject("Missing parameters");

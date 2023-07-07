@@ -1,13 +1,15 @@
 import React from "react";
+import { v4 as uuidv4 } from 'uuid';
 import shortid from "shortid";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IconButton, Grid, Typography } from "@mui/material";
 import { withStyles } from "@mui/styles";
 import { Add } from "@mui/icons-material";
 import { AddListModal, ListColumn } from "components";
-//import { UserContext } from "provider/UserProvider";
+import { UserContext } from "provider/UserProvider";
 import { BoardHelpers } from "helpers";
 import { canvasStyles } from "./styles";
+import { GetBoardColumns } from "api/Board";
 
 class DndCanvas extends React.Component {
     constructor(props) {
@@ -16,16 +18,21 @@ class DndCanvas extends React.Component {
             anchorEl: null,
         };
     }
-    //static contextType = UserContext;
+    static contextType = UserContext;
 
     componentDidUpdate(prevProps) {
         const board = this.context.renderedBoard;
         if (prevProps.board !== board) {
             if (board) {
-                if (board.lists) {
+                if (board.boardcolumns) {
+                    var newListOrder = [];
+                    for (var key in board.boardcolumns.sort((a, b) => parseFloat(a.order) - parseFloat(b.order))) {
+                        newListOrder.push(board.boardcolumns[key].id);
+                    }
                     this.setState({
-                        listOrder: board.listOrder,
-                        lists: board.lists,
+                        lists: board.boardcolumns,
+                        listOrder: newListOrder
+,
                     });
                     if (board.tasks) {
                         this.setState({
@@ -39,23 +46,38 @@ class DndCanvas extends React.Component {
     componentDidMount() {
         if (this.context.renderedBoard) {
             const board = this.context.renderedBoard;
-            if (board) {
-                if (board.lists) {
-                    this.setState({
-                        listOrder: board.listOrder,
-                        lists: board.lists,
-                    });
-                    if (board.tasks) {
+            GetBoardColumns(board.id)
+                .then((response) => {
+                    if (response.responseCode === 200) {
+                        var newListOrder = [];
+                        for (var key in board.boardcolumns.sort((a, b) => parseFloat(a.order) - parseFloat(b.order))) {
+                            newListOrder.push(board.boardcolumns[key].id);
+                        }
                         this.setState({
-                            tasks: board.tasks,
-                        });
+                            lists: response.responseData,
+                            listOrder: newListOrder
+                        })
                     }
-                }
-            }
+                })
+
+            // if (board) {
+            //     if (board.boardcolumns) {
+            //         this.setState({
+            //             //listOrder: board.listOrder,
+            //             lists: board.boardcolumns,
+            //         });
+            //         if (board.tasks) {
+            //             this.setState({
+            //                 tasks: board.tasks,
+            //             });
+            //         }
+            //     }
+            // }
         }
     }
 
     onDragEnd = (result) => {
+        console.log('drag&drop');
         const { destination, source, draggableId, type } = result;
         const board = this.context.renderedBoard;
 
@@ -77,14 +99,17 @@ class DndCanvas extends React.Component {
             const newListOrder = Array.from(this.state.listOrder);
             newListOrder.splice(source.index, 1);
             newListOrder.splice(destination.index, 0, draggableId);
-
+            
             const updatedState = {
                 ...this.state,
                 listOrder: newListOrder,
             };
             this.setState(updatedState);
+            console.log('this.state.listOrder', newListOrder);
             BoardHelpers.HandleListReordering(board, newListOrder)
-                .then((renderedBoard) => this.context.setRenderedBoard(renderedBoard))
+                .then((renderedBoard) => {
+                    this.context.setRenderedBoard(renderedBoard)
+                })
                 .catch((err) => console.log(err));
             return;
         }
@@ -153,20 +178,25 @@ class DndCanvas extends React.Component {
 
     createNewList = async (title) => {
         let updatedState = { ...this.state };
+        console.log('truoc', updatedState.lists);
+        //const listId = uuidv4();
         const listId = shortid.generate();
         let list;
         const board = this.context.renderedBoard;
+        
+        // board doesn't have any list
+            list = {
+                id: listId,
+                boardid: board.id,
+                title: title,
+                tasks: [],
+            };
+            console.log('updatedState.lists', updatedState.lists);
 
-        if (updatedState.lists !== undefined) {
-            // board doesn't have any list
-            list = {
-                id: listId,
-                title: title,
-                taskIds: [],
-            };
             updatedState.lists[listId] = list;
-            updatedState.listOrder.push(listId);
+
             this.setState(updatedState);
+            console.log('sau', updatedState.lists);
             BoardHelpers.HandleListCreation(
                 board,
                 updatedState.lists,
@@ -177,28 +207,52 @@ class DndCanvas extends React.Component {
                     this.context.setRenderedBoard(renderedBoard);
                 })
                 .catch((err) => console.log(err));
-        } else {
-            list = {
-                id: listId,
-                title: title,
-                taskIds: [],
-            };
-            updatedState.lists = {
-                [listId]: list,
-            };
-            updatedState.listOrder = [listId];
-            this.setState(updatedState);
-            BoardHelpers.HandleListCreation(
-                board,
-                updatedState.lists,
-                list,
-                updatedState.listOrder
-            )
-                .then((renderedBoard) => {
-                    this.context.setRenderedBoard(renderedBoard);
-                })
-                .catch((err) => console.log(err));
-        }
+        // if (updatedState.lists !== undefined) {
+        //     // board doesn't have any list
+        //     list = {
+        //         id: listId,
+        //         boardid: board.id,
+        //         title: title,
+        //         tasks: [],
+        //     };
+        //     updatedState.lists.push(list);
+        //     this.setState(updatedState);
+        //     BoardHelpers.HandleListCreation(
+        //         board,
+        //         updatedState.lists,
+        //         list,
+        //         updatedState.listOrder
+        //     )
+        //         .then((renderedBoard) => {
+        //             this.context.setRenderedBoard(renderedBoard);
+        //         })
+        //         .catch((err) => console.log(err));
+        // } else {
+        //     list = {
+        //         id: listId,
+        //         boardid: board.id,
+        //         title: title,
+        //         tasks: [],
+        //     };
+            
+        //     updatedState.lists = {
+        //         [listId]: list,
+        //     };
+        //     updatedState.lists.push(list);
+        //     this.setState(updatedState);
+        //     console.log("updatedState", updatedState);
+        //     BoardHelpers.HandleListCreation(
+        //         board,
+        //         updatedState.lists,
+        //         list,
+        //         updatedState.listOrder
+        //         )
+        //         .then((renderedBoard) => {
+        //             this.context.setRenderedBoard(renderedBoard);
+        //         })
+        //         .catch((err) => console.log(err));
+        //         console.log('vao ham insertttt boardddddd', updatedState);
+        // }
     };
 
     createNewTask = (listId, title) => {
@@ -283,21 +337,20 @@ class DndCanvas extends React.Component {
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            {this.state.listOrder &&
-                                this.state.lists &&
-                                this.state.listOrder.map((listId, index) => {
-                                    const list = this.state.lists[listId];
-                                    if (list && list.id) {
-                                        return (
-                                            <ListColumn
-                                                key={list.id}
-                                                list={list}
-                                                taskMap={this.state.tasks}
-                                                index={index}
-                                                createNewTask={this.createNewTask}
-                                            />
-                                        );
-                                    }
+                                {
+                                    this.state.listOrder &&
+                                    this.state.lists &&
+                                    this.state.listOrder.map((key, i) => {
+                                    const list = this.state.lists[key];
+                                    return (
+                                             <ListColumn
+                                                 key={list.id}
+                                                 list={list}
+                                                 taskMap={this.state.tasks}
+                                                 index={i}
+                                                 createNewTask={this.createNewTask}
+                                             />
+                                         );
                                 })}
                             {provided.placeholder}
                             <div style={{ padding: "0px 8px" }}>
