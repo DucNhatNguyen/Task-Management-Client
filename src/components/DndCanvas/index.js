@@ -32,7 +32,7 @@ class DndCanvas extends React.Component {
                     this.setState({
                         lists: board.boardcolumns,
                         listOrder: newListOrder
-,
+                        ,
                     });
                     if (board.tasks) {
                         this.setState({
@@ -99,7 +99,7 @@ class DndCanvas extends React.Component {
             const newListOrder = Array.from(this.state.listOrder);
             newListOrder.splice(source.index, 1);
             newListOrder.splice(destination.index, 0, draggableId);
-            
+
             const updatedState = {
                 ...this.state,
                 listOrder: newListOrder,
@@ -183,30 +183,30 @@ class DndCanvas extends React.Component {
         const listId = shortid.generate();
         let list;
         const board = this.context.renderedBoard;
-        
+
         // board doesn't have any list
-            list = {
-                id: listId,
-                boardid: board.id,
-                title: title,
-                tasks: [],
-            };
-            console.log('updatedState.lists', updatedState.lists);
+        list = {
+            id: listId,
+            boardid: board.id,
+            title: title,
+            tasks: [],
+        };
+        console.log('updatedState.lists', updatedState.lists);
 
-            updatedState.lists[listId] = list;
+        updatedState.lists[listId] = list;
 
-            this.setState(updatedState);
-            console.log('sau', updatedState.lists);
-            BoardHelpers.HandleListCreation(
-                board,
-                updatedState.lists,
-                list,
-                updatedState.listOrder
-            )
-                .then((renderedBoard) => {
-                    this.context.setRenderedBoard(renderedBoard);
-                })
-                .catch((err) => console.log(err));
+        this.setState(updatedState);
+        console.log('sau', updatedState.lists);
+        BoardHelpers.HandleListCreation(
+            board,
+            updatedState.lists,
+            list,
+            updatedState.listOrder
+        )
+            .then((renderedBoard) => {
+                this.context.setRenderedBoard(renderedBoard);
+            })
+            .catch((err) => console.log(err));
         // if (updatedState.lists !== undefined) {
         //     // board doesn't have any list
         //     list = {
@@ -234,7 +234,7 @@ class DndCanvas extends React.Component {
         //         title: title,
         //         tasks: [],
         //     };
-            
+
         //     updatedState.lists = {
         //         [listId]: list,
         //     };
@@ -261,6 +261,7 @@ class DndCanvas extends React.Component {
         let taskId;
         let task;
         const board = this.context.renderedBoard;
+        const userid = localStorage.getItem("pmt_userid");
 
         if (updatedState.tasks !== undefined) {
             taskCount = Object.keys(updatedState.tasks).length;
@@ -274,12 +275,14 @@ class DndCanvas extends React.Component {
                 updatedState.lists[listId].taskIds.push(taskId);
             else updatedState.lists[listId].taskIds = [taskId];
             this.setState(updatedState);
+
             BoardHelpers.HandleTaskCreation(
                 board,
                 listId,
                 updatedState.tasks,
                 task,
-                updatedState.lists[listId].taskIds
+                updatedState.lists[listId].taskIds,
+                userid
             )
                 .then((renderedBoard) => {
                     this.context.setRenderedBoard(renderedBoard);
@@ -299,12 +302,14 @@ class DndCanvas extends React.Component {
                 updatedState.lists[listId].taskIds.push(taskId);
             else updatedState.lists[listId].taskIds = [taskId];
             this.setState(updatedState);
+
             BoardHelpers.HandleTaskCreation(
                 board,
                 listId,
                 updatedState.tasks,
                 task,
-                updatedState.lists[listId].taskIds
+                updatedState.lists[listId].taskIds,
+                userid
             )
                 .then((renderedBoard) => {
                     this.context.setRenderedBoard(renderedBoard);
@@ -337,20 +342,20 @@ class DndCanvas extends React.Component {
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                                {
-                                    this.state.listOrder &&
-                                    this.state.lists &&
-                                    this.state.listOrder.map((key, i) => {
+                            {
+                                this.state.listOrder &&
+                                this.state.lists &&
+                                this.state.listOrder.map((key, i) => {
                                     const list = this.state.lists[key];
                                     return (
-                                             <ListColumn
-                                                 key={list.id}
-                                                 list={list}
-                                                 taskMap={this.state.tasks}
-                                                 index={i}
-                                                 createNewTask={this.createNewTask}
-                                             />
-                                         );
+                                        <ListColumn
+                                            key={list.id}
+                                            list={list}
+                                            taskMap={this.state.tasks}
+                                            index={i}
+                                            createNewTask={this.createNewTask}
+                                        />
+                                    );
                                 })}
                             {provided.placeholder}
                             <div style={{ padding: "0px 8px" }}>

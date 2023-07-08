@@ -4,7 +4,7 @@
 //     UpdateBoardProperty,
 //     RemoveUser,
 // } from "api/Board";
-// import { CreateNewTask, ReorderTasks, SwitchTasks } from "api/Task";
+import { CreateNewTask } from "api/Task";
 import { CreateNewList } from "api/List";
 import { ReorderColumnLists } from "api/Board"
 import { GetUserRelatedBoards } from "api/Board";
@@ -152,7 +152,7 @@ const HandleInvitingUser = (boardId, input) =>
     });
 
 const HandleListCreation = (board, lists, list, listOrder) =>
-new Promise((resolve, reject) => {
+    new Promise((resolve, reject) => {
         if ((board && lists, list)) {
             board.lists = lists;
             //board.listOrder = listOrder;
@@ -168,16 +168,16 @@ new Promise((resolve, reject) => {
         }
     });
 
-const HandleTaskCreation = (board, listId, tasks, task, taskIds) =>
+const HandleTaskCreation = (board, listId, tasks, task, taskIds, userid) =>
     new Promise((resolve, reject) => {
         if (board && listId && tasks && tasks && task && taskIds) {
             board.tasks = tasks;
-            // CreateNewTask({
-            //     boardId: board.id,
-            //     task: task,
-            //     listId: listId,
-            //     taskIds: taskIds,
-            // });
+            CreateNewTask({
+                id: task.id,
+                title: task.title,
+                columnId: listId,
+                createdBy: userid,
+            });
             resolve(board);
         } else {
             reject("Missing parameter empty!");
@@ -190,14 +190,14 @@ const HandleListReordering = (board, listOrder) =>
             ReorderColumnLists({
                 boardId: board.id,
                 listOrder: listOrder,
-                })
+            })
                 .then((response) => {
                     if (response.responseCode === 200) {
                         board.boardcolumns = response.responseData;
                         resolve(true);
                     }
                 })
-            
+
             resolve(board);
         } else {
             reject("Missing parameters");

@@ -1,5 +1,5 @@
 import React from "react";
-//import { UserContext } from "provider/UserProvider";
+import { UserContext } from "provider/UserProvider";
 import { ListHelpers } from "helpers";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { IconButton, Grid, Typography } from "@mui/material";
@@ -19,7 +19,7 @@ class List extends React.Component {
         this.listContainerRef = React.createRef();
     }
 
-    //static contextType = UserContext;
+    static contextType = UserContext;
 
     handleNameInputClose = () => {
         this.setState({
@@ -152,7 +152,7 @@ class List extends React.Component {
                                 padding: "8px",
                                 fontWeight: "600"
                             }}>
-                                <div style={{ padding: "0px 6px"}}>
+                                <div style={{ padding: "0px 6px" }}>
                                     <IconButton
                                         style={{
                                             maxHeight: "45px",

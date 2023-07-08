@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { IconButton, Grid, Button } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { modalStyles, PopMenu, NameInput } from "./styles";
+import { PopMenu, NameInput } from "./styles";
 
 const AddElementModal = ({ anchorEl, handleClose, createNewTask, list }) => {
-    const classes = modalStyles();
     const [error, setError] = useState();
     const [nameInput, setNameInput] = useState("");
 
