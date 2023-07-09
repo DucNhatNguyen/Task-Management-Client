@@ -265,47 +265,7 @@ class Task extends React.Component {
             labels,
             assigments,
         } = this.state;
-        //const { renderedBoard } = this.context;
-        const renderedBoard = {
-    "admin": {
-        "boards": {
-            "-NYX6AimlUULSlFxgv6E": {
-                "boardId": "-NYX6AimlUULSlFxgv6E"
-            }
-        },
-        "email": "ducnhat090199@gmail.com",
-        "name": "N.T MAX",
-        "picture": "https://lh3.googleusercontent.com/a/AAcHTtcmuVue47yEfADs1fvleNkCkS2XyQywMpft_yuO=s96-c",
-        "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-    },
-    "coverPhoto": "https://images.unsplash.com/photo-1615058712849-d33b9e7824c5?ixid=MnwyMDY2MzR8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MTY1MDcwODQ&ixlib=rb-1.2.1",
-    "date": "June 22, 2023",
-    "id": "-NYYV0DUybOzG5C_grEt",
-    "title": "dasasdas",
-    "users": [
-        {
-            "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-        }
-    ],
-    "visibility": "Private",
-    "userData": [
-        {
-            "boards": {
-                "-NYX6AimlUULSlFxgv6E": {
-                    "boardId": "-NYX6AimlUULSlFxgv6E"
-                },
-                "-NYYV0DUybOzG5C_grEt": {
-                    "boardId": "-NYYV0DUybOzG5C_grEt"
-                }
-            },
-            "email": "ducnhat090199@gmail.com",
-            "name": "N.T MAX",
-            "picture": "https://lh3.googleusercontent.com/a/AAcHTtcmuVue47yEfADs1fvleNkCkS2XyQywMpft_yuO=s96-c",
-            "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-        }
-    ]
-}
-
+        const { renderedBoard } = this.context;
         let avatarCounter = 0;
 
         return (

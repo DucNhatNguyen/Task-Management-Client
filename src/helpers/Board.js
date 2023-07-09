@@ -4,9 +4,9 @@
 //     UpdateBoardProperty,
 //     RemoveUser,
 // } from "api/Board";
-import { CreateNewTask } from "api/Task";
+import { CreateNewTask, ReorderTaskList } from "api/Task";
 import { CreateNewList } from "api/List";
-import { ReorderColumnLists } from "api/Board"
+import { GetBoardColumns, ReorderColumnLists } from "api/Board"
 import { GetUserRelatedBoards } from "api/Board";
 import { UIHelpers, UserHelpers } from "helpers/";
 
@@ -207,7 +207,19 @@ const HandleListReordering = (board, listOrder) =>
 const HandleTaskReordering = (board, listId, taskIds) =>
     new Promise((resolve, reject) => {
         if (board && listId && taskIds) {
-            board.lists[listId].taskIds = taskIds;
+            ReorderTaskList({
+                columnId: listId,
+                listTasksOrder: taskIds
+            }).then((response) => {
+                if (response.responseCode === 200) {
+                    GetBoardColumns(board.id).then((res) => {
+                        if (res.responseCode === 200) {
+                            board.boardcolumns = res.responseData;
+                            resolve(true);
+                        }
+                    })
+                }
+            })
             // ReorderTasks({
             //     boardId: board.id,
             //     listId: listId,

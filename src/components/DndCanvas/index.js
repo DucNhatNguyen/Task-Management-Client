@@ -23,22 +23,23 @@ class DndCanvas extends React.Component {
     componentDidUpdate(prevProps) {
         const board = this.context.renderedBoard;
         if (prevProps.board !== board) {
+            console.log('task order', board.boardcolumns)
             if (board) {
                 if (board.boardcolumns) {
                     var newListOrder = [];
                     for (var key in board.boardcolumns.sort((a, b) => parseFloat(a.order) - parseFloat(b.order))) {
                         newListOrder.push(board.boardcolumns[key].id);
                     }
+
                     this.setState({
                         lists: board.boardcolumns,
-                        listOrder: newListOrder
-                        ,
+                        listOrder: newListOrder,
                     });
-                    if (board.tasks) {
-                        this.setState({
-                            tasks: board.tasks,
-                        });
-                    }
+                    // if (board.tasks) {
+                    //     this.setState({
+                    //         tasks: board.tasks,
+                    //     });
+                    // }
                 }
             }
         }
@@ -59,20 +60,6 @@ class DndCanvas extends React.Component {
                         })
                     }
                 })
-
-            // if (board) {
-            //     if (board.boardcolumns) {
-            //         this.setState({
-            //             //listOrder: board.listOrder,
-            //             lists: board.boardcolumns,
-            //         });
-            //         if (board.tasks) {
-            //             this.setState({
-            //                 tasks: board.tasks,
-            //             });
-            //         }
-            //     }
-            // }
         }
     }
 
@@ -105,7 +92,6 @@ class DndCanvas extends React.Component {
                 listOrder: newListOrder,
             };
             this.setState(updatedState);
-            console.log('this.state.listOrder', newListOrder);
             BoardHelpers.HandleListReordering(board, newListOrder)
                 .then((renderedBoard) => {
                     this.context.setRenderedBoard(renderedBoard)
@@ -119,7 +105,9 @@ class DndCanvas extends React.Component {
 
         // triggers when reordering tasks in the same list
         if (home === foreign) {
-            const newTaskIds = Array.from(home.taskIds);
+            const newTaskIds = Array.from(home.tasks.reduce((acc, cur) => {
+                return [...acc, cur.id]
+            }, []));
             newTaskIds.splice(source.index, 1);
             newTaskIds.splice(destination.index, 0, draggableId);
 
@@ -127,7 +115,6 @@ class DndCanvas extends React.Component {
                 ...home,
                 taskIds: newTaskIds,
             };
-
             const newState = {
                 ...this.state,
                 lists: {
@@ -135,7 +122,9 @@ class DndCanvas extends React.Component {
                     [newHome.id]: newHome,
                 },
             };
+            console.log('dadadadadad', newHome.id)
             this.setState(newState);
+
             BoardHelpers.HandleTaskReordering(board, newHome.id, newTaskIds)
                 .then((renderedBoard) => this.context.setRenderedBoard(renderedBoard))
                 .catch((err) => console.log(err));
@@ -191,7 +180,6 @@ class DndCanvas extends React.Component {
             title: title,
             tasks: [],
         };
-        console.log('updatedState.lists', updatedState.lists);
 
         updatedState.lists[listId] = list;
 
@@ -207,52 +195,6 @@ class DndCanvas extends React.Component {
                 this.context.setRenderedBoard(renderedBoard);
             })
             .catch((err) => console.log(err));
-        // if (updatedState.lists !== undefined) {
-        //     // board doesn't have any list
-        //     list = {
-        //         id: listId,
-        //         boardid: board.id,
-        //         title: title,
-        //         tasks: [],
-        //     };
-        //     updatedState.lists.push(list);
-        //     this.setState(updatedState);
-        //     BoardHelpers.HandleListCreation(
-        //         board,
-        //         updatedState.lists,
-        //         list,
-        //         updatedState.listOrder
-        //     )
-        //         .then((renderedBoard) => {
-        //             this.context.setRenderedBoard(renderedBoard);
-        //         })
-        //         .catch((err) => console.log(err));
-        // } else {
-        //     list = {
-        //         id: listId,
-        //         boardid: board.id,
-        //         title: title,
-        //         tasks: [],
-        //     };
-
-        //     updatedState.lists = {
-        //         [listId]: list,
-        //     };
-        //     updatedState.lists.push(list);
-        //     this.setState(updatedState);
-        //     console.log("updatedState", updatedState);
-        //     BoardHelpers.HandleListCreation(
-        //         board,
-        //         updatedState.lists,
-        //         list,
-        //         updatedState.listOrder
-        //         )
-        //         .then((renderedBoard) => {
-        //             this.context.setRenderedBoard(renderedBoard);
-        //         })
-        //         .catch((err) => console.log(err));
-        //         console.log('vao ham insertttt boardddddd', updatedState);
-        // }
     };
 
     createNewTask = (listId, title) => {
@@ -265,7 +207,7 @@ class DndCanvas extends React.Component {
 
         if (updatedState.tasks !== undefined) {
             taskCount = Object.keys(updatedState.tasks).length;
-            taskId = `task-${taskCount + 1}`;
+            taskId = shortid.generate();
             task = {
                 id: taskId,
                 title: title,
@@ -351,7 +293,7 @@ class DndCanvas extends React.Component {
                                         <ListColumn
                                             key={list.id}
                                             list={list}
-                                            taskMap={this.state.tasks}
+                                            // taskMap={this.state.tasks}
                                             index={i}
                                             createNewTask={this.createNewTask}
                                         />
