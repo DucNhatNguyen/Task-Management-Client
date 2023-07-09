@@ -29,6 +29,8 @@ export const GetTaskByColumnId = (columnId) =>
         }
     });
 
+
+
 export const ReorderTaskList = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -38,6 +40,21 @@ export const ReorderTaskList = (body) =>
                     "Content-type": "application/json; charset=UTF-8",
                 }),
                 body: JSON.stringify(body),
+            });
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
+        }
+    });
+
+export const GetTaskByBoardId = (boardId) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(`https://localhost:44385/api/v1/task/board/${boardId}`, {
+                method: "GET",
+                headers: new Headers({
+                    "Content-type": "application/json; charset=UTF-8",
+                })
             });
             resolve(await response.json());
         } catch (err) {

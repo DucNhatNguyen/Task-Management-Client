@@ -11,9 +11,6 @@ class TaskColumn extends React.Component {
 
     render() {
         const { tasks, list } = this.props;
-        console.log('jajajajajaj', tasks.reduce((acc, cur) => {
-            return [...acc, cur.order]
-        }, []))
         return tasks ? (
             tasks.map((task, index) => (
                 <Task key={task.id} task={task} index={index} listTitle={list.title} />

@@ -212,12 +212,8 @@ const HandleTaskReordering = (board, listId, taskIds) =>
                 listTasksOrder: taskIds
             }).then((response) => {
                 if (response.responseCode === 200) {
-                    GetBoardColumns(board.id).then((res) => {
-                        if (res.responseCode === 200) {
-                            board.boardcolumns = res.responseData;
-                            resolve(true);
-                        }
-                    })
+                    board.boardcolumns = response.responseData;
+                    resolve(true);
                 }
             })
             // ReorderTasks({

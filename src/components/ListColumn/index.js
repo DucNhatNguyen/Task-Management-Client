@@ -3,16 +3,17 @@ import { List } from "components";
 
 class ListColumn extends React.Component {
     render() {
-        const { list, index, createNewTask } = this.props;
-        let tasks;
-        // if (list.tasks) {
-        //     tasks = list.taskIds.map((taskId) => taskMap[taskId]);
-        // }
+        const { list, taskMap, index, createNewTask } = this.props;
+        let tasksList;
+        if (list.tasks) {
+            tasksList = list.tasks.map((task) => taskMap[task.id]);
+        }
+
         return (
             <div>
                 <List
                     list={list}
-                    tasks={list.tasks}
+                    tasks={tasksList}
                     index={index}
                     createNewTask={createNewTask}
                 />

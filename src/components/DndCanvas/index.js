@@ -10,6 +10,7 @@ import { UserContext } from "provider/UserProvider";
 import { BoardHelpers } from "helpers";
 import { canvasStyles } from "./styles";
 import { GetBoardColumns } from "api/Board";
+import { GetTaskByBoardId } from "api/Task";
 
 class DndCanvas extends React.Component {
     constructor(props) {
@@ -54,17 +55,22 @@ class DndCanvas extends React.Component {
                         for (var key in board.boardcolumns.sort((a, b) => parseFloat(a.order) - parseFloat(b.order))) {
                             newListOrder.push(board.boardcolumns[key].id);
                         }
-                        this.setState({
-                            lists: response.responseData,
-                            listOrder: newListOrder
-                        })
+                        GetTaskByBoardId(board.id)
+                            .then((res) => {
+                                if (res.responseCode === 200) {
+                                    this.setState({
+                                        lists: response.responseData,
+                                        listOrder: newListOrder,
+                                        tasks: res.responseData
+                                    })
+                                }
+                            })
                     }
                 })
         }
     }
 
     onDragEnd = (result) => {
-        console.log('drag&drop');
         const { destination, source, draggableId, type } = result;
         const board = this.context.renderedBoard;
 
@@ -105,6 +111,7 @@ class DndCanvas extends React.Component {
 
         // triggers when reordering tasks in the same list
         if (home === foreign) {
+            console.log('hopmeee', home)
             const newTaskIds = Array.from(home.tasks.reduce((acc, cur) => {
                 return [...acc, cur.id]
             }, []));
@@ -122,7 +129,6 @@ class DndCanvas extends React.Component {
                     [newHome.id]: newHome,
                 },
             };
-            console.log('dadadadadad', newHome.id)
             this.setState(newState);
 
             BoardHelpers.HandleTaskReordering(board, newHome.id, newTaskIds)
@@ -293,7 +299,7 @@ class DndCanvas extends React.Component {
                                         <ListColumn
                                             key={list.id}
                                             list={list}
-                                            // taskMap={this.state.tasks}
+                                            taskMap={this.state.tasks}
                                             index={i}
                                             createNewTask={this.createNewTask}
                                         />
