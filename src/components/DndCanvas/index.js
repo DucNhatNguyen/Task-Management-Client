@@ -9,7 +9,7 @@ import { AddListModal, ListColumn } from "components";
 import { UserContext } from "provider/UserProvider";
 import { BoardHelpers } from "helpers";
 import { canvasStyles } from "./styles";
-import { GetBoardColumns } from "api/Board";
+import { GetBoardColumnsDict } from "api/Board";
 import { GetTaskByBoardId } from "api/Task";
 
 class DndCanvas extends React.Component {
@@ -24,23 +24,17 @@ class DndCanvas extends React.Component {
     componentDidUpdate(prevProps) {
         const board = this.context.renderedBoard;
         if (prevProps.board !== board) {
-            console.log('task order', board.boardcolumns)
             if (board) {
-                if (board.boardcolumns) {
-                    var newListOrder = [];
-                    for (var key in board.boardcolumns.sort((a, b) => parseFloat(a.order) - parseFloat(b.order))) {
-                        newListOrder.push(board.boardcolumns[key].id);
-                    }
-
+                if (board.lists) {
                     this.setState({
-                        lists: board.boardcolumns,
-                        listOrder: newListOrder,
+                        listOrder: board.listOrder,
+                        lists: board.lists,
                     });
-                    // if (board.tasks) {
-                    //     this.setState({
-                    //         tasks: board.tasks,
-                    //     });
-                    // }
+                    if (board.tasks) {
+                        this.setState({
+                        tasks: board.tasks,
+                        });
+                    }
                 }
             }
         }
@@ -48,28 +42,22 @@ class DndCanvas extends React.Component {
     componentDidMount() {
         if (this.context.renderedBoard) {
             const board = this.context.renderedBoard;
-            GetBoardColumns(board.id)
-                .then((response) => {
-                    if (response.responseCode === 200) {
-                        var newListOrder = [];
-                        for (var key in board.boardcolumns.sort((a, b) => parseFloat(a.order) - parseFloat(b.order))) {
-                            newListOrder.push(board.boardcolumns[key].id);
-                        }
-                        GetTaskByBoardId(board.id)
-                            .then((res) => {
-                                if (res.responseCode === 200) {
-                                    this.setState({
-                                        lists: response.responseData,
-                                        listOrder: newListOrder,
-                                        tasks: res.responseData
-                                    })
-                                }
-                            })
+            if (board) {
+                if (board.lists) {
+                    this.setState({
+                        listOrder: board.listOrder,
+                        lists: board.lists,
+                    });
+                    if (board.tasks) {
+                        this.setState({
+                        tasks: board.tasks,
+                        });
                     }
-                })
+                }
+            }
         }
     }
-
+            
     onDragEnd = (result) => {
         const { destination, source, draggableId, type } = result;
         const board = this.context.renderedBoard;
@@ -111,13 +99,11 @@ class DndCanvas extends React.Component {
 
         // triggers when reordering tasks in the same list
         if (home === foreign) {
-            console.log('hopmeee', home)
-            const newTaskIds = Array.from(home.tasks.reduce((acc, cur) => {
-                return [...acc, cur.id]
-            }, []));
+            const newTaskIds = Array.from(home.taskIds);
             newTaskIds.splice(source.index, 1);
             newTaskIds.splice(destination.index, 0, draggableId);
 
+            
             const newHome = {
                 ...home,
                 taskIds: newTaskIds,
@@ -130,14 +116,15 @@ class DndCanvas extends React.Component {
                 },
             };
             this.setState(newState);
-
             BoardHelpers.HandleTaskReordering(board, newHome.id, newTaskIds)
-                .then((renderedBoard) => this.context.setRenderedBoard(renderedBoard))
-                .catch((err) => console.log(err));
+                    .then((renderedBoard) => this.context.setRenderedBoard(renderedBoard))
+                    .catch((err) => console.log(err));
             return;
         }
 
         // codes below only works when moving a task one list to another
+        console.log('draggableId', draggableId);
+
         const homeTaskIds = Array.from(home.taskIds);
         homeTaskIds.splice(source.index, 1);
         const newHome = {
@@ -166,14 +153,13 @@ class DndCanvas extends React.Component {
             },
         };
         this.setState(newState);
-        BoardHelpers.HandleTaskSwitching(board, newState.lists)
+        BoardHelpers.HandleTaskSwitching(board, newState.lists, source.droppableId, destination.droppableId, draggableId)
             .then((renderedBoard) => this.context.setRenderedBoard(renderedBoard))
             .catch((err) => console.log(err));
     };
 
     createNewList = async (title) => {
         let updatedState = { ...this.state };
-        console.log('truoc', updatedState.lists);
         //const listId = uuidv4();
         const listId = shortid.generate();
         let list;
@@ -190,7 +176,6 @@ class DndCanvas extends React.Component {
         updatedState.lists[listId] = list;
 
         this.setState(updatedState);
-        console.log('sau', updatedState.lists);
         BoardHelpers.HandleListCreation(
             board,
             updatedState.lists,

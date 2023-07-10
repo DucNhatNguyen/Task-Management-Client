@@ -32,8 +32,8 @@ const Board = () => {
             setOpenBackdrop,
             setAdmin,
             userData
-        );
-        setShowFooter(false);
+            );
+            setShowFooter(false);
         return () => {
             UIHelpers.HideShowAllBoards(
                 renderedBoard,

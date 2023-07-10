@@ -4,7 +4,7 @@
 //     UpdateBoardProperty,
 //     RemoveUser,
 // } from "api/Board";
-import { CreateNewTask, ReorderTaskList } from "api/Task";
+import { CreateNewTask, ReorderTaskList, SwitchTasks } from "api/Task";
 import { CreateNewList } from "api/List";
 import { GetBoardColumns, ReorderColumnLists } from "api/Board"
 import { GetUserRelatedBoards } from "api/Board";
@@ -193,6 +193,7 @@ const HandleListReordering = (board, listOrder) =>
             })
                 .then((response) => {
                     if (response.responseCode === 200) {
+                        console.log('column order', response.responseData);
                         board.boardcolumns = response.responseData;
                         resolve(true);
                     }
@@ -212,8 +213,11 @@ const HandleTaskReordering = (board, listId, taskIds) =>
                 listTasksOrder: taskIds
             }).then((response) => {
                 if (response.responseCode === 200) {
-                    board.boardcolumns = response.responseData;
-                    resolve(true);
+                    GetBoardColumns(board.id).then((res) => {
+                        console.log('task order', res.responseData);
+                        board.boardcolumns = res.responseData;
+                        resolve(true);
+                    })
                 }
             })
             // ReorderTasks({
@@ -227,14 +231,21 @@ const HandleTaskReordering = (board, listId, taskIds) =>
         }
     });
 
-const HandleTaskSwitching = (board, lists) =>
+const HandleTaskSwitching = (board, lists, source, target, draggableId) =>
     new Promise((resolve, reject) => {
         if (board && lists) {
             board.lists = lists;
-            // SwitchTasks({
-            //     boardId: board.id,
-            //     lists: lists,
-            // });
+            let listParam = []
+            for (let value of Object.values(lists)) {
+                listParam.push(value);
+            }
+            SwitchTasks({
+                boardId: board.id,
+                lists: listParam,
+                source: source,
+                target: target,
+                draggableId: draggableId
+            });
             resolve(board);
         } else {
             reject("Missing parameters");

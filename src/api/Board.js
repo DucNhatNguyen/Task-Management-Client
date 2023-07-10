@@ -52,10 +52,10 @@ export const GetBoardAdmin = (boardId) =>
     }
   });
 
-export const GetBoardColumns = (boardid) =>
+export const GetBoardColumnsDict = (boardid) =>
 new Promise(async (resolve, reject) => {
     try {
-      await fetch(`https://localhost:44385/api/v1/column/list?boardid=${boardid}`, {
+      await fetch(`https://localhost:44385/api/v1/column/list-dict?boardid=${boardid}`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -82,6 +82,25 @@ export const ReorderColumnLists = (body) =>
         body: JSON.stringify(body),
       });
       resolve(await response.json());
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+export const GetBoardColumns = (boardid) =>
+new Promise(async (resolve, reject) => {
+    try {
+      await fetch(`https://localhost:44385/api/v1/column/list?boardid=${boardid}`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        }
+      })
+        .then(res => res.json())
+        .then(async data => {
+          resolve(data)
+        })
     } catch (err) {
       reject(err);
     }

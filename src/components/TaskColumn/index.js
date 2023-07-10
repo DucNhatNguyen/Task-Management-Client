@@ -10,7 +10,7 @@ class TaskColumn extends React.Component {
     }
 
     render() {
-        const { tasks, list } = this.props;
+        const { list, tasks } = this.props;
         return tasks ? (
             tasks.map((task, index) => (
                 <Task key={task.id} task={task} index={index} listTitle={list.title} />
