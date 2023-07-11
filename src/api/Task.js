@@ -1,7 +1,7 @@
 export const CreateNewTask = (boardData) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch('https://localhost:44385/api/v1/task', {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task`, {
                 method: "POST",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
@@ -17,7 +17,7 @@ export const CreateNewTask = (boardData) =>
 export const GetTaskByColumnId = (columnId) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`https://localhost:44385/api/v1/task/${columnId}`, {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/${columnId}`, {
                 method: "GET",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
@@ -34,7 +34,7 @@ export const GetTaskByColumnId = (columnId) =>
 export const ReorderTaskList = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch('https://localhost:44385/api/v1/task/order', {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/order`, {
                 method: "POST",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
@@ -50,7 +50,7 @@ export const ReorderTaskList = (body) =>
 export const GetTaskByBoardId = (boardId) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`https://localhost:44385/api/v1/task/board/${boardId}`, {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/board/${boardId}`, {
                 method: "GET",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
@@ -66,7 +66,7 @@ export const SwitchTasks = (body) =>
   new Promise(async (resolve, reject) => {
     try {
       let response = await fetch(
-        'https://localhost:44385/api/v1/task/task-switch',
+        `${process.env.REACT_APP_ROOT_API_PATH}task/task-switch`,
         {
           method: "PUT",
           headers: new Headers({

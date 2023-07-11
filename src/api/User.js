@@ -3,7 +3,7 @@ import { UIHelpers } from "helpers";
 export const FetchUserData = (userid, setUserData, setOpenBackdrop) =>
   new Promise(async (resolve, reject) => {
     try {
-        await fetch(`https://localhost:44385/api/v1/user/${userid}`, {
+        await fetch(`${process.env.REACT_APP_ROOT_API_PATH}user/${userid}`, {
                 method: "GET",
                 headers: {
                     "Content-type": "application/json",

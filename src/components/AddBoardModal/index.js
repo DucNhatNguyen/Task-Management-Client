@@ -10,9 +10,10 @@ import {
 import { Clear, Image, Lock, Add, Public } from "@mui/icons-material";
 import { UserContext } from "provider/UserProvider";
 import { CreateNewBoard } from "api/Board";
-//import { BoardHelpers } from "helpers/";
+import { BoardHelpers } from "helpers/";
 import { VisibilityMenu, CoverMenu } from "components";
 import { green } from "@mui/material/colors";
+import { VisibilityEnum } from "helpers/Enum";
 
 
 const placeholder =
@@ -29,7 +30,7 @@ const AddBoardModal = ({ open, setOpen }) => {
     const [coverAnchorEl, setCoverAnchorEl] = useState(null);
 
     const [boardTitle, setBoardTitle] = useState("");
-    const [boardVisibility, setBoardVisibility] = useState("Private");
+    const [boardVisibility, setBoardVisibility] = useState(VisibilityEnum.Private);
 
     const [coverImageRegular, setCoverImageRegular] = useState();
     const [coverImageRaw, setCoverImageRaw] = useState();
@@ -55,13 +56,30 @@ const AddBoardModal = ({ open, setOpen }) => {
             };
 
             CreateNewBoard(boardData).then((response) => {
-                if (response.statusCode === 200) {
-            
+                if (response.responseCode === 200) {
+                    BoardHelpers.HandleBoardCreation(
+                        response.responseData,
+                        userData,
+                        setUserData,
+                        setBoards,
+                        setOpenBackdrop
+                    )
+                    .then(() => {
+                        setSuccess(true);
+                        setLoading(false);
+                        handleClose();
+                        setError("");
+                    })
+                    .catch((err) => {
+                        setLoading(false);
+                        setError(err);
+                        console.log(err);
+                    });
                 } 
             }).catch((err) => {
-            setLoading(false);
-            setError(err);
-            console.log(err);
+                setLoading(false);
+                setError(err);
+                console.log(err);
             });
         }
     };
@@ -72,7 +90,7 @@ const AddBoardModal = ({ open, setOpen }) => {
         setCoverImageRaw();
         setCoverImageRegular();
         setBoardTitle("");
-        setBoardVisibility("Private")
+        setBoardVisibility(VisibilityEnum.Private)
     };
 
     const handleVisibilityClick = (event) => {
@@ -248,7 +266,7 @@ const AddBoardModal = ({ open, setOpen }) => {
                                 style={{
                                     float: "right",
                                     backgroundColor:
-                                        boardVisibility === "Private" ? "#ffe2de" : "#e2f7df",
+                                        boardVisibility === VisibilityEnum.Private ? "#ffe2de" : "#e2f7df",
                                     width: "90%",
                                     //backgroundColor: "#F2F2F2",
                                     borderRadius: "8px",
@@ -261,7 +279,7 @@ const AddBoardModal = ({ open, setOpen }) => {
                                 onClick={handleVisibilityClick}
                                 aria-label="cover"
                             >
-                                {boardVisibility === "Private" ? (
+                                {boardVisibility === VisibilityEnum.Private ? (
                                     <Lock style={{
                                         width: "1rem",
                                         height: "1rem",

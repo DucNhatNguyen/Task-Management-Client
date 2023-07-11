@@ -2,6 +2,7 @@ import React from "react";
 import { Typography, Grid } from "@mui/material";
 import { Public, Lock } from "@mui/icons-material";
 import { PopMenu, PopMenuItem } from "./styles";
+import { VisibilityEnum } from "helpers/Enum";
 
 const VisibilityMenu = ({
     open,
@@ -45,8 +46,8 @@ const VisibilityMenu = ({
                 </Grid>
             </Grid>
             <PopMenuItem
-                style={{ backgroundColor: boardVisibility === "Public" && "#e2f7df" }}
-                onClick={() => setBoardVisibility("Public")}
+                style={{ backgroundColor: boardVisibility === VisibilityEnum.Public && "#e2f7df" }}
+                onClick={() => setBoardVisibility(VisibilityEnum.Public)}
             >
                 <Grid container>
                     <Grid style={{
@@ -87,9 +88,9 @@ const VisibilityMenu = ({
             </PopMenuItem>
             <PopMenuItem
                 style={{
-                    backgroundColor: boardVisibility === "Private" && "#ffe2de",
+                    backgroundColor: boardVisibility === VisibilityEnum.Private && "#ffe2de",
                 }}
-                onClick={() => setBoardVisibility("Private")}
+                onClick={() => setBoardVisibility(VisibilityEnum.Private)}
             >
                 <Grid container>
                     <Grid style={{

@@ -1,11 +1,10 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Typography, Container, Box, Button } from "@mui/material";
+import { Grid, Typography, Box, Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { AppLayout } from "layouts";
-// import { Board, AddBoardModal } from "components";
 import { UserContext } from "provider/UserProvider";
-import { boardsStyles, useContainerStyles, useBoxStyles, useBoardsContainer } from "./styles";
+import { useContainerStyles, useBoxStyles, useBoardsContainer } from "./styles";
 import { AddBoardModal, Board } from "components";
 
 const Boards = () => {
@@ -15,7 +14,7 @@ const Boards = () => {
     let navigate = useNavigate();
 
     const [modalOpen, setModalOpen] = useState(false);
-    const { userData, boards } = useContext(UserContext);
+    const { boards } = useContext(UserContext);
 
     const handleBoardClick = (boardId) => {
         navigate("/board/" + boardId);

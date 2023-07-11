@@ -1,7 +1,7 @@
 export const CreateNewBoard = (boardData) =>
   new Promise(async (resolve, reject) => {
     try {
-      let response = await fetch(process.env.REACT_APP_SERVICE_URL + `/board`, {
+      let response = await fetch(process.env.REACT_APP_ROOT_API_PATH + `boards`, {
         method: "POST",
         headers: new Headers({
           "Content-type": "application/json; charset=UTF-8",
@@ -17,7 +17,7 @@ export const CreateNewBoard = (boardData) =>
 export const GetUserRelatedBoards = (userid) =>
   new Promise(async (resolve, reject) => {
     try {
-      await fetch(`https://localhost:44385/api/v1/user/${userid}/boards`, {
+      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}user/${userid}/boards`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -36,7 +36,7 @@ export const GetUserRelatedBoards = (userid) =>
 export const GetBoardAdmin = (boardId) =>
   new Promise(async (resolve, reject) => {
     try {
-      await fetch(`https://localhost:44385/api/v1/boards/${boardId}/admin`, {
+      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}boards/${boardId}/admin`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -55,7 +55,7 @@ export const GetBoardAdmin = (boardId) =>
 export const GetBoardColumnsDict = (boardid) =>
 new Promise(async (resolve, reject) => {
     try {
-      await fetch(`https://localhost:44385/api/v1/column/list-dict?boardid=${boardid}`, {
+      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column/list-dict?boardid=${boardid}`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
@@ -74,7 +74,7 @@ new Promise(async (resolve, reject) => {
 export const ReorderColumnLists = (body) =>
   new Promise(async (resolve, reject) => {
     try {
-      let response = await fetch('https://localhost:44385/api/v1/column/order', {
+      let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column/order`, {
         method: "PUT",
         headers: new Headers({
           "Content-type": "application/json; charset=UTF-8",
@@ -90,7 +90,7 @@ export const ReorderColumnLists = (body) =>
 export const GetBoardColumns = (boardid) =>
 new Promise(async (resolve, reject) => {
     try {
-      await fetch(`https://localhost:44385/api/v1/column/list?boardid=${boardid}`, {
+      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column/list?boardid=${boardid}`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",

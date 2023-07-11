@@ -1,5 +1,6 @@
 //import { handleSignIn, manualSignIn } from "../functions/UserFunctions";
 
+import { FetchUserData } from "api/User";
 import { UIHelpers } from "helpers";
 
 const SignUp = (
@@ -23,7 +24,7 @@ const Login = (
 ) => {
     new Promise(async (resolve, reject) => {
         try {
-            await fetch("https://localhost:44385/api/v1/user/login", {
+            await fetch(`${process.env.REACT_APP_ROOT_API_PATH}user/login`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -39,10 +40,10 @@ const Login = (
                 const token = data.responseData.token;
                 localStorage.setItem("pmt_token", token);
                 localStorage.setItem("pmt_userid", data.responseData.user.id);
-                setToken(token);
-                setUserData(data.responseData);
+                await setToken(token);
+                await setUserData(data.responseData.user);
                 UIHelpers.HandleBackdropClose(setOpenBackdrop)
-
+                FetchUserData(data.responseData.user.id, setUserData, setOpenBackdrop)
                 resolve(data.responseData)
             })
         } catch (err) {

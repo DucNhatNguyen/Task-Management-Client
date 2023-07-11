@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
     Route,
     Routes
 } from "react-router-dom";
 import { Boards, Login, SignUp } from "pages";
 import Board from "pages/Board/Board";
-//import { Authentication } from "provider/AuthProvider"
+import { Authentication } from "provider/AuthProvider";
 
 const Layout = (props) => {
-    //const { token } = useContext(Authentication);
-    const token = null;
+    const { token } = useContext(Authentication);
+
     return (
 
         <Routes>
