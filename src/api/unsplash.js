@@ -28,7 +28,6 @@ export const GetRandomImages = (count) =>
       .then((result) => {
         if (result.type === "success") {
           resolve(result.response);
-          console.log(result.response)
         } else {
           reject(result.type);
         }

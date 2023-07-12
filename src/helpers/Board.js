@@ -1,9 +1,3 @@
-// import {
-//     GetUserRelatedBoards,
-//     InviteUser,
-//     UpdateBoardProperty,
-//     RemoveUser,
-// } from "api/Board";
 import { CreateNewTask, ReorderTaskList, SwitchTasks } from "api/Task";
 import { CreateNewList } from "api/List";
 import { GetBoardColumns, ReorderColumnLists } from "api/Board"
@@ -77,7 +71,7 @@ const HandleUserRelatedBoards = (
     });
 
 const FindExactBoard = (
-    id,
+    slug,
     boards,
     setRenderedBoard,
     setShowAllBoards,
@@ -88,7 +82,7 @@ const FindExactBoard = (
     UIHelpers.HandleBackdropOpen(setOpenBackdrop);
 
     for (let board of boards) {
-        if (board.id === id) {
+        if (board.slug === slug) {
             UIHelpers.HandleBoardPageRender(
                 board,
                 setRenderedBoard,
@@ -96,7 +90,7 @@ const FindExactBoard = (
             );
             UIHelpers.HandleBackdropClose(setOpenBackdrop);
 
-            if (board.createdby === userData.id) {
+            if (board.createdby === localStorage.getItem("pmt_userid")) {
                 setAdmin(true)
             }
             break;
@@ -118,7 +112,7 @@ const HandleBoardCreation = (
                 Object.assign(updateUser.boards, response);
                 setUserData(updateUser);
                 const data = await UserHelpers.HandleUserData(
-                    userData.uid,
+                    userData.id,
                     setUserData,
                     setBoards,
                     setOpenBackdrop
@@ -128,7 +122,7 @@ const HandleBoardCreation = (
                 updateUser.boards = response;
                 setUserData(updateUser);
                 const data = await UserHelpers.HandleUserData(
-                    userData.uid,
+                    userData.id,
                     setUserData,
                     setBoards,
                     setOpenBackdrop

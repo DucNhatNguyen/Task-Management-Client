@@ -38,7 +38,7 @@ const BoardDrawer = ({ board, admin }) => {
             return;
         }
 
-        //changeDrawerVisibility("set", false);
+        changeDrawerVisibility("set", false);
     };
 
     const closeDescriptionEditArea = () => {
@@ -112,7 +112,7 @@ const BoardDrawer = ({ board, admin }) => {
         <Drawer
             variant="persistent"
             anchor="right"
-            //open={drawerOpen}
+            open={drawerOpen}
             onClose={toggleDrawer(false)}
             classes={{ paper: classes.drawer }}
         >
@@ -139,7 +139,7 @@ const BoardDrawer = ({ board, admin }) => {
                         <Grid item xs={2} container justifyContent="end">
                             <IconButton
                                 className={classes.closeButton}
-                            //onClick={() => changeDrawerVisibility("set", false)}
+                                onClick={() => changeDrawerVisibility("set", false)}
                             >
                                 <Close />
                             </IconButton>

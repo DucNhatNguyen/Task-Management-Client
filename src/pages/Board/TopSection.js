@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
-//import { UIContext } from "provider/UIProvider";
+import { UIContext } from "provider/UIProvider";
 import { Grid, Typography, IconButton, Button } from "@mui/material";
 import { Public, Lock, MoreHoriz, Add } from "@mui/icons-material";
 import { VisibilityMenu, UserAvatar, InviteUserMenu } from "components";
 import { styled } from '@mui/material/styles';
+import { ChangeVisibilityBoard } from "api/Board";
 
 const TopSection = ({ board, admin }) => {
-    //const { changeDrawerVisibility } = useContext(UIContext);
+    const { changeDrawerVisibility } = useContext(UIContext);
 
     const [visibilityAnchorEl, setVisibilityAnchorEl] = useState(null);
     const [openVisibility, setOpenVisibilty] = useState(false);
@@ -18,6 +19,12 @@ const TopSection = ({ board, admin }) => {
         setOpenVisibilty(true);
     };
     const handleVisibilityClose = () => {
+        // console.log('visibility', boardVisibility);
+        // var body = {
+        //     boardId: board.id,
+        //     visibility:boardVisibility
+        // }
+        // ChangeVisibilityBoard(body);
         setVisibilityAnchorEl(null);
         setOpenVisibilty(false);
     };
@@ -62,22 +69,7 @@ const TopSection = ({ board, admin }) => {
             marginBottom: theme.spacing(2),
         },
     }));
-    const VisibilityText = (value) => {
-        var text = "";
-        switch (value) {
-            case 1:
-                text = "Private";
-                break;
-            case 2:
-                text = "Public";
-                break;
-            case 3:
-                text = "Cancel";
-                break;
-            default:
-        }
-        return text;
-    }
+    
     return (
         <Root>
             <GridContainer container>
@@ -122,7 +114,8 @@ const TopSection = ({ board, admin }) => {
                                 lineHeight: "18px",
                                 fontFamily: "Poppins"
                             }} component="p">
-                                {board && VisibilityText(board.visibility)}
+                                {/* {board && VisibilityText(board.visibility)} */}
+                                {boardVisibility}
                             </Typography>
                         </IconButton>
                         <VisibilityMenu
@@ -178,12 +171,11 @@ const TopSection = ({ board, admin }) => {
                         container
                         item
                         xs={12}
-                    //className={classes.showMenuContainer}
                     >
                         <MenuButton
                             sx={{ "&:hover": { backgroundColor: "#e6e5e5" } }}
                             aria-label="cover"
-                        //onClick={changeDrawerVisibility}
+                        onClick={changeDrawerVisibility}
                         >
                             <MoreHoriz style={{
                                 marginRight: "8px",

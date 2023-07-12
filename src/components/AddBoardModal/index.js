@@ -13,7 +13,7 @@ import { CreateNewBoard } from "api/Board";
 import { BoardHelpers } from "helpers/";
 import { VisibilityMenu, CoverMenu } from "components";
 import { green } from "@mui/material/colors";
-import { VisibilityEnum } from "helpers/Enum";
+import slugify from "slugify";
 
 
 const placeholder =
@@ -30,7 +30,7 @@ const AddBoardModal = ({ open, setOpen }) => {
     const [coverAnchorEl, setCoverAnchorEl] = useState(null);
 
     const [boardTitle, setBoardTitle] = useState("");
-    const [boardVisibility, setBoardVisibility] = useState(VisibilityEnum.Private);
+    const [boardVisibility, setBoardVisibility] = useState("Private");
 
     const [coverImageRegular, setCoverImageRegular] = useState();
     const [coverImageRaw, setCoverImageRaw] = useState();
@@ -51,8 +51,9 @@ const AddBoardModal = ({ open, setOpen }) => {
             const boardData = {
                 title: boardTitle,
                 coverPhoto: coverImageRaw,
-                visibility: boardVisibility,
+                visibilityText: boardVisibility,
                 userid: userData.id,
+                slug: slugify(boardTitle, { replacement: '-', remove: undefined, lower: true, strict: false, locale: 'vi',trim: true })
             };
 
             CreateNewBoard(boardData).then((response) => {
@@ -90,7 +91,7 @@ const AddBoardModal = ({ open, setOpen }) => {
         setCoverImageRaw();
         setCoverImageRegular();
         setBoardTitle("");
-        setBoardVisibility(VisibilityEnum.Private)
+        setBoardVisibility('Private')
     };
 
     const handleVisibilityClick = (event) => {
@@ -266,7 +267,7 @@ const AddBoardModal = ({ open, setOpen }) => {
                                 style={{
                                     float: "right",
                                     backgroundColor:
-                                        boardVisibility === VisibilityEnum.Private ? "#ffe2de" : "#e2f7df",
+                                        boardVisibility === 'Private' ? "#ffe2de" : "#e2f7df",
                                     width: "90%",
                                     //backgroundColor: "#F2F2F2",
                                     borderRadius: "8px",
@@ -279,7 +280,7 @@ const AddBoardModal = ({ open, setOpen }) => {
                                 onClick={handleVisibilityClick}
                                 aria-label="cover"
                             >
-                                {boardVisibility === VisibilityEnum.Private ? (
+                                {boardVisibility === 'Private' ? (
                                     <Lock style={{
                                         width: "1rem",
                                         height: "1rem",

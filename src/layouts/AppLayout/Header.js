@@ -4,7 +4,7 @@ import { IconButton, Typography } from "@mui/material";
 import { Dashboard, Apps } from "@mui/icons-material";
 import Menu from "./Menu";
 import { useToolbar, useIconButton, useMenuTitle, useAppBar, useTitle } from "./styles";
-//import { UIContext } from "provider/UIProvider";
+import { UIContext } from "provider/UIProvider";
 
 const Header = () => {
     let navigate = useNavigate();
@@ -13,10 +13,8 @@ const Header = () => {
     const { styledMenuTitle: StyledMenuTitle } = useMenuTitle();
     const { styledAppBar: StyledAppBar } = useAppBar();
     const { styledTitle: StyledTitle } = useTitle();
-    //const { showAllBoards, renderedBoard } = useContext(UIContext);
-    const showAllBoards = true;
-    const renderedBoard = null;
-
+    const { showAllBoards, renderedBoard } = useContext(UIContext);
+    
     return (
         <div style={{ flexGrow: 1 }}>
             <StyledAppBar position="static">
@@ -45,7 +43,7 @@ const Header = () => {
                         }}
                         >
                             <StyledTitle>
-                                {"Test Board1"}
+                                {renderedBoard.title}
                             </StyledTitle>
                             <IconButton
                                 onClick={() => navigate("/boards")}

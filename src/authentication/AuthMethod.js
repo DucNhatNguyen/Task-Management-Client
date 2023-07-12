@@ -1,7 +1,4 @@
-//import { handleSignIn, manualSignIn } from "../functions/UserFunctions";
-
-import { FetchUserData } from "api/User";
-import { UIHelpers } from "helpers";
+import { handleSignIn } from "functions/UserFunction";
 
 const SignUp = (
     email,
@@ -38,12 +35,11 @@ const Login = (
             .then(res => res.json())
             .then(async data => {
                 const token = data.responseData.token;
-                localStorage.setItem("pmt_token", token);
-                localStorage.setItem("pmt_userid", data.responseData.user.id);
+                handleSignIn(data.responseData.user, setUserData, setOpenBackdrop)
+                
+                await localStorage.setItem("pmt_token", token);
+                await localStorage.setItem("pmt_userid", data.responseData.user.id);
                 await setToken(token);
-                await setUserData(data.responseData.user);
-                UIHelpers.HandleBackdropClose(setOpenBackdrop)
-                FetchUserData(data.responseData.user.id, setUserData, setOpenBackdrop)
                 resolve(data.responseData)
             })
         } catch (err) {
@@ -54,7 +50,9 @@ const Login = (
 };
 
 const Logout = (setErrors, setToken) => {
-
+    localStorage.removeItem("pmt_token");
+    localStorage.removeItem("pmt_userid");
+    setToken(null);
 };
 
 export const AuthMethods = {

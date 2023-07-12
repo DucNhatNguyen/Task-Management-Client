@@ -5,6 +5,7 @@ import { AuthForm, Alert } from "components";
 import { Container, CssBaseline, Snackbar } from "@mui/material";
 import { loginStyles } from "./styles";
 import { Authentication } from "provider/AuthProvider";
+import UserProvider from "provider/UserProvider";
 
 const Login = () => {
     const classes = loginStyles(AuthTheme);

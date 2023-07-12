@@ -6,6 +6,7 @@ import { AppLayout } from "layouts";
 import { UserContext } from "provider/UserProvider";
 import { useContainerStyles, useBoxStyles, useBoardsContainer } from "./styles";
 import { AddBoardModal, Board } from "components";
+import slugify from "slugify";
 
 const Boards = () => {
     const { styledContainer: StyledContainer } = useContainerStyles();
@@ -59,9 +60,17 @@ const Boards = () => {
                         {boards !== undefined &&
                             boards.length > 0 &&
                             boards.map((value, key) => {
+                                let slug = slugify(value.title, {
+                                                    replacement: '-',
+                                                    remove: undefined,
+                                                    lower: true,     
+                                                    strict: false,
+                                                    locale: 'vi',
+                                                    trim: true
+                                                    })
                                 return (
                                     <Grid container key={key} item lg={3} md={3} sm={4} xs={10}>
-                                        <div onClick={() => handleBoardClick(value.id)}>
+                                        <div onClick={() => handleBoardClick(slug)}>
                                             <Board
                                                 image={value.coverphoto}
                                                 title={value.title}

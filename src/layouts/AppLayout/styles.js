@@ -117,35 +117,35 @@ export const useMenuTitle = () => {
     return { styledMenuTitle };
 };
 
-export const useTypography = () => {
-    const styledTypography = styled(Button)(({ theme }) => ({
-        textAlign: "center",
-        fontSize: "1.125rem",
-        lineHeight: "27px",
-        fontWeight: "500",
-        letterSpacing: "-0.035em",
-        paddingRight: theme.spacing(3),
-        borderRight: "1px solid #E0E0E0",
-        maxWidth: "350px",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap"
-    }));
+// export const useTypography = () => {
+//     const styledTypography = styled(Button)(({ theme }) => ({
+//         textAlign: "center",
+//         fontSize: "1.125rem",
+//         lineHeight: "27px",
+//         fontWeight: "500",
+//         letterSpacing: "-0.035em",
+//         paddingRight: theme.spacing(3),
+//         borderRight: "1px solid #E0E0E0",
+//         maxWidth: "350px",
+//         overflow: "hidden",
+//         textOverflow: "ellipsis",
+//         whiteSpace: "nowrap"
+//     }));
 
-    return { styledTypography };
-};
+//     return { styledTypography };
+// };
 
-export const useAllBoardsButton = () => {
-    const styledAllBoardsButton = styled(Button)(({ theme }) => ({
-        marginLeft: theme.spacing(3),
-        borderRadius: "8px",
-        backgroundColor: "#F2F2F2",
-        paddingTop: "6px",
-        paddingBottom: "6px"
-    }));
+// export const useAllBoardsButton = () => {
+//     const styledAllBoardsButton = styled(Button)(({ theme }) => ({
+//         marginLeft: theme.spacing(3),
+//         borderRadius: "8px",
+//         backgroundColor: "#F2F2F2",
+//         paddingTop: "6px",
+//         paddingBottom: "6px"
+//     }));
 
-    return { styledAllBoardsButton };
-};
+//     return { styledAllBoardsButton };
+// };
 
 export const useAppBar = () => {
     const styledAppBar = styled(AppBar)(({ theme }) => ({

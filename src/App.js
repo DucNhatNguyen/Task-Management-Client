@@ -6,30 +6,44 @@ import UserProvider from "provider/UserProvider";
 import AuthProvider from "provider/AuthProvider";
 import UIProvider from "provider/UIProvider";
 import { UserHelpers } from "helpers";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [openBackdrop, setOpenBackdrop] = useState(false);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState();
   const [boards, setBoards] = useState([]);
   const [renderedBoard, setRenderedBoard] = useState();
   const userid = localStorage.getItem("pmt_userid");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (userData) {
-      console.log('userdatasssss', userData);
-      if (userid){
-        UserHelpers.HandleUserData(
+    if (userid){
+      UserHelpers.HandleUserData(
             userid,
             setUserData,
             setBoards,
             setOpenBackdrop,
             userData
           );
-      } else{
-        return;
-      }
+    } else {
+      navigate("/login");
     }
-  }, []);
+    
+    // if (!userData) {
+    //   if (userid){
+    //     UserHelpers.HandleUserData(
+    //         userid,
+    //         setUserData,
+    //         setBoards,
+    //         setOpenBackdrop,
+    //         userData
+    //       );
+    //   } else{
+    //     return;
+    //   }
+    // }
+  }, [userid]);
 
   return (
     <UIProvider

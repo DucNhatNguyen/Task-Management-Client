@@ -3,7 +3,13 @@
 const HandleTaskPropertyUpdate = (board, taskId, property, data) =>
     new Promise((resolve, reject) => {
         if (board && taskId && property && data) {
-            board.tasks[taskId][property] = data;
+            console.log('edit task', {
+                board: board,
+                taskId: taskId,
+                property: property,
+                data: data
+            })
+            //board.tasks[taskId][property] = data;
             // UpdateTaskProperty({
             //     boardId: board.id,
             //     taskId: taskId,
@@ -13,6 +19,12 @@ const HandleTaskPropertyUpdate = (board, taskId, property, data) =>
             //     .then(() => resolve(board))
             //     .catch((err) => reject(err));
         } else {
+            console.log('edit task', {
+                board: board,
+                taskId: taskId,
+                property: property,
+                data: data
+            })
             reject("Missing parameters");
         }
     });

@@ -28,15 +28,15 @@ const KeywordSearch = ({
             });
     }, []);
 
-    // useEffect(() => {
-    //     setError();
-    // }, [searchInput]);
+    useEffect(() => {
+        setError();
+    }, [searchInput]);
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setError();
-    //     }, 5000);
-    // }, [error]);
+    useEffect(() => {
+        setTimeout(() => {
+            setError();
+        }, 5000);
+    }, [error]);
 
     const handleSearch = () => {
         setError();

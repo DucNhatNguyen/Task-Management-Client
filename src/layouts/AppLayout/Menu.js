@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
-// import { FirebaseAuth } from "provider/AuthProvider";
-// import { UserContext } from "provider/UserProvider";
+import React, { useState, useContext, useEffect } from "react";
+import { UserContext } from "provider/UserProvider";
 import { UserAvatar } from "components";
 import {
     IconButton,
@@ -19,11 +18,12 @@ import {
     Assignment
 } from "@mui/icons-material";
 import { PopMenu, PopMenuItem } from "./styles";
+import { Authentication } from "provider/AuthProvider";
+import { FetchUserData } from "api/User";
 
 const Menu = ({ navigate }) => {
-    // const { handleLogout } = useContext(FirebaseAuth);
-    // const { userData } = useContext(UserContext);
-    const userData = { "boards": { "-NYX6AimlUULSlFxgv6E": { "boardId": "-NYX6AimlUULSlFxgv6E" }, "-NYYV0DUybOzG5C_grEt": { "boardId": "-NYYV0DUybOzG5C_grEt" } }, "email": "ducnhat090199@gmail.com", "name": "N.T MAX", "picture": "https://lh3.googleusercontent.com/a/AAcHTtcmuVue47yEfADs1fvleNkCkS2XyQywMpft_yuO=s96-c", "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1" }
+    const { handleLogout } = useContext(Authentication);
+    const { userData, setUserData } = useContext(UserContext);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
@@ -109,7 +109,7 @@ const Menu = ({ navigate }) => {
                     width: "85%",
                     margin: "auto"
                 }} />
-                <PopMenuItem /*onClick={handleLogout}*/>
+                <PopMenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <ExitToApp style={{ color: "#EB5757" }} fontSize="small" />
                     </ListItemIcon>

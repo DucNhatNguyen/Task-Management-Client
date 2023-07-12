@@ -9,6 +9,11 @@ const CoverMenu = ({ anchorEl, handleClose, handleImageClick }) => {
 
     const [searchInput, setSearchInput] = useState("");
 
+    const handleImageClose = (regular, raw) => {
+        handleImageClick(regular, raw)
+        handleClose()
+    }
+
     return (
         <div>
             <PopMenu
@@ -80,7 +85,7 @@ const CoverMenu = ({ anchorEl, handleClose, handleImageClick }) => {
                                 >
                                     <img
                                         onClick={() =>
-                                            handleImageClick(val.urls.regular, val.urls.raw)
+                                            handleImageClose(val.urls.regular, val.urls.raw)
                                         }
                                         key={key}
                                         style={{
@@ -116,7 +121,7 @@ const CoverMenu = ({ anchorEl, handleClose, handleImageClick }) => {
                                 >
                                     <img
                                         onClick={() =>
-                                            handleImageClick(val.urls.regular, val.urls.raw)
+                                            handleImageClose(val.urls.regular, val.urls.raw)
                                         }
                                         key={key}
                                         style={{

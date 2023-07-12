@@ -4,7 +4,7 @@ import { withStyles } from "@mui/styles";
 import { Add, AttachFile, Comment } from "@mui/icons-material";
 import { Paper, Grid, Typography, IconButton } from "@mui/material";
 import { UserAvatar, EditTaskModal } from "components";
-//import { UIContext } from "provider/UIProvider";
+import { UIContext } from "provider/UIProvider";
 import { TaskHelpers } from "helpers";
 import { taskStyles } from "./styles";
 
@@ -22,7 +22,7 @@ class Task extends React.Component {
             assigments: [],
         };
     }
-    //static contextType = UIContext;
+    static contextType = UIContext;
 
     handleTaskClick = () => {
         this.setState({ modalVisible: true });
@@ -266,6 +266,7 @@ class Task extends React.Component {
             assigments,
         } = this.state;
         const { renderedBoard } = this.context;
+        console.log('taskkkk',  this.state);
         let avatarCounter = 0;
 
         return (
@@ -311,7 +312,7 @@ class Task extends React.Component {
                                         {title}
                                     </Typography>
                                 </Grid>
-                                <Grid
+                                {/* <Grid
                                     item
                                     container
                                     xs={12}
@@ -338,95 +339,9 @@ class Task extends React.Component {
                                                 </Grid>
                                             );
                                         })}
-                                </Grid>
+                                </Grid> */}
                             </Grid>
-                            <Grid item container xs={12}>
-                                {assigments &&
-                                    renderedBoard &&
-                                    renderedBoard.userData.map((user, index) => {
-                                        if (
-                                            assigments.includes(user.uid) &&
-                                            !(assigments.length > 2 && avatarCounter > 0)
-                                        ) {
-                                            avatarCounter += 1;
-                                            return (
-                                                <Grid
-                                                    item
-                                                    style={{
-                                                        width: "35px",
-                                                        height: "35px",
-                                                        marginRight: "8px",
-                                                    }}
-                                                >
-                                                    <UserAvatar
-                                                        user={user}
-                                                        styles={classes.memberAvatar}
-                                                        isTask={true}
-                                                    />
-                                                </Grid>
-                                            );
-                                        }
-                                        if (index === renderedBoard.userData.length - 1)
-                                            avatarCounter = 0;
-                                    })}
-                                {assigments && assigments.length > 2 ? (
-                                    <Grid item className={classes.othersContainer}>
-                                        <Typography
-                                            className={classes.othersInfo}
-                                            variant="body2"
-                                            gutterBottom
-                                        >
-                                            +{assigments.length - 1} Others
-                                        </Typography>
-                                    </Grid>
-                                ) : (
-                                    <Grid
-                                        item
-                                        style={{
-                                            width: "35px",
-                                            height: "35px",
-                                        }}
-                                    >
-                                        <IconButton className={classes.addButton}>
-                                            <Add style={{ color: "white" }} />
-                                        </IconButton>
-                                    </Grid>
-                                )}
-                                <Grid
-                                    item
-                                    container
-                                    xs
-                                    justifyContent="end"
-                                    className={classes.propertyCounter}
-                                >
-                                    {comments && comments.length > 0 && (
-                                        <Grid
-                                            item
-                                            container
-                                            justify="center"
-                                            alignItems="center"
-                                            xs={4}
-                                            style={{ maxWidth: "35px" }}
-                                        >
-                                            <Comment className={classes.propertyIcon} />
-                                            {comments.length}
-                                        </Grid>
-                                    )}
-                                    {attachments && attachments.length > 0 && (
-                                        <Grid
-                                            item
-                                            container
-                                            justify="center"
-                                            alignItems="center"
-                                            xs={4}
-                                            style={{ maxWidth: "35px" }}
-                                        >
-                                            <AttachFile className={classes.propertyIcon} />
-                                            {attachments.length}
-                                        </Grid>
-                                    )}
-                                </Grid>
-                            </Grid>
+                            {/* z */}
                         </Paper>
                         <EditTaskModal
                             open={this.state.modalVisible}

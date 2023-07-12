@@ -31,7 +31,7 @@ const Layout = (props) => {
             <Route
                 element={<Board />}
                 exact
-                path="/board/:id"
+                path="/board/:slug"
             />
         </Routes>
     );

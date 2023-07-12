@@ -19,13 +19,13 @@ const Board = () => {
     } = useContext(UIContext);
 
     const { boards, userData } = useContext(UserContext);
-    const { id } = useParams();
+    const { slug } = useParams();
 
     const [adminPerm, setAdmin] = useState(false);
 
     useEffect(() => {
         BoardHelpers.FindExactBoard(
-            id,
+            slug,
             boards,
             setRenderedBoard,
             setShowAllBoards,
@@ -46,7 +46,7 @@ const Board = () => {
 
     useEffect(() => {
         BoardHelpers.FindExactBoard(
-            id,
+            slug,
             boards,
             setRenderedBoard,
             setShowAllBoards,
@@ -57,11 +57,11 @@ const Board = () => {
     }, [boards]);
 
     useEffect(() => {
-        // if (renderedBoard && renderedBoard.admin) {
-        //     if (userData.uid === renderedBoard.admin.uid) {
-        //         setAdmin(true);
-        //     }
-        // }
+        if (renderedBoard && renderedBoard.createdby) {
+            if (userData.id === renderedBoard.createdby) {
+                setAdmin(true);
+            }
+        }
     }, [renderedBoard]);
 
     // const findAdminIndex = (userData, adminUid) =>

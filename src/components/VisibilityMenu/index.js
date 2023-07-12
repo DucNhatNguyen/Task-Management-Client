@@ -11,6 +11,12 @@ const VisibilityMenu = ({
     setBoardVisibility,
     boardVisibility,
 }) => {
+
+    const PopMenuClose = (val) => {
+        setBoardVisibility(val)
+        handleClose()
+    }
+
     return (
         <PopMenu
             id="customized-menu"
@@ -18,7 +24,6 @@ const VisibilityMenu = ({
             keepMounted
             open={Boolean(anchorEl)}
             onClose={handleClose}
-            sx={{ top: 140 }}
         >
             <Grid style={{
                 paddingLeft: "12px",
@@ -47,7 +52,7 @@ const VisibilityMenu = ({
             </Grid>
             <PopMenuItem
                 style={{ backgroundColor: boardVisibility === VisibilityEnum.Public && "#e2f7df" }}
-                onClick={() => setBoardVisibility(VisibilityEnum.Public)}
+                onClick={() => PopMenuClose("Public")}
             >
                 <Grid container>
                     <Grid style={{
@@ -90,7 +95,7 @@ const VisibilityMenu = ({
                 style={{
                     backgroundColor: boardVisibility === VisibilityEnum.Private && "#ffe2de",
                 }}
-                onClick={() => setBoardVisibility(VisibilityEnum.Private)}
+                onClick={() => PopMenuClose("Private")}
             >
                 <Grid container>
                     <Grid style={{
