@@ -7,6 +7,7 @@ import { UserAvatar, EditTaskModal } from "components";
 import { UIContext } from "provider/UIProvider";
 import { TaskHelpers } from "helpers";
 import { taskStyles } from "./styles";
+import { ActionLabel } from "api/Task";
 
 class Task extends React.Component {
     constructor(props) {
@@ -175,15 +176,22 @@ class Task extends React.Component {
     addLabel = (label) => {
         this.setState(
             {
-                labels: [...this.state.labels, label],
+                labels: [...this.state.labels, {
+                    colorhex: label.color.hex,
+                    colorname: label.color.name,
+                    id: label.id,
+                    taskid: this.props.task.id,
+                    title: label.input
+                }],
             },
             () => {
-                TaskHelpers.HandleTaskPropertyUpdate(
-                    this.context.renderedBoard,
-                    this.props.task.id,
-                    "labels",
-                    this.state.labels
-                );
+                ActionLabel({
+                    taskId: this.props.task.id,
+                    id: label.id,
+                    title: label.input,
+                    color: label.color,
+                    actiontype: 1
+                }).catch((err) => console.log(err));
             }
         );
     };
@@ -192,15 +200,26 @@ class Task extends React.Component {
         for (let i = 0; i < labels.length; i++) {
             const label = labels[i];
             if (label.id === labelId) {
+                console.log('delete label', label);
                 // remove id matched label
                 labels.splice(i, 1);
                 this.setState({ labels: labels }, () => {
-                    TaskHelpers.HandleTaskPropertyUpdate(
-                        this.context.renderedBoard,
-                        this.props.task.id,
-                        "labels",
-                        this.state.labels
-                    ).catch((err) => console.log(err));
+                        ActionLabel({
+                        taskId: label.taskid,
+                        id: label.id,
+                        title: label.title,
+                        color: {
+                            hex: label.colorhex,
+                            name: label.colorname
+                        },
+                        actiontype: 2
+                    }).catch((err) => console.log(err));
+                    // TaskHelpers.HandleTaskPropertyUpdate(
+                    //     this.context.renderedBoard,
+                    //     this.props.task.id,
+                    //     "labels",
+                    //     this.state.labels
+                    // ).catch((err) => console.log(err));
                 });
             }
         }
@@ -266,7 +285,7 @@ class Task extends React.Component {
             assigments,
         } = this.state;
         const { renderedBoard } = this.context;
-        console.log('taskkkk',  this.state);
+        console.log('taskkkk',  renderedBoard);
         let avatarCounter = 0;
 
         return (
@@ -312,7 +331,7 @@ class Task extends React.Component {
                                         {title}
                                     </Typography>
                                 </Grid>
-                                {/* <Grid
+                                <Grid
                                     item
                                     container
                                     xs={12}
@@ -324,22 +343,125 @@ class Task extends React.Component {
                                             return (
                                                 <Grid
                                                     className={classes.labelContainer}
-                                                    style={{ backgroundColor: label.color.hex }}
+                                                    style={{ backgroundColor: label.colorhex, borderRadius: "14px",
+                                                                padding: "3px 0px",
+                                                                width: "60px",
+                                                                marginBottom: '8px',
+                                                                marginRight: '12px', 
+                                                            }}
                                                     item
                                                     container
                                                     alignItems="center"
-                                                    justify="space-around"
+                                                    justifyContent="space-around"
                                                     index={index}
                                                 >
-                                                    <Grid item xs={10}>
-                                                        <Typography className={classes.labelText}>
-                                                            {label.input}
+                                                    <Grid item xs={5}>
+                                                        <Typography style={{
+                                                                        fontWeight: "500",
+                                                                        fontSize: "0.625rem",
+                                                                        lineHeight: "14px",
+                                                                        letterSpacing: "-0.035em",
+                                                                        paddingBottom: "4px",
+                                                                        paddingTop: "4px",
+                                                                        textAlign: "center",
+                                                                        color: "white",
+                                                                        overflow: "hidden",
+                                                                        textOverflow: "ellipsis",
+                                                                    }}>
+                                                            {label.title}
                                                         </Typography>
                                                     </Grid>
                                                 </Grid>
                                             );
                                         })}
-                                </Grid> */}
+                                </Grid>
+                            </Grid>
+                            <Grid item container xs={12}>
+                                {/* {assigments &&
+                                    renderedBoard &&
+                                    renderedBoard.userData.map((user, index) => {
+                                        if (
+                                            assigments.includes(user.uid) &&
+                                            !(assigments.length > 2 && avatarCounter > 0)
+                                        ) {
+                                            avatarCounter += 1;
+                                            return (
+                                                <Grid
+                                                    item
+                                                    style={{
+                                                        width: "35px",
+                                                        height: "35px",
+                                                        marginRight: "8px",
+                                                    }}
+                                                >
+                                                    <UserAvatar
+                                                        user={user}
+                                                        styles={classes.memberAvatar}
+                                                        isTask={true}
+                                                    />
+                                                </Grid>
+                                            );
+                                        }
+                                        if (index === renderedBoard.userData.length - 1)
+                                            avatarCounter = 0;
+                                    })} */}
+                                {assigments && assigments.length > 2 ? (
+                                    <Grid item className={classes.othersContainer}>
+                                        <Typography
+                                            className={classes.othersInfo}
+                                            variant="body2"
+                                            gutterBottom
+                                        >
+                                            +{assigments.length - 1} Others
+                                        </Typography>
+                                    </Grid>
+                                ) : (
+                                    <Grid
+                                        item
+                                        style={{
+                                            width: "35px",
+                                            height: "35px",
+                                        }}
+                                    >
+                                        <IconButton className={classes.addButton}>
+                                            <Add style={{ color: "white" }} />
+                                        </IconButton>
+                                    </Grid>
+                                )}
+                                <Grid
+                                    item
+                                    container
+                                    xs
+                                    justifyContent="end"
+                                    className={classes.propertyCounter}
+                                >
+                                    {comments && comments.length > 0 && (
+                                        <Grid
+                                            item
+                                            container
+                                            justify="center"
+                                            alignItems="center"
+                                            xs={4}
+                                            style={{ maxWidth: "35px" }}
+                                        >
+                                            <Comment className={classes.propertyIcon} />
+                                            {comments.length}
+                                        </Grid>
+                                    )}
+                                    {attachments && attachments.length > 0 && (
+                                        <Grid
+                                            item
+                                            container
+                                            justify="center"
+                                            alignItems="center"
+                                            xs={4}
+                                            style={{ maxWidth: "35px" }}
+                                        >
+                                            <AttachFile className={classes.propertyIcon} />
+                                            {attachments.length}
+                                        </Grid>
+                                    )}
+                                </Grid>
                             </Grid>
                             {/* z */}
                         </Paper>

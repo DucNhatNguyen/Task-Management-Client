@@ -3,6 +3,7 @@ import { Typography, Grid, Button } from "@mui/material";
 // import { GetUniqueId } from "api/Common";
 import { PopMenu } from "./styles";
 import { colors } from "./color";
+import { v4 as uuidv4 } from "uuid";
 
 const LabelsMenu = ({ anchorEl, handleClose, addLabel }) => {
   const [input, setInput] = useState("");
@@ -15,20 +16,14 @@ const LabelsMenu = ({ anchorEl, handleClose, addLabel }) => {
     } else if (selectedColor === 1917) {
       setError("Select a color!");
     } else {
-    //   GetUniqueId()
-    //     .then((id) => {
-    //       addLabel({
-    //         id: id.data,
-    //         input: input,
-    //         color: colors[selectedColor],
-    //       });
-    //       setError();
-    //       setInput("");
-    //       handleClose();
-    //     })
-    //     .catch((err) => {
-    //       setError(err);
-    //     });
+      addLabel({
+            id: uuidv4(),
+            input: input,
+            color: colors[selectedColor],
+          });
+          setError();
+          setInput("");
+          handleClose();
     }
   };
 

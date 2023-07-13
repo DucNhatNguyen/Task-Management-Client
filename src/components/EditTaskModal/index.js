@@ -22,7 +22,7 @@ import {
   AssignMemberMenu,
   UserAvatar,
 } from "components";
-//import { UserContext } from "provider/UserProvider";
+import { UserContext } from "provider/UserProvider";
 
 const imageFormats = [
   "APNG",
@@ -62,7 +62,7 @@ const EditTaskModal = ({
   assignMemberToTask,
   removeAssignedMember,
 }) => {
-  //const { renderedBoard } = useContext(UserContext);
+  const { renderedBoard } = useContext(UserContext);
 
   const [displayEditArea, setDisplayEditArea] = useState(false);
   const [displayEditTitle, setDisplayEditTitle] = useState(false);
@@ -324,13 +324,13 @@ const EditTaskModal = ({
                       xs
                     >
                       <Label
-                        text={label.input}
+                        text={label.title}
                         id={label.id}
                         deleteLabel={deleteLabel}
-                        color={label.color.hex}
+                        color={label.colorhex}
                         style={{ width: "100%" }}
                       >
-                        {label.input}
+                        {label.title}
                       </Label>
                     </Grid>
                   );

@@ -29,8 +29,6 @@ export const GetTaskByColumnId = (columnId) =>
         }
     });
 
-
-
 export const ReorderTaskList = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -80,3 +78,35 @@ export const SwitchTasks = (body) =>
       reject(err);
     }
   });
+
+export const ActionLabel = (body) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/action-label`, {
+                method: "POST",
+                headers: new Headers({
+                    "Content-type": "application/json; charset=UTF-8",
+                }),
+                body: JSON.stringify(body),
+            });
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
+        }
+    });
+
+export const EditTask = (body) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task`, {
+                method: "PUT",
+                headers: new Headers({
+                    "Content-type": "application/json; charset=UTF-8",
+                }),
+                body: JSON.stringify(body),
+            });
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
+        }
+    });
