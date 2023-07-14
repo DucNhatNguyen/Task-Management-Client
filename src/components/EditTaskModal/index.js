@@ -23,6 +23,7 @@ import {
   UserAvatar,
 } from "components";
 import { UserContext } from "provider/UserProvider";
+import { Attachments } from "api/Task";
 
 const imageFormats = [
   "APNG",
@@ -61,6 +62,7 @@ const EditTaskModal = ({
   deleteLabel,
   assignMemberToTask,
   removeAssignedMember,
+  taskid
 }) => {
   const { renderedBoard } = useContext(UserContext);
 
@@ -117,30 +119,50 @@ const EditTaskModal = ({
   };
 
   const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
+    const files = e.target.files;
     setUploadError();
-    if (file) {
-      if (file.size > 5000000) {
-        setUploadError("Upload limit is 5mb! ");
-      } else {
-        setDisplayProgress(true);
-        const now = new Date();
-        const day = now.getDate();
-        const month = now.toLocaleString("en-EN", { month: "long" });
-        const year = now.getFullYear();
-        file.uploadDate = `${month} ${day}, ${year}`;
-        file.fileType = file.type
-          .slice(file.type.lastIndexOf("/") + 1, file.type.length)
-          .toUpperCase();
-        const response = await addAttachment(file);
-        if (response) {
-          setDisplayProgress(false);
+
+    if (files.length > 0) {
+      setDisplayProgress(true);
+      var formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].size > 5000000) {
+          setUploadError("Upload limit is 5mb! ");
         } else {
-          setDisplayProgress(false);
-          setUploadError("Upload failed try uploading it later!");
+          formData.append(`files`, files[i]);
         }
       }
+      const response = await addAttachment(formData);
+      if (response) {
+        setDisplayProgress(false);
+      } else {
+        setDisplayProgress(false);
+        setUploadError("Upload failed try uploading it later!");
+      }
     }
+
+    // if (file) {
+    //   if (file.size > 5000000) {
+    //     setUploadError("Upload limit is 5mb! ");
+    //   } else {
+    //     setDisplayProgress(true);
+    //     const now = new Date();
+    //     const day = now.getDate();
+    //     const month = now.toLocaleString("en-EN", { month: "long" });
+    //     const year = now.getFullYear();
+    //     file.uploadDate = `${month} ${day}, ${year}`;
+    //     file.fileType = file.type
+    //       .slice(file.type.lastIndexOf("/") + 1, file.type.length)
+    //       .toUpperCase();
+    //     const response = await addAttachment(file);
+    //     if (response) {
+    //       setDisplayProgress(false);
+    //     } else {
+    //       setDisplayProgress(false);
+    //       setUploadError("Upload failed try uploading it later!");
+    //     }
+    //   }
+    // }
   };
 
   useEffect(() => {
@@ -160,19 +182,19 @@ const EditTaskModal = ({
 
   return (
     <Modal style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            paddingTop: "64px",
-            overflow: "scroll",
-          }}
-          sx={{
-            "&::-webkit-scrollbar": {
-                width: "0",
-                background: "transparent",
-              },
-          }}
-            open={open} onClose={() => handleClose()}>
+      display: "flex",
+      alignItems: "flex-start",
+      justifyContent: "center",
+      paddingTop: "64px",
+      overflow: "scroll",
+    }}
+      sx={{
+        "&::-webkit-scrollbar": {
+          width: "0",
+          background: "transparent",
+        },
+      }}
+      open={open} onClose={() => handleClose()}>
       <div style={{
         backgroundColor: "white",
         width: "675px",
@@ -208,8 +230,8 @@ const EditTaskModal = ({
               }}
               sx={{
                 "&:hover": {
-                    backgroundColor: "rgb(32, 89, 165)",
-                    },
+                  backgroundColor: "rgb(32, 89, 165)",
+                },
               }}
               aria-label="delete"
             >
@@ -231,8 +253,8 @@ const EditTaskModal = ({
             )}
           </Grid>
           {/*this is the left side of modal in big screens */}
-          <Grid style={{marginBottom: "24px"}} item container sm={8} xs={12}>
-             <Grid item container xs={12}> {/*className={classes.taskTitleWrapper}> */}
+          <Grid style={{ marginBottom: "24px" }} item container sm={8} xs={12}>
+            <Grid item container xs={12}> {/*className={classes.taskTitleWrapper}> */}
               <Grid
                 item
                 xs={10}
@@ -283,24 +305,27 @@ const EditTaskModal = ({
             <Grid item container xs={12}>
               <Grid item>
                 <Typography
-                  style={{ 
+                  style={{
                     color: "#BDBDBD",
                     fontWeight: 600,
                     fontSize: "0.725rem",
                     lineHeight: "15px",
                     letterSpacing: "-0.035em",
-                    marginBottom: "20px" }}
+                    marginBottom: "20px"
+                  }}
                 >
                   in list
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Typography
-                  style={{ marginLeft: "8px",fontWeight: 600,
+                  style={{
+                    marginLeft: "8px", fontWeight: 600,
                     fontSize: "0.725rem",
                     lineHeight: "15px",
                     letterSpacing: "-0.035em",
-                    marginBottom: "20px" }}
+                    marginBottom: "20px"
+                  }}
                 >
                   {listTitle}
                 </Typography>
@@ -406,6 +431,8 @@ const EditTaskModal = ({
                 <input
                   id="icon-button-file"
                   type="file"
+                  multiple
+                  name="files"
                   style={{ display: "none" }}
                   onChange={handleFileUpload}
                 />
@@ -413,18 +440,21 @@ const EditTaskModal = ({
                   <IconButton
                     aria-label="upload file"
                     component="span"
-                    style={{border: "1px solid #BDBDBD",
-                            borderRadius: "8px",
-                            height: "24px"}}
+                    style={{
+                      border: "1px solid #BDBDBD",
+                      borderRadius: "8px",
+                      height: "24px"
+                    }}
                   >
-                    <Add style={{fontSize: "1rem"}} />
+                    <Add style={{ fontSize: "1rem" }} />
                     <Typography
-                      style={{ marginLeft: "8px",
-                              lineHeight: "15px",
-                              letterSpacing: "-0.035em",
-                              fontSize: "0.725rem",
-                              fontWeight: "600" 
-                            }}
+                      style={{
+                        marginLeft: "8px",
+                        lineHeight: "15px",
+                        letterSpacing: "-0.035em",
+                        fontSize: "0.725rem",
+                        fontWeight: "600"
+                      }}
                     >
                       Add
                     </Typography>
@@ -527,13 +557,13 @@ const EditTaskModal = ({
               container
               justify="flex-start"
               sx={{
-                  paddingLeft: "24px",
-                  marginBottom: "12px",
-                  height: "30px",
-                  // [theme.breakpoints.down("xs")]: {
-                  //   paddingLeft: "0px",
-                  // },
-                }}
+                paddingLeft: "24px",
+                marginBottom: "12px",
+                height: "30px",
+                // [theme.breakpoints.down("xs")]: {
+                //   paddingLeft: "0px",
+                // },
+              }}
             >
               <SectionTitle title="Actions" icon="people" />
             </Grid>
@@ -656,7 +686,7 @@ const EditTaskModal = ({
                         maxHeight: "60px",
                         display: "inline-flex",
                         marginBottom: "12px",
-                        paddingLeft: "20px", 
+                        paddingLeft: "20px",
                         justifyContent: "flex-end",
                         // [theme.breakpoints.down("xs")]: {
                         //   justifyContent: "flex-start",
@@ -675,7 +705,7 @@ const EditTaskModal = ({
                           backgroundColor: "#ffbaba",
                           cursor: "pointer",
                         },
-                        }}>
+                      }}>
                         <Grid item xs style={{ maxWidth: "32px" }} >
                           {/* <UserAvatar user={user} styles={{
                             borderRadius: "8px",
@@ -683,13 +713,13 @@ const EditTaskModal = ({
                             width: "32px",
                           }} /> */}
                           <Avatar
-                              src={user.avatar}
-                              alt={user.fullname + " avatar"}
-                              style={{
-                                  borderRadius: "8px",
-                                  width: "32px",
-                                  height: "32px",
-                              }}
+                            src={user.avatar}
+                            alt={user.fullname + " avatar"}
+                            style={{
+                              borderRadius: "8px",
+                              width: "32px",
+                              height: "32px",
+                            }}
                           />
                         </Grid>
                         <Grid
@@ -721,16 +751,17 @@ const EditTaskModal = ({
                   item
                   container
                   justifyContent="end"
-                  style={{ marginTop: "12px",
-                        maxHeight: "60px",
-                        display: "inline-flex",
-                        marginBottom: "12px",
-                        paddingLeft: "20px",
-                        justifyContent: "flex-end",
-                        // [theme.breakpoints.down("xs")]: {
-                        //   justifyContent: "center",
-                        //   paddingLeft: "0px"
-                        // }, 
+                  style={{
+                    marginTop: "12px",
+                    maxHeight: "60px",
+                    display: "inline-flex",
+                    marginBottom: "12px",
+                    paddingLeft: "20px",
+                    justifyContent: "flex-end",
+                    // [theme.breakpoints.down("xs")]: {
+                    //   justifyContent: "center",
+                    //   paddingLeft: "0px"
+                    // }, 
                   }}
                   xs={12}
                 >

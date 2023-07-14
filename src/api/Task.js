@@ -61,23 +61,23 @@ export const GetTaskByBoardId = (boardId) =>
     });
 
 export const SwitchTasks = (body) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      let response = await fetch(
-        `${process.env.REACT_APP_ROOT_API_PATH}task/task-switch`,
-        {
-          method: "PUT",
-          headers: new Headers({
-            "Content-type": "application/json; charset=UTF-8",
-          }),
-          body: JSON.stringify(body),
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(
+                `${process.env.REACT_APP_ROOT_API_PATH}task/task-switch`,
+                {
+                    method: "PUT",
+                    headers: new Headers({
+                        "Content-type": "application/json; charset=UTF-8",
+                    }),
+                    body: JSON.stringify(body),
+                }
+            );
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
         }
-      );
-      resolve(await response.json());
-    } catch (err) {
-      reject(err);
-    }
-  });
+    });
 
 export const ActionLabel = (body) =>
     new Promise(async (resolve, reject) => {
@@ -104,6 +104,19 @@ export const EditTask = (body) =>
                     "Content-type": "application/json; charset=UTF-8",
                 }),
                 body: JSON.stringify(body),
+            });
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
+        }
+    });
+
+export const Attachments = (formData, taskid) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/${taskid}/attachments`, {
+                method: "POST",
+                body: formData,
             });
             resolve(await response.json());
         } catch (err) {

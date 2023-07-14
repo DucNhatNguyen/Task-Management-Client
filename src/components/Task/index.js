@@ -8,6 +8,7 @@ import { UIContext } from "provider/UIProvider";
 import { TaskHelpers } from "helpers";
 import { taskStyles } from "./styles";
 import { ActionLabel } from "api/Task";
+import { v4 as uuidv4 } from "uuid";
 
 class Task extends React.Component {
     constructor(props) {
@@ -106,39 +107,35 @@ class Task extends React.Component {
         }
     };
     addAttachment = (file) => {
-        // new Promise(async (resolve, reject) => {
-        //     const id = await GetUniqueId();
-        //     const fileUrl = await UploadFile(file, id.data);
-        //     if (fileUrl) {
-        //         this.setState(
-        //             {
-        //                 attachments: [
-        //                     ...this.state.attachments,
-        //                     {
-        //                         id: id.data,
-        //                         name: file.name,
-        //                         uploadDate: file.uploadDate,
-        //                         fileType: file.fileType,
-        //                         fileUrl: fileUrl,
-        //                     },
-        //                 ],
-        //             },
-        //             async () => {
-        //                 const response = await TaskHelpers.HandleTaskPropertyUpdate(
-        //                     this.context.renderedBoard,
-        //                     this.props.task.id,
-        //                     "Attachments",
-        //                     this.state.attachments
-        //                 );
-        //                 if (response) {
-        //                     resolve("Property updated successfully!");
-        //                 } else {
-        //                     reject("Property update failed");
-        //                 }
-        //             }
-        //         );
-        //     }
-        // });
+        new Promise(async (resolve, reject) => {
+            const id = uuidv4;
+            console.log('upload file', file)
+            // const fileUrl = await UploadFile(file, id.data);
+            // if (fileUrl) {
+            //     this.setState(
+            //         {
+            //             attachments: [
+            //                 ...this.state.attachments,
+            //                 {
+            //                     id: id.data,
+            //                     name: file.name,
+            //                     uploadDate: file.uploadDate,
+            //                     fileType: file.fileType,
+            //                     fileUrl: fileUrl,
+            //                 },
+            //             ],
+            //         },
+            //         async () => {
+            //             Attachments(formData, taskid)
+            //                 .then((response) => setDisplayProgress(false))
+            //                 .catch((err) => {
+            //                     setDisplayProgress(false)
+            //                     setUploadError("Upload failed try uploading it later!")
+            //                 });
+            //         }
+            //     );
+            // }
+        });
     }
     deleteAttachment = (attachmentId) => {
         let attachments = this.state.attachments;
@@ -204,7 +201,7 @@ class Task extends React.Component {
                 // remove id matched label
                 labels.splice(i, 1);
                 this.setState({ labels: labels }, () => {
-                        ActionLabel({
+                    ActionLabel({
                         taskId: label.taskid,
                         id: label.id,
                         title: label.title,
@@ -344,12 +341,13 @@ class Task extends React.Component {
                                             return (
                                                 <Grid
                                                     className={classes.labelContainer}
-                                                    style={{ backgroundColor: label.colorhex, borderRadius: "14px",
-                                                                padding: "3px 0px",
-                                                                width: "60px",
-                                                                marginBottom: '8px',
-                                                                marginRight: '12px', 
-                                                            }}
+                                                    style={{
+                                                        backgroundColor: label.colorhex, borderRadius: "14px",
+                                                        padding: "3px 0px",
+                                                        width: "60px",
+                                                        marginBottom: '8px',
+                                                        marginRight: '12px',
+                                                    }}
                                                     item
                                                     container
                                                     alignItems="center"
@@ -358,17 +356,17 @@ class Task extends React.Component {
                                                 >
                                                     <Grid item xs={5}>
                                                         <Typography style={{
-                                                                        fontWeight: "500",
-                                                                        fontSize: "0.625rem",
-                                                                        lineHeight: "14px",
-                                                                        letterSpacing: "-0.035em",
-                                                                        paddingBottom: "4px",
-                                                                        paddingTop: "4px",
-                                                                        textAlign: "center",
-                                                                        color: "white",
-                                                                        overflow: "hidden",
-                                                                        textOverflow: "ellipsis",
-                                                                    }}>
+                                                            fontWeight: "500",
+                                                            fontSize: "0.625rem",
+                                                            lineHeight: "14px",
+                                                            letterSpacing: "-0.035em",
+                                                            paddingBottom: "4px",
+                                                            paddingTop: "4px",
+                                                            textAlign: "center",
+                                                            color: "white",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                        }}>
                                                             {label.title}
                                                         </Typography>
                                                     </Grid>
@@ -489,6 +487,7 @@ class Task extends React.Component {
                             deleteLabel={this.deleteLabel}
                             assignMemberToTask={this.assignMemberToTask}
                             removeAssignedMember={this.removeAssignedMember}
+                            taskid={this.props.task.id}
                         />
                     </div>
                 )}
