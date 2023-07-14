@@ -24,3 +24,18 @@ export const FetchUserData = (userid, setUserData, setOpenBackdrop) =>
       reject(err);
     }
   });
+
+export const GetUserAll = () =>
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}user/all`, {
+                method: "GET",
+                headers: new Headers({
+                    "Content-type": "application/json; charset=UTF-8",
+                })
+            });
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
+        }
+    });

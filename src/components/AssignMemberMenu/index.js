@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Typography, Grid, Avatar } from "@mui/material";
 import { UserAvatar } from "components";
-// import { UserContext } from "provider/UserProvider";
+import { UserContext } from "provider/UserProvider";
 import { PopMenu } from "./styles";
 
 const AssignMemberMenu = ({
@@ -11,51 +11,13 @@ const AssignMemberMenu = ({
   assignMemberToTask,
 }) => {
 
-//   const { renderedBoard } = useContext(UserContext);
-const renderedBoard = {
-    "admin": {
-        "boards": {
-            "-NYX6AimlUULSlFxgv6E": {
-                "boardId": "-NYX6AimlUULSlFxgv6E"
-            }
-        },
-        "email": "ducnhat090199@gmail.com",
-        "name": "N.T MAX",
-        "picture": "https://lh3.googleusercontent.com/a/AAcHTtcmuVue47yEfADs1fvleNkCkS2XyQywMpft_yuO=s96-c",
-        "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-    },
-    "coverPhoto": "https://images.unsplash.com/photo-1615058712849-d33b9e7824c5?ixid=MnwyMDY2MzR8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MTY1MDcwODQ&ixlib=rb-1.2.1",
-    "date": "June 22, 2023",
-    "id": "-NYYV0DUybOzG5C_grEt",
-    "title": "dasasdas",
-    "users": [
-        {
-            "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-        }
-    ],
-    "visibility": "Private",
-    "userData": [
-        {
-            "boards": {
-                "-NYX6AimlUULSlFxgv6E": {
-                    "boardId": "-NYX6AimlUULSlFxgv6E"
-                },
-                "-NYYV0DUybOzG5C_grEt": {
-                    "boardId": "-NYYV0DUybOzG5C_grEt"
-                }
-            },
-            "email": "ducnhat090199@gmail.com",
-            "name": "N.T MAX",
-            "picture": "https://lh3.googleusercontent.com/a/AAcHTtcmuVue47yEfADs1fvleNkCkS2XyQywMpft_yuO=s96-c",
-            "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-        }
-    ]
-}
+  const { renderedBoard } = useContext(UserContext);
+
   const [input, setInput] = useState("");
   const [memberList, setMemberList] = useState([]);
 
-  const handleMemberClick = (uid) => {
-    assignMemberToTask(uid);
+  const handleMemberClick = (id) => {
+    assignMemberToTask(id);
     handleClose();
   };
 
@@ -70,14 +32,14 @@ const renderedBoard = {
     }
   }, [input]);
 
-//   useEffect(() => {
-//     if (assigments && renderedBoard.userData) {
-//       const list = renderedBoard.userData.filter(
-//         (user) => !assigments.includes(user.uid)
-//       );
-//       setMemberList(list);
-//     }
-//   }, [assigments, renderedBoard.userData]);
+  useEffect(() => {
+    if (assigments && renderedBoard.members) {
+      const list = renderedBoard.members.filter(
+        (user) => !assigments.map(a => a.id).includes(user.id)
+      );
+      setMemberList(list);
+    }
+  }, [assigments, renderedBoard.members]);
 
   const handleOnKeyDown = (e) => {
     e.stopPropagation();
@@ -145,8 +107,8 @@ const renderedBoard = {
             />
           </Grid>
         </Grid>
-        {renderedBoard.userData &&
-          renderedBoard.userData.length !== assigments.length && (
+        {renderedBoard.members &&
+          renderedBoard.members.length !== assigments.length && (
             <Grid item container style={{
                 background: "#FFFFFF",
                 border: "1px solid #E0E0E0",
@@ -176,7 +138,7 @@ const renderedBoard = {
                             cursor: "pointer",
                         }
                       }}
-                      onClick={() => handleMemberClick(user.uid)}
+                      onClick={() => handleMemberClick(user.id)}
                     >
                       <Grid item xs style={{ maxWidth: "32px" }}>
                         <UserAvatar user={user} styles={{
@@ -199,7 +161,7 @@ const renderedBoard = {
                             letterSpacing: "-0.035em",
                             paddingLeft: "16px"
                         }}>
-                          {user.name}
+                          {user.fullname}
                         </Typography>
                       </Grid>
                     </Grid>

@@ -14,13 +14,13 @@ class Task extends React.Component {
         super(props);
         this.state = {
             modalVisible: false,
-            coverImage: "",
+            coverimage: "",
             title: "",
             description: "",
             comments: [],
             attachments: [],
             labels: [],
-            assigments: [],
+            members: [],
         };
     }
     static contextType = UIContext;
@@ -36,7 +36,7 @@ class Task extends React.Component {
         TaskHelpers.HandleTaskPropertyUpdate(
             this.context.renderedBoard,
             this.props.task.id,
-            "title",
+            "Title",
             title
         ).catch((err) => console.log(err));
     };
@@ -45,7 +45,7 @@ class Task extends React.Component {
         TaskHelpers.HandleTaskPropertyUpdate(
             this.context.renderedBoard,
             this.props.task.id,
-            "description",
+            "Description",
             description
         ).catch((err) => console.log(err));
     };
@@ -81,7 +81,7 @@ class Task extends React.Component {
                     TaskHelpers.HandleTaskPropertyUpdate(
                         this.context.renderedBoard,
                         this.props.task.id,
-                        "comments",
+                        "Comments",
                         this.state.comments
                     ).catch((err) => console.log(err));
                 });
@@ -98,7 +98,7 @@ class Task extends React.Component {
                     TaskHelpers.HandleTaskPropertyUpdate(
                         this.context.renderedBoard,
                         this.props.task.id,
-                        "comments",
+                        "Comments",
                         this.state.comments
                     ).catch((err) => console.log(err));
                 });
@@ -127,7 +127,7 @@ class Task extends React.Component {
         //                 const response = await TaskHelpers.HandleTaskPropertyUpdate(
         //                     this.context.renderedBoard,
         //                     this.props.task.id,
-        //                     "attachments",
+        //                     "Attachments",
         //                     this.state.attachments
         //                 );
         //                 if (response) {
@@ -151,7 +151,7 @@ class Task extends React.Component {
                     TaskHelpers.HandleTaskPropertyUpdate(
                         this.context.renderedBoard,
                         this.props.task.id,
-                        "attachments",
+                        "Attachments",
                         this.state.attachments
                     ).catch((err) => console.log(err));
                 });
@@ -161,14 +161,14 @@ class Task extends React.Component {
     handleSearchedImageClick = (regular) => {
         this.setState(
             {
-                coverImage: regular,
+                coverimage: regular,
             },
             () => {
                 TaskHelpers.HandleTaskPropertyUpdate(
                     this.context.renderedBoard,
                     this.props.task.id,
-                    "coverImage",
-                    this.state.coverImage
+                    "coverimage",
+                    this.state.coverimage
                 );
             }
         );
@@ -217,24 +217,25 @@ class Task extends React.Component {
                     // TaskHelpers.HandleTaskPropertyUpdate(
                     //     this.context.renderedBoard,
                     //     this.props.task.id,
-                    //     "labels",
+                    //     "Labels",
                     //     this.state.labels
                     // ).catch((err) => console.log(err));
                 });
             }
         }
     };
-    assignMemberToTask = (uid) => {
+    assignMemberToTask = (id) => {
+        console.log('id assginengms', this.state.members);
         this.setState(
             {
-                assigments: [...this.state.assigments, uid],
+                members: [...this.state.members, id],
             },
             () => {
                 TaskHelpers.HandleTaskPropertyUpdate(
                     this.context.renderedBoard,
                     this.props.task.id,
-                    "assigments",
-                    this.state.assigments
+                    "Members",
+                    id
                 );
             }
         );
@@ -247,7 +248,7 @@ class Task extends React.Component {
                 TaskHelpers.HandleTaskPropertyUpdate(
                     this.context.renderedBoard,
                     this.props.task.id,
-                    "assigments",
+                    "Assigments",
                     this.state.assigments
                 ).catch((err) => console.log(err));
             });
@@ -255,37 +256,37 @@ class Task extends React.Component {
     };
     componentDidMount() {
         const {
-            coverImage,
+            coverimage,
             title,
             description,
             comments,
             attachments,
             labels,
-            assigments,
+            members
         } = this.props.task;
         this.setState({
-            coverImage: coverImage || "",
+            coverimage: coverimage || "",
             title: title || " ",
             description: description || " ",
             comments: comments || [],
             attachments: attachments || [],
             labels: labels || [],
-            assigments: assigments || [],
+            members: members || [],
         });
     }
 
     render() {
         const { classes, task, index } = this.props;
         const {
-            coverImage,
+            coverimage,
             title,
             comments,
             attachments,
             labels,
-            assigments,
+            members,
         } = this.state;
         const { renderedBoard } = this.context;
-        console.log('taskkkk',  renderedBoard);
+
         let avatarCounter = 0;
 
         return (
@@ -314,11 +315,11 @@ class Task extends React.Component {
                                 })
                             }
                         >
-                            {coverImage && (
+                            {coverimage && (
                                 <img
                                     alt="task-cover"
                                     className={classes.cover}
-                                    src={coverImage + "&q=80&w=400"}
+                                    src={coverimage + "&q=80&w=400"}
                                 />
                             )}
                             <Grid container>
@@ -377,12 +378,12 @@ class Task extends React.Component {
                                 </Grid>
                             </Grid>
                             <Grid item container xs={12}>
-                                {/* {assigments &&
+                                {members &&
                                     renderedBoard &&
-                                    renderedBoard.userData.map((user, index) => {
+                                    renderedBoard.members.map((user, index) => {
                                         if (
-                                            assigments.includes(user.uid) &&
-                                            !(assigments.length > 2 && avatarCounter > 0)
+                                            members.map(a => a.id).includes(user.id) &&
+                                            !(members.length > 2 && avatarCounter > 0)
                                         ) {
                                             avatarCounter += 1;
                                             return (
@@ -402,17 +403,17 @@ class Task extends React.Component {
                                                 </Grid>
                                             );
                                         }
-                                        if (index === renderedBoard.userData.length - 1)
+                                        if (index === renderedBoard.members.length - 1)
                                             avatarCounter = 0;
-                                    })} */}
-                                {assigments && assigments.length > 2 ? (
+                                    })}
+                                {members && members.length > 2 ? (
                                     <Grid item className={classes.othersContainer}>
                                         <Typography
                                             className={classes.othersInfo}
                                             variant="body2"
                                             gutterBottom
                                         >
-                                            +{assigments.length - 1} Others
+                                            +{members.length - 1} Others
                                         </Typography>
                                     </Grid>
                                 ) : (
@@ -470,13 +471,13 @@ class Task extends React.Component {
                             handleClose={this.closeEditModal}
                             editTitle={this.handleTitleChange}
                             editDescription={this.handleDescriptionChange}
-                            coverImage={this.state.coverImage}
+                            coverimage={this.state.coverimage}
                             labels={this.state.labels}
                             listTitle={this.props.listTitle}
                             taskTitle={this.state.title}
                             description={this.state.description}
                             comments={this.state.comments}
-                            assigments={this.state.assigments}
+                            assigments={this.state.members}
                             addImageToTask={this.handleSearchedImageClick}
                             submitComment={this.submitComment}
                             deleteComment={this.deleteComment}

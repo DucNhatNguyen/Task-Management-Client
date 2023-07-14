@@ -41,7 +41,7 @@ const imageFormats = [
 const EditTaskModal = ({
   open,
   handleClose,
-  coverImage,
+  coverimage,
   taskTitle,
   listTitle,
   editDescription,
@@ -150,12 +150,12 @@ const EditTaskModal = ({
   }, [uploadError]);
 
   useEffect(() => {
-    // if (renderedBoard) {
-    //   const users = renderedBoard.userData.filter((user) =>
-    //     assigments.includes(user.uid)
-    //   );
-    //   setAssignedUsers(users);
-    // }
+    if (renderedBoard) {
+      const users = renderedBoard.members.filter((user) =>
+        assigments.map(a => a.id).includes(user.id)
+      );
+      setAssignedUsers(users);
+    }
   }, [assigments]);
 
   return (
@@ -215,7 +215,7 @@ const EditTaskModal = ({
             >
               <Clear />
             </IconButton>
-            {coverImage && (
+            {coverimage && (
               <img
                 style={{
                   width: "100%",
@@ -225,7 +225,7 @@ const EditTaskModal = ({
                   padding: "12px",
                   background: "#F2F2F2",
                 }}
-                src={coverImage + "&w=1280&q=80"}
+                src={coverimage + "&w=1280&q=80"}
                 alt="cover-img"
               />
             )}
@@ -473,7 +473,7 @@ const EditTaskModal = ({
                           date={attachment.uploadDate}
                           image={true}
                           fileUrl={attachment.fileUrl}
-                          coverImage={coverImage}
+                          coverimage={coverimage}
                           deleteAttachment={deleteAttachment}
                           addImageToTask={addImageToTask}
                         />
@@ -664,7 +664,7 @@ const EditTaskModal = ({
                         // },
                       }}
                       container
-                      onClick={() => removeAssignedMember(user.uid)}
+                      onClick={() => removeAssignedMember(user.id)}
                     >
                       <Grid item container sm xs={8} sx={{
                         borderRadius: "8px",
@@ -676,17 +676,27 @@ const EditTaskModal = ({
                           cursor: "pointer",
                         },
                         }}>
-                        <Grid item xs style={{ maxWidth: "32px" }}>
-                          <UserAvatar user={user} styles={{
+                        <Grid item xs style={{ maxWidth: "32px" }} >
+                          {/* <UserAvatar user={user} styles={{
                             borderRadius: "8px",
-                            height: "2rem",
-                            width: "2rem",
-                          }} />
+                            height: "32px",
+                            width: "32px",
+                          }} /> */}
+                          <Avatar
+                              src={user.avatar}
+                              alt={user.fullname + " avatar"}
+                              style={{
+                                  borderRadius: "8px",
+                                  width: "32px",
+                                  height: "32px",
+                              }}
+                          />
                         </Grid>
                         <Grid
                           item
                           container
                           alignItems="center"
+                          justifyContent="center"
                           xs
                           style={{ maxWidth: "180px" }}
                         >
@@ -700,7 +710,7 @@ const EditTaskModal = ({
                             maxWidth: "140px",
                             paddingLeft: "16px",
                           }}>
-                            {user.name}
+                            {user.fullname}
                           </Typography>
                         </Grid>
                       </Grid>
