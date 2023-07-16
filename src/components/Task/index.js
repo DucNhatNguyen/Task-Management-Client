@@ -7,7 +7,7 @@ import { UserAvatar, EditTaskModal } from "components";
 import { UIContext } from "provider/UIProvider";
 import { TaskHelpers } from "helpers";
 import { taskStyles } from "./styles";
-import { ActionLabel } from "api/Task";
+import { ActionLabel, Attachments, RemoveAttachments, AddComment } from "api/Task";
 import { v4 as uuidv4 } from "uuid";
 
 class Task extends React.Component {
@@ -52,24 +52,48 @@ class Task extends React.Component {
     };
     submitComment = (comment) =>
         new Promise((resolve, reject) => {
-            this.setState(
-                {
-                    comments: [...this.state.comments, comment],
-                },
-                async () => {
-                    const response = await TaskHelpers.HandleTaskPropertyUpdate(
-                        this.context.renderedBoard,
-                        this.props.task.id,
-                        "comments",
-                        this.state.comments
-                    );
-                    if (response) {
-                        resolve("Property updated successfully!");
-                    } else {
-                        reject("Property update failed");
-                    }
-                }
-            );
+            AddComment({
+                id: comment.id,
+                userid: comment.userid,
+                text: comment.text,
+                createdBy: comment.createdBy,
+            }, this.props.task.id)
+                .then((res) => {
+                    this.setState(
+                        {
+                            comments: [...this.state.comments, res.responseData],
+                        })
+                    resolve("Property updated successfully!")
+                })
+                .catch((err) => reject("Property update failed"))
+
+            // this.setState(
+            //     {
+            //         comments: [...this.state.comments, comment],
+            //     },
+            //     async () => {
+            //         AddComment({
+            //             id: comment.id,
+            //             userid: comment.userid,
+            //             text: comment.text,
+            //             createdBy: comment.createdBy,
+            //         }, this.props.task.id)
+            //             .then((res) => resolve("Property updated successfully!"))
+            //             .catch((err) => reject("Property update failed"))
+
+            //         // const response = await TaskHelpers.HandleTaskPropertyUpdate(
+            //         //     this.context.renderedBoard,
+            //         //     this.props.task.id,
+            //         //     "comments",
+            //         //     this.state.comments
+            //         // );
+            //         // if (response) {
+            //         //     resolve("Property updated successfully!");
+            //         // } else {
+            //         //     reject("Property update failed");
+            //         // }
+            //     }
+            // );
         });
     deleteComment = (commentId) => {
         let comments = this.state.comments;
@@ -106,37 +130,30 @@ class Task extends React.Component {
             }
         }
     };
-    addAttachment = (file) => {
+    addItem = (item) => {
+        this.setState(state => ({
+            attachments: [...state.attachments, item]
+        }));
+    }
+    addAttachment = (formData) => {
         new Promise(async (resolve, reject) => {
-            const id = uuidv4;
-            console.log('upload file', file)
-            // const fileUrl = await UploadFile(file, id.data);
-            // if (fileUrl) {
-            //     this.setState(
-            //         {
-            //             attachments: [
-            //                 ...this.state.attachments,
-            //                 {
-            //                     id: id.data,
-            //                     name: file.name,
-            //                     uploadDate: file.uploadDate,
-            //                     fileType: file.fileType,
-            //                     fileUrl: fileUrl,
-            //                 },
-            //             ],
-            //         },
-            //         async () => {
-            //             Attachments(formData, taskid)
-            //                 .then((response) => setDisplayProgress(false))
-            //                 .catch((err) => {
-            //                     setDisplayProgress(false)
-            //                     setUploadError("Upload failed try uploading it later!")
-            //                 });
+            // await Attachments(formData, this.props.task.id)
+            //     .then((res) => {
+            //         const data = res.responseData
+            //         for (let i = 0; i < data.length; i++) {
+            //             this.addItem({
+            //                 id: data[i].id,
+            //                 name: data[i].name,
+            //                 fileType: data[i].filetype,
+            //                 fileUrl: data[i].fileurl,
+            //             })
             //         }
-            //     );
-            // }
+            //         resolve("Property updated successfully!");
+            //     })
+            //     .catch((err) => reject("Property update failed"));
         });
     }
+
     deleteAttachment = (attachmentId) => {
         let attachments = this.state.attachments;
         for (let i = 0; i < attachments.length; i++) {
@@ -145,17 +162,14 @@ class Task extends React.Component {
                 // remove id matched comment
                 attachments.splice(i, 1);
                 this.setState({ attachments: attachments }, () => {
-                    TaskHelpers.HandleTaskPropertyUpdate(
-                        this.context.renderedBoard,
-                        this.props.task.id,
-                        "Attachments",
-                        this.state.attachments
-                    ).catch((err) => console.log(err));
+                    RemoveAttachments(attachment.id)
+                        .catch((err) => console.log(err))
                 });
             }
         }
     };
     handleSearchedImageClick = (regular) => {
+        //var newCoverImg = regular.includes(process.env.REACT_APP_DOMAIN) ? regular : process.env.REACT_APP_DOMAIN + regular
         this.setState(
             {
                 coverimage: regular,
@@ -164,7 +178,7 @@ class Task extends React.Component {
                 TaskHelpers.HandleTaskPropertyUpdate(
                     this.context.renderedBoard,
                     this.props.task.id,
-                    "coverimage",
+                    "Coverimage",
                     this.state.coverimage
                 );
             }
@@ -221,18 +235,18 @@ class Task extends React.Component {
             }
         }
     };
-    assignMemberToTask = (id) => {
-        console.log('id assginengms', this.state.members);
+    assignMemberToTask = (assignedUser) => {
+        console.log('member listsss rrr', assignedUser)
         this.setState(
             {
-                members: [...this.state.members, id],
+                members: [...this.state.members, assignedUser],
             },
             () => {
                 TaskHelpers.HandleTaskPropertyUpdate(
                     this.context.renderedBoard,
                     this.props.task.id,
                     "Members",
-                    id
+                    assignedUser.id
                 );
             }
         );
@@ -316,7 +330,8 @@ class Task extends React.Component {
                                 <img
                                     alt="task-cover"
                                     className={classes.cover}
-                                    src={coverimage + "&q=80&w=400"}
+                                    // src={coverimage + "&q=80&w=400"}
+                                    src={coverimage}
                                 />
                             )}
                             <Grid container>
@@ -488,6 +503,7 @@ class Task extends React.Component {
                             assignMemberToTask={this.assignMemberToTask}
                             removeAssignedMember={this.removeAssignedMember}
                             taskid={this.props.task.id}
+                            addItem={this.addItem}
                         />
                     </div>
                 )}

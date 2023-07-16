@@ -39,24 +39,27 @@ const Attachment = ({
     <Grid container style={{ marginBottom: "16px" }}>
       <Grid item style={{ width: "100px" }}>
         {image ? (
-          <img style={{
-            width: "100%",
-            height: "66px",
-            padding: "12px",
-            objectFit: "scale-down",
-            borderRadius: "8px",
-            backgroundColor: "#F2F2F2"
-          }} src={`${fileUrl}`} alt={title} />
+          <img
+            style={{
+              width: "100%",
+              height: "66px",
+              padding: "12px",
+              objectFit: "scale-down",
+              borderRadius: "8px",
+              backgroundColor: "#F2F2F2"
+            }}
+            src={process.env.REACT_APP_DOMAIN + fileUrl}
+            alt={title} />
         ) : (
           fileType && (
             <div style={{
-                borderRadius: "8px",
-                width: "100%",
-                height: "66px",
-                backgroundColor: "#E0E0E0",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
+              borderRadius: "8px",
+              width: "100%",
+              height: "66px",
+              backgroundColor: "#E0E0E0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}>
               <Typography style={{
                 fontSize: "0.725rem",
@@ -90,13 +93,18 @@ const Attachment = ({
             lineHeight: "15px",
             letterSpacing: "-0.035rem",
             color: "#4F4F4F",
-            marginBottom: "8px"
-          }}>{title}</Typography>
+            marginBottom: "8px",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: 'ellipsis'
+          }}>
+            {title}
+          </Typography>
         </Grid>
         <Grid item container xs={12}>
           <Grid item xs={3}>
             <a
-              href={fileUrl}
+              href={process.env.REACT_APP_DOMAIN + fileUrl}
               download="safd.png"
               target="_blank"
               rel="noopener noreferrer"
@@ -134,16 +142,16 @@ const Attachment = ({
           </Grid>
           {image && fileUrl && fileUrl !== coverImage && (
             <Grid item container alignItems="center" xs={5}>
-              <div onClick={() => addImageToTask(fileUrl)}>
+              <div onClick={() => addImageToTask(process.env.REACT_APP_DOMAIN + fileUrl)}>
                 <Typography style={{
-                    fontSize: "0.725rem",
-                    fontWeight: 500
+                  fontSize: "0.725rem",
+                  fontWeight: 500
                 }}
-                sx={{
+                  sx={{
                     "&:hover": {
-                        cursor: "pointer",
+                      cursor: "pointer",
                     },
-                }}
+                  }}
                 >
                   Set Cover Image
                 </Typography>
@@ -152,7 +160,7 @@ const Attachment = ({
           )}
         </Grid>
       </Grid>
-    </Grid>
+    </Grid >
   );
 };
 

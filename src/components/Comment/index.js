@@ -8,30 +8,18 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-// import { UserContext } from "provider/UserProvider";
+import { UserContext } from "provider/UserProvider";
 import { EditInput, UserAvatar } from "components";
+import { TaskHelpers } from "helpers"
 
 const Comment = ({ comment, deleteComment, editComment }) => {
-//   const { userData } = useContext(UserContext);
-const userData = {
-            "boards": {
-                "-NYX6AimlUULSlFxgv6E": {
-                    "boardId": "-NYX6AimlUULSlFxgv6E"
-                },
-                "-NYYV0DUybOzG5C_grEt": {
-                    "boardId": "-NYYV0DUybOzG5C_grEt"
-                }
-            },
-            "email": "ducnhat090199@gmail.com",
-            "name": "N.T MAX",
-            "picture": "https://lh3.googleusercontent.com/a/AAcHTtcmuVue47yEfADs1fvleNkCkS2XyQywMpft_yuO=s96-c",
-            "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-        }
+  const { userData } = useContext(UserContext);
+
   const [owner, setOwner] = useState(false);
 
   const [displayEditArea, setDisplayEditArea] = useState(false);
   const [displayDeleteDialog, setDisplayDeleteDialog] = useState(false);
-
+  const [time, setTime] = useState(TaskHelpers.HandleTimeComment(comment.createdtime))
   const handleEditButtonClick = () => {
     setDisplayEditArea(!displayEditArea);
   };
@@ -58,41 +46,42 @@ const userData = {
   };
 
   useEffect(() => {
-    if (userData.uid === comment.uid) {
+    if (userData.id === comment.userid) {
+      console.log('nguoi comment chinh chu')
       setOwner(true);
     }
   }, [userData]);
 
   return (
     <Grid container style={{
-        minHeight: "100px",
-        padding: "16px",
-        borderBottom: "1px solid #F2F2F2",
-        marginTop: "8px",
-        marginBottom: "8px",
+      minHeight: "100px",
+      padding: "16px",
+      borderBottom: "1px solid #F2F2F2",
+      marginTop: "8px",
+      marginBottom: "8px",
     }}>
       <Grid item container xs={12} justify="space-between">
-        <Grid item xs={1}>
-          <UserAvatar user={comment} styles={{borderRadius: "8px"}} />
+        <Grid item xs={1} style={{ marginRight: "20px" }}>
+          <UserAvatar user={comment.user} styles={{ borderRadius: "8px" }} />
         </Grid>
-        <Grid item container xs={7} style={{ paddingLeft: "7px"}}>
+        <Grid item container xs={7} style={{ paddingLeft: "7px" }}>
           <Grid item xs={12}>
             <Typography style={{
-                fontWeight: 500,
-                fontSize: "0.85rem",
-                lineHeight: "18px",
-                letterSpacing: "-0.035em",
-                color: "black"
-            }}>{comment.name}</Typography>
+              fontWeight: 500,
+              fontSize: "0.85rem",
+              lineHeight: "18px",
+              letterSpacing: "-0.035em",
+              color: "black"
+            }}>{comment.createdby}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography style={{
-                fontWeight: 500,
-                fontSize: "0.725rem",
-                lineHeight: "14px",
-                letterSpacing: "-0.035em",
-                color: "#BDBDBD"
-            }}>{comment.time}</Typography>
+              fontWeight: 500,
+              fontSize: "0.725rem",
+              lineHeight: "14px",
+              letterSpacing: "-0.035em",
+              color: "#BDBDBD"
+            }}>{time}</Typography>
           </Grid>
         </Grid>
         <Grid item container xs={3} justifyContent="end">
@@ -111,8 +100,8 @@ const userData = {
                   }}
                   sx={{
                     "&:hover": {
-                        cursor: "pointer",
-                        color: "rgba(130,130,130,1)",
+                      cursor: "pointer",
+                      color: "rgba(130,130,130,1)",
                     },
                   }}
                 >
@@ -143,8 +132,8 @@ const userData = {
                   }}
                   sx={{
                     "&:hover": {
-                        cursor: "pointer",
-                        color: "rgba(130,130,130,1)",
+                      cursor: "pointer",
+                      color: "rgba(130,130,130,1)",
                     },
                   }}
                 >

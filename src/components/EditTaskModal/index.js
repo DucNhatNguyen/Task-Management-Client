@@ -62,7 +62,8 @@ const EditTaskModal = ({
   deleteLabel,
   assignMemberToTask,
   removeAssignedMember,
-  taskid
+  taskid,
+  addItem
 }) => {
   const { renderedBoard } = useContext(UserContext);
 
@@ -132,37 +133,25 @@ const EditTaskModal = ({
           formData.append(`files`, files[i]);
         }
       }
-      const response = await addAttachment(formData);
-      if (response) {
-        setDisplayProgress(false);
-      } else {
-        setDisplayProgress(false);
-        setUploadError("Upload failed try uploading it later!");
-      }
+      await Attachments(formData, taskid)
+        .then((res) => {
+          const data = res.responseData
+          for (let i = 0; i < data.length; i++) {
+            addItem({
+              id: data[i].id,
+              name: data[i].name,
+              filetype: data[i].filetype,
+              fileurl: data[i].fileurl,
+              uploaddate: data[i].uploaddate
+            })
+          }
+          setDisplayProgress(false)
+        })
+        .catch((err) => {
+          setDisplayProgress(false);
+          setUploadError("Upload failed try uploading it later!");
+        });
     }
-
-    // if (file) {
-    //   if (file.size > 5000000) {
-    //     setUploadError("Upload limit is 5mb! ");
-    //   } else {
-    //     setDisplayProgress(true);
-    //     const now = new Date();
-    //     const day = now.getDate();
-    //     const month = now.toLocaleString("en-EN", { month: "long" });
-    //     const year = now.getFullYear();
-    //     file.uploadDate = `${month} ${day}, ${year}`;
-    //     file.fileType = file.type
-    //       .slice(file.type.lastIndexOf("/") + 1, file.type.length)
-    //       .toUpperCase();
-    //     const response = await addAttachment(file);
-    //     if (response) {
-    //       setDisplayProgress(false);
-    //     } else {
-    //       setDisplayProgress(false);
-    //       setUploadError("Upload failed try uploading it later!");
-    //     }
-    //   }
-    // }
   };
 
   useEffect(() => {
@@ -247,7 +236,8 @@ const EditTaskModal = ({
                   padding: "12px",
                   background: "#F2F2F2",
                 }}
-                src={coverimage + "&w=1280&q=80"}
+                // src={coverimage + "&w=1280&q=80"}
+                src={coverimage}
                 alt="cover-img"
               />
             )}
@@ -494,15 +484,15 @@ const EditTaskModal = ({
               <Grid item xs={12} style={{ marginBottom: "16px" }}>
                 {attachments &&
                   attachments.map((attachment, key) => {
-                    if (imageFormats.includes(attachment.fileType)) {
+                    if (imageFormats.includes(attachment.filetype)) {
                       return (
                         <Attachment
                           key={key}
                           id={attachment.id}
                           title={attachment.name}
-                          date={attachment.uploadDate}
+                          date={attachment.uploaddate}
                           image={true}
-                          fileUrl={attachment.fileUrl}
+                          fileUrl={attachment.fileurl}
                           coverimage={coverimage}
                           deleteAttachment={deleteAttachment}
                           addImageToTask={addImageToTask}
@@ -515,8 +505,8 @@ const EditTaskModal = ({
                           id={attachment.id}
                           title={attachment.name}
                           date={attachment.uploadDate}
-                          fileUrl={attachment.fileUrl}
-                          fileType={attachment.fileType}
+                          fileUrl={attachment.fileurl}
+                          fileType={attachment.filetype}
                           deleteAttachment={deleteAttachment}
                         />
                       );
@@ -726,7 +716,6 @@ const EditTaskModal = ({
                           item
                           container
                           alignItems="center"
-                          justifyContent="center"
                           xs
                           style={{ maxWidth: "180px" }}
                         >

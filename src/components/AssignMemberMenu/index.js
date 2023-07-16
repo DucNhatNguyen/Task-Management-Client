@@ -17,7 +17,9 @@ const AssignMemberMenu = ({
   const [memberList, setMemberList] = useState([]);
 
   const handleMemberClick = (id) => {
-    assignMemberToTask(id);
+    const assignedUser = memberList.filter(el => el.id === id);
+
+    assignMemberToTask(assignedUser[0]);
     handleClose();
   };
 
@@ -57,26 +59,26 @@ const AssignMemberMenu = ({
         }}
       >
         <Grid style={{
-            paddingLeft: "12px",
-            paddingRight: "12px",
-            paddingTop: "14.4px",
-            outlineWidth: "0"
+          paddingLeft: "12px",
+          paddingRight: "12px",
+          paddingTop: "14.4px",
+          outlineWidth: "0"
         }} container>
           <Grid item xs={12}>
             <Typography style={{
-                color: "black",
-                fontWeight: "600",
-                fontSize: "1rem"
+              color: "black",
+              fontWeight: "600",
+              fontSize: "1rem"
             }} component="p">
               Assign Member
             </Typography>
           </Grid>
         </Grid>
         <Grid style={{
-            paddingLeft: "12px",
-            paddingRight: "12px",
-            paddingTop: "14.4px",
-            paddingBottom: "14.4px",
+          paddingLeft: "12px",
+          paddingRight: "12px",
+          paddingTop: "14.4px",
+          paddingBottom: "14.4px",
         }} item container>
           <Grid item container xs={12} style={{
             backgroundColor: "white",
@@ -110,13 +112,13 @@ const AssignMemberMenu = ({
         {renderedBoard.members &&
           renderedBoard.members.length !== assigments.length && (
             <Grid item container style={{
-                background: "#FFFFFF",
-                border: "1px solid #E0E0E0",
-                borderRadius: "8px",
-                boxShadow: "0px 2px 8px rgb(0 0 0 / 10%)",
-                margin: "auto",
-                marginBottom: "12px",
-                padding: "8px",
+              background: "#FFFFFF",
+              border: "1px solid #E0E0E0",
+              borderRadius: "8px",
+              boxShadow: "0px 2px 8px rgb(0 0 0 / 10%)",
+              margin: "auto",
+              marginBottom: "12px",
+              padding: "8px",
             }} xs={11}>
               {memberList &&
                 memberList.map((user, index) => {
@@ -134,17 +136,17 @@ const AssignMemberMenu = ({
                       }}
                       sx={{
                         "&:hover": {
-                            backgroundColor: "#d7ffd9",
-                            cursor: "pointer",
+                          backgroundColor: "#d7ffd9",
+                          cursor: "pointer",
                         }
                       }}
                       onClick={() => handleMemberClick(user.id)}
                     >
                       <Grid item xs style={{ maxWidth: "32px" }}>
                         <UserAvatar user={user} styles={{
-                            borderRadius: "8px",
-                            height: "2rem",
-                            width: "2rem"
+                          borderRadius: "8px",
+                          height: "2rem",
+                          width: "2rem"
                         }} />
                       </Grid>
                       <Grid
@@ -155,11 +157,11 @@ const AssignMemberMenu = ({
                         style={{ maxWidth: "180px" }}
                       >
                         <Typography style={{
-                            fontWeight: 600,
-                            fontSize: "0.875rem",
-                            lineHeight: "18px",
-                            letterSpacing: "-0.035em",
-                            paddingLeft: "16px"
+                          fontWeight: 600,
+                          fontSize: "0.875rem",
+                          lineHeight: "18px",
+                          letterSpacing: "-0.035em",
+                          paddingLeft: "16px"
                         }}>
                           {user.fullname}
                         </Typography>

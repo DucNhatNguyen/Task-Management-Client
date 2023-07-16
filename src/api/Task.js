@@ -123,3 +123,31 @@ export const Attachments = (formData, taskid) =>
             reject(err);
         }
     });
+
+export const RemoveAttachments = (fileid) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/attachments/${fileid}`, {
+                method: "DELETE",
+            });
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
+        }
+    });
+
+export const AddComment = (body, taskid) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/${taskid}/add-comment`, {
+                method: "POST",
+                headers: new Headers({
+                    "Content-type": "application/json; charset=UTF-8",
+                }),
+                body: JSON.stringify(body),
+            });
+            resolve(await response.json());
+        } catch (err) {
+            reject(err);
+        }
+    });

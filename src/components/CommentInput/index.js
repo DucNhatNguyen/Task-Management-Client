@@ -6,27 +6,14 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-//import { GetUniqueId } from "api/Common";
-//import { UserContext } from "provider/UserProvider";
+import { UserContext } from "provider/UserProvider";
 import { UserAvatar } from "components";
 import { CommentInput } from "./styles";
+import { v4 as uuidv4 } from "uuid";
 
 const EditDescription = ({ handleButtonClick }) => {
-  //const { userData } = useContext(UserContext);
-  const userData = {
-            "boards": {
-                "-NYX6AimlUULSlFxgv6E": {
-                    "boardId": "-NYX6AimlUULSlFxgv6E"
-                },
-                "-NYYV0DUybOzG5C_grEt": {
-                    "boardId": "-NYYV0DUybOzG5C_grEt"
-                }
-            },
-            "email": "ducnhat090199@gmail.com",
-            "name": "N.T MAX",
-            "picture": "https://lh3.googleusercontent.com/a/AAcHTtcmuVue47yEfADs1fvleNkCkS2XyQywMpft_yuO=s96-c",
-            "uid": "JekzTyjSkDg4DyoRvFJcdbr1u9n1"
-        }
+  const { userData } = useContext(UserContext);
+
   const [comment, setComment] = useState("");
   const [time, setTime] = useState();
   const [commentError, setCommentError] = useState();
@@ -44,22 +31,21 @@ const EditDescription = ({ handleButtonClick }) => {
       setCommentError("You can't submit empty comment!");
       setLoading(false);
     } else {
-    //   const id = await GetUniqueId();
-    //   const response = await handleButtonClick({
-    //     id: id.data,
-    //     uid: userData.uid,
-    //     name: userData.name,
-    //     picture: userData.picture,
-    //     text: comment,
-    //     time: time || "24 August at 20:43",
-    //   });
-    //   if (response) {
-    //     setLoading(false);
-    //   } else {
-    //     setLoading(false);
-    //     setCommentError(`Couldn't submit the comment!`);
-    //   }
-    //   setComment(" ");
+      console.log('user comment', userData)
+      const id = uuidv4()
+      await handleButtonClick({
+        id: id,
+        text: comment,
+        userid: userData.id,
+        createdBy: userData.fullname,
+        createdtime: new Date(),
+      }).then((res) => setLoading(false))
+        .catch((err) => {
+          setLoading(false);
+          setCommentError(`Couldn't submit the comment!`)
+        })
+
+      setComment(" ");
     }
   };
 
@@ -92,7 +78,7 @@ const EditDescription = ({ handleButtonClick }) => {
         padding: "16px"
       }} justify="space-around">
         <Grid item sm={1} xs={2}>
-          <UserAvatar user={userData} styles={{borderRadius: "8px"}} />
+          <UserAvatar user={userData} styles={{ borderRadius: "8px" }} />
         </Grid>
         <Grid item xs={10} style={{ margin: "auto" }}>
           <CommentInput
@@ -144,11 +130,11 @@ const EditDescription = ({ handleButtonClick }) => {
         xs={12}
       >
         <Typography style={{
-            fontSize: "0.825rem",
-            color: "#f44336",
-            marginTop: "4px",
-            marginBottom:"4px",
-            paddingLeft: "4px",
+          fontSize: "0.825rem",
+          color: "#f44336",
+          marginTop: "4px",
+          marginBottom: "4px",
+          paddingLeft: "4px",
         }}>{commentError}</Typography>
       </Grid>
     </>
