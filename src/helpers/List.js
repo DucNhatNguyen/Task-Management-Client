@@ -1,16 +1,21 @@
-// import { RenameList, DeleteList } from "api/List";
+import { DeleteColumn, RenameColumn } from "api/List";
 
 const HandleRenamingList = (board, listId, title) =>
     new Promise((resolve, reject) => {
         if (board && listId && title) {
             board.lists[listId][title] = title;
-            // RenameList({
-            //     boardId: board.id,
-            //     listId: listId,
-            //     title: title,
-            // })
-            //     .then(() => resolve(board))
-            //     .catch((err) => reject(err));
+            console.log('rename title', {
+                boardId: board.id,
+                listId: listId,
+                title: title,
+            })
+            RenameColumn({
+                boardId: board.id,
+                listId: listId,
+                title: title,
+            })
+                .then(() => resolve(board))
+                .catch((err) => reject(err));
         } else {
             reject("Missing parameters");
         }
@@ -19,12 +24,12 @@ const HandleRenamingList = (board, listId, title) =>
 const HandleDeletingList = (board, listId) =>
     new Promise((resolve, reject) => {
         if (board && listId) {
-            // DeleteList({
-            //     boardId: board.id,
-            //     listId: listId,
-            // })
-            //     .then(() => resolve(true))
-            //     .catch((err) => reject(err));
+            DeleteColumn({
+                boardId: board.id,
+                listId: listId,
+            })
+                .then(() => resolve(true))
+                .catch((err) => reject(err));
         } else {
             reject("Missing parameters");
         }

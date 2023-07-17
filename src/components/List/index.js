@@ -7,6 +7,8 @@ import { AddTaskModal, TaskColumn } from "components";
 import { Add, MoreHoriz } from "@mui/icons-material";
 import { withStyles } from "@mui/styles";
 import { listStyles } from "./styles";
+import ListMenu from "components/ListMenu";
+import RenameMenu from "components/RenameMenu";
 
 class List extends React.Component {
     constructor(props) {
@@ -107,19 +109,19 @@ class List extends React.Component {
                                         <MoreHoriz />
                                     </IconButton>
                                 </Grid>
-                                {/* <ListMenu
+                                <ListMenu
                                     anchorEl={this.state.listMenuAnchorEl}
                                     handleClose={this.handleListMenuClose}
                                     renameButtonClick={this.handleRenameButtonClick}
                                     deleteButtonClick={this.handleDeleteButtonClick}
                                     listId={this.props.list.id}
-                                /> */}
-                                {/* <RenameMenu
+                                />
+                                <RenameMenu
                                     anchorEl={this.state.renameMenuAnchorEl}
                                     handleClose={this.handleRenameMenuClose}
                                     listTitle={this.props.list.title}
                                     listId={this.props.list.id}
-                                /> */}
+                                />
                             </Grid>
                             <Droppable droppableId={list.id} type="task">
                                 {(provided, snapshot) => (

@@ -32,7 +32,7 @@ class DndCanvas extends React.Component {
                     });
                     if (board.tasks) {
                         this.setState({
-                        tasks: board.tasks,
+                            tasks: board.tasks,
                         });
                     }
                 }
@@ -50,14 +50,14 @@ class DndCanvas extends React.Component {
                     });
                     if (board.tasks) {
                         this.setState({
-                        tasks: board.tasks,
+                            tasks: board.tasks,
                         });
                     }
                 }
             }
         }
     }
-            
+
     onDragEnd = (result) => {
         const { destination, source, draggableId, type } = result;
         const board = this.context.renderedBoard;
@@ -103,7 +103,7 @@ class DndCanvas extends React.Component {
             newTaskIds.splice(source.index, 1);
             newTaskIds.splice(destination.index, 0, draggableId);
 
-            
+
             const newHome = {
                 ...home,
                 taskIds: newTaskIds,
@@ -117,8 +117,8 @@ class DndCanvas extends React.Component {
             };
             this.setState(newState);
             BoardHelpers.HandleTaskReordering(board, newHome.id, newTaskIds)
-                    .then((renderedBoard) => this.context.setRenderedBoard(renderedBoard))
-                    .catch((err) => console.log(err));
+                .then((renderedBoard) => this.context.setRenderedBoard(renderedBoard))
+                .catch((err) => console.log(err));
             return;
         }
 
@@ -280,15 +280,17 @@ class DndCanvas extends React.Component {
                                 this.state.lists &&
                                 this.state.listOrder.map((key, i) => {
                                     const list = this.state.lists[key];
-                                    return (
-                                        <ListColumn
-                                            key={list.id}
-                                            list={list}
-                                            taskMap={this.state.tasks}
-                                            index={i}
-                                            createNewTask={this.createNewTask}
-                                        />
-                                    );
+                                    if (list) {
+                                        return (
+                                            <ListColumn
+                                                key={list.id}
+                                                list={list}
+                                                taskMap={this.state.tasks}
+                                                index={i}
+                                                createNewTask={this.createNewTask}
+                                            />
+                                        );
+                                    }
                                 })}
                             {provided.placeholder}
                             <div style={{ padding: "0px 8px" }}>
