@@ -31,7 +31,6 @@ const EditDescription = ({ handleButtonClick }) => {
       setCommentError("You can't submit empty comment!");
       setLoading(false);
     } else {
-      console.log('user comment', userData)
       const id = uuidv4()
       await handleButtonClick({
         id: id,

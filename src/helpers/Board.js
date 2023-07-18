@@ -187,7 +187,6 @@ const HandleListReordering = (board, listOrder) =>
             })
                 .then((response) => {
                     if (response.responseCode === 200) {
-                        console.log('column order', response.responseData);
                         board.boardcolumns = response.responseData;
                         resolve(true);
                     }
@@ -208,7 +207,6 @@ const HandleTaskReordering = (board, listId, taskIds) =>
             }).then((response) => {
                 if (response.responseCode === 200) {
                     GetBoardColumns(board.id).then((res) => {
-                        console.log('task order', res.responseData);
                         board.boardcolumns = res.responseData;
                         resolve(true);
                     })

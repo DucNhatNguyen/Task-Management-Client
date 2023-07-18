@@ -21,7 +21,7 @@ export const GetUserRelatedBoards = (userid) =>
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          "Authorization": `${localStorage.getItem("pmt_token")}`
         }
       })
         .then(res => res.json())
@@ -78,6 +78,7 @@ export const ReorderColumnLists = (body) =>
         method: "PUT",
         headers: new Headers({
           "Content-type": "application/json; charset=UTF-8",
+          "Authorization": `${localStorage.getItem("pmt_token")}`
         }),
         body: JSON.stringify(body),
       });
@@ -86,7 +87,6 @@ export const ReorderColumnLists = (body) =>
       reject(err);
     }
   });
-
 export const GetBoardColumns = (boardid) =>
 new Promise(async (resolve, reject) => {
     try {
@@ -95,6 +95,7 @@ new Promise(async (resolve, reject) => {
         headers: {
           "Content-type": "application/json",
           "Access-Control-Allow-Origin": "*",
+          "Authorization": `${localStorage.getItem("pmt_token")}`
         }
       })
         .then(res => res.json())
@@ -105,7 +106,6 @@ new Promise(async (resolve, reject) => {
       reject(err);
     }
   });
-
 export const ChangeVisibilityBoard = (body) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -113,6 +113,7 @@ export const ChangeVisibilityBoard = (body) =>
         method: "POST",
         headers: new Headers({
           "Content-type": "application/json; charset=UTF-8",
+          "Authorization": `${localStorage.getItem("pmt_token")}`
         }),
         body: JSON.stringify(body),
       });

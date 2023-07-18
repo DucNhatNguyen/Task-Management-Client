@@ -20,26 +20,22 @@ const Comment = ({ comment, deleteComment, editComment }) => {
   const [displayEditArea, setDisplayEditArea] = useState(false);
   const [displayDeleteDialog, setDisplayDeleteDialog] = useState(false);
   const [time, setTime] = useState(TaskHelpers.HandleTimeComment(comment.createdtime))
+
   const handleEditButtonClick = () => {
     setDisplayEditArea(!displayEditArea);
   };
-
   const closeEditArea = () => {
     setDisplayEditArea(false);
   };
-
   const handleEditComment = (input) => {
     editComment(comment.id, input);
   };
-
   const handleDeleteButtonClick = () => {
     setDisplayDeleteDialog(!displayDeleteDialog);
   };
-
   const closeDeleteDialog = () => {
     setDisplayDeleteDialog(false);
   };
-
   const handleDeleteComment = () => {
     deleteComment(comment.id);
     closeDeleteDialog();
@@ -47,7 +43,6 @@ const Comment = ({ comment, deleteComment, editComment }) => {
 
   useEffect(() => {
     if (userData.id === comment.userid) {
-      console.log('nguoi comment chinh chu')
       setOwner(true);
     }
   }, [userData]);

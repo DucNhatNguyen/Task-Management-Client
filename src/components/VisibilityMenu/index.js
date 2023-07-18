@@ -3,6 +3,7 @@ import { Typography, Grid } from "@mui/material";
 import { Public, Lock } from "@mui/icons-material";
 import { PopMenu, PopMenuItem } from "./styles";
 import { VisibilityEnum } from "helpers/Enum";
+import { ChangeVisibilityBoard } from "api/Board";
 
 const VisibilityMenu = ({
     open,
@@ -10,11 +11,22 @@ const VisibilityMenu = ({
     handleClose,
     setBoardVisibility,
     boardVisibility,
+    boardId
 }) => {
 
     const PopMenuClose = (val) => {
-        setBoardVisibility(val)
-        handleClose()
+        console.log('visibility', val);
+        ChangeVisibilityBoard({
+            boardId: boardId,
+            visibility: val
+        })
+        .then((res) => {
+            if (res.responseCode === 200) {
+                setBoardVisibility(val)
+                handleClose()
+            }
+        })
+        .catch((err) => console.log(err))
     }
 
     return (

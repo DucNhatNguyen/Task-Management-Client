@@ -66,34 +66,6 @@ class Task extends React.Component {
                     resolve("Property updated successfully!")
                 })
                 .catch((err) => reject("Property update failed"))
-
-            // this.setState(
-            //     {
-            //         comments: [...this.state.comments, comment],
-            //     },
-            //     async () => {
-            //         AddComment({
-            //             id: comment.id,
-            //             userid: comment.userid,
-            //             text: comment.text,
-            //             createdBy: comment.createdBy,
-            //         }, this.props.task.id)
-            //             .then((res) => resolve("Property updated successfully!"))
-            //             .catch((err) => reject("Property update failed"))
-
-            //         // const response = await TaskHelpers.HandleTaskPropertyUpdate(
-            //         //     this.context.renderedBoard,
-            //         //     this.props.task.id,
-            //         //     "comments",
-            //         //     this.state.comments
-            //         // );
-            //         // if (response) {
-            //         //     resolve("Property updated successfully!");
-            //         // } else {
-            //         //     reject("Property update failed");
-            //         // }
-            //     }
-            // );
         });
     deleteComment = (commentId) => {
         let comments = this.state.comments;
@@ -119,12 +91,16 @@ class Task extends React.Component {
             if (comments[i].id === commentId) {
                 // remove id matched comment
                 comments[i].text = comment;
+                const newArrComment = this.state.comments.map(({user, ...rest}) => {
+                    return rest;
+                });
+                console.log('objectdsdsd', newArrComment);
                 this.setState({ comments: comments }, () => {
                     TaskHelpers.HandleTaskPropertyUpdate(
                         this.context.renderedBoard,
                         this.props.task.id,
                         "Comments",
-                        this.state.comments
+                        newArrComment
                     ).catch((err) => console.log(err));
                 });
             }
@@ -137,20 +113,7 @@ class Task extends React.Component {
     }
     addAttachment = (formData) => {
         new Promise(async (resolve, reject) => {
-            // await Attachments(formData, this.props.task.id)
-            //     .then((res) => {
-            //         const data = res.responseData
-            //         for (let i = 0; i < data.length; i++) {
-            //             this.addItem({
-            //                 id: data[i].id,
-            //                 name: data[i].name,
-            //                 fileType: data[i].filetype,
-            //                 fileUrl: data[i].fileurl,
-            //             })
-            //         }
-            //         resolve("Property updated successfully!");
-            //     })
-            //     .catch((err) => reject("Property update failed"));
+            
         });
     }
 
@@ -169,7 +132,6 @@ class Task extends React.Component {
         }
     };
     handleSearchedImageClick = (regular) => {
-        //var newCoverImg = regular.includes(process.env.REACT_APP_DOMAIN) ? regular : process.env.REACT_APP_DOMAIN + regular
         this.setState(
             {
                 coverimage: regular,
@@ -211,7 +173,6 @@ class Task extends React.Component {
         for (let i = 0; i < labels.length; i++) {
             const label = labels[i];
             if (label.id === labelId) {
-                console.log('delete label', label);
                 // remove id matched label
                 labels.splice(i, 1);
                 this.setState({ labels: labels }, () => {
@@ -225,18 +186,11 @@ class Task extends React.Component {
                         },
                         actiontype: 2
                     }).catch((err) => console.log(err));
-                    // TaskHelpers.HandleTaskPropertyUpdate(
-                    //     this.context.renderedBoard,
-                    //     this.props.task.id,
-                    //     "Labels",
-                    //     this.state.labels
-                    // ).catch((err) => console.log(err));
                 });
             }
         }
     };
     assignMemberToTask = (assignedUser) => {
-        console.log('member listsss rrr', assignedUser)
         this.setState(
             {
                 members: [...this.state.members, assignedUser],

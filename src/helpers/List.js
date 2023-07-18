@@ -4,11 +4,6 @@ const HandleRenamingList = (board, listId, title) =>
     new Promise((resolve, reject) => {
         if (board && listId && title) {
             board.lists[listId][title] = title;
-            console.log('rename title', {
-                boardId: board.id,
-                listId: listId,
-                title: title,
-            })
             RenameColumn({
                 boardId: board.id,
                 listId: listId,

@@ -26,6 +26,7 @@ function App() {
             setOpenBackdrop,
             userData
           );
+      navigate("/boards");
     } else {
       navigate("/login");
     }

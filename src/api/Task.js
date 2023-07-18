@@ -5,6 +5,7 @@ export const CreateNewTask = (boardData) =>
                 method: "POST",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(boardData),
             });
@@ -13,7 +14,6 @@ export const CreateNewTask = (boardData) =>
             reject(err);
         }
     });
-
 export const GetTaskByColumnId = (columnId) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -21,6 +21,7 @@ export const GetTaskByColumnId = (columnId) =>
                 method: "GET",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 })
             });
             resolve(await response.json());
@@ -28,7 +29,6 @@ export const GetTaskByColumnId = (columnId) =>
             reject(err);
         }
     });
-
 export const ReorderTaskList = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -36,6 +36,7 @@ export const ReorderTaskList = (body) =>
                 method: "POST",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(body),
             });
@@ -44,7 +45,6 @@ export const ReorderTaskList = (body) =>
             reject(err);
         }
     });
-
 export const GetTaskByBoardId = (boardId) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -52,6 +52,7 @@ export const GetTaskByBoardId = (boardId) =>
                 method: "GET",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 })
             });
             resolve(await response.json());
@@ -59,7 +60,6 @@ export const GetTaskByBoardId = (boardId) =>
             reject(err);
         }
     });
-
 export const SwitchTasks = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -69,6 +69,7 @@ export const SwitchTasks = (body) =>
                     method: "PUT",
                     headers: new Headers({
                         "Content-type": "application/json; charset=UTF-8",
+                        "Authorization": `${localStorage.getItem("pmt_token")}`
                     }),
                     body: JSON.stringify(body),
                 }
@@ -78,7 +79,6 @@ export const SwitchTasks = (body) =>
             reject(err);
         }
     });
-
 export const ActionLabel = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -86,6 +86,7 @@ export const ActionLabel = (body) =>
                 method: "POST",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(body),
             });
@@ -94,7 +95,6 @@ export const ActionLabel = (body) =>
             reject(err);
         }
     });
-
 export const EditTask = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -102,6 +102,7 @@ export const EditTask = (body) =>
                 method: "PUT",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(body),
             });
@@ -110,12 +111,14 @@ export const EditTask = (body) =>
             reject(err);
         }
     });
-
 export const Attachments = (formData, taskid) =>
     new Promise(async (resolve, reject) => {
         try {
             let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/${taskid}/attachments`, {
                 method: "POST",
+                headers: new Headers({
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
+                }),
                 body: formData,
             });
             resolve(await response.json());
@@ -123,19 +126,20 @@ export const Attachments = (formData, taskid) =>
             reject(err);
         }
     });
-
 export const RemoveAttachments = (fileid) =>
     new Promise(async (resolve, reject) => {
         try {
             let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/attachments/${fileid}`, {
                 method: "DELETE",
+                headers: new Headers({
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
+                }),
             });
             resolve(await response.json());
         } catch (err) {
             reject(err);
         }
     });
-
 export const AddComment = (body, taskid) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -143,6 +147,7 @@ export const AddComment = (body, taskid) =>
                 method: "POST",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(body),
             });

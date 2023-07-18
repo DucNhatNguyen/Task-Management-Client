@@ -123,7 +123,6 @@ class DndCanvas extends React.Component {
         }
 
         // codes below only works when moving a task one list to another
-        console.log('draggableId', draggableId);
 
         const homeTaskIds = Array.from(home.taskIds);
         homeTaskIds.splice(source.index, 1);

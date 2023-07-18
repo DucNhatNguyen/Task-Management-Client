@@ -1,10 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UIContext } from "provider/UIProvider";
 import { Grid, Typography, IconButton, Button } from "@mui/material";
 import { Public, Lock, MoreHoriz, Add } from "@mui/icons-material";
 import { VisibilityMenu, UserAvatar, InviteUserMenu } from "components";
 import { styled } from '@mui/material/styles';
-import { ChangeVisibilityBoard } from "api/Board";
 
 const TopSection = ({ board, admin }) => {
     const { changeDrawerVisibility } = useContext(UIContext);
@@ -14,12 +13,15 @@ const TopSection = ({ board, admin }) => {
     const [boardVisibility, setBoardVisibility] = useState("Private");
     const [inviteAnchorEl, setInviteAnchorEl] = useState(null);
 
+    useEffect(() => {
+        setBoardVisibility(board?.visibility === 1 ? "Private" : "Public")
+    }, [board?.visibility])
+
     const handleVisibilityClick = (event) => {
         setVisibilityAnchorEl(event.currentTarget);
         setOpenVisibilty(true);
     };
     const handleVisibilityClose = () => {
-        // console.log('visibility', boardVisibility);
         // var body = {
         //     boardId: board.id,
         //     visibility:boardVisibility
@@ -124,6 +126,7 @@ const TopSection = ({ board, admin }) => {
                             handleClose={handleVisibilityClose}
                             setBoardVisibility={setBoardVisibility}
                             boardVisibility={boardVisibility}
+                            boardId={board?.id}
                         />
                     </GridVisibilityMenuContainer>
                     <Grid item container xs>

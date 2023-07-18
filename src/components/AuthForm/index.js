@@ -103,7 +103,7 @@ const AuthForm = ({
                 >
                     {constants.buttonText}
                 </StyledSubmit>
-                <StyledGridContainer container justifyContent={"center"}>
+                {/* <StyledGridContainer container justifyContent={"center"}>
                     <Grid item>
                         <Typography style={{ color: "#828282" }} variant="body2">
                             or continue with these
@@ -157,7 +157,7 @@ const AuthForm = ({
                             <GitHub />
                         </IconButton>
                     </Grid>
-                </StyledGridContainer>
+                </StyledGridContainer> */}
                 <StyledGridContainer container justifyContent={"flex-end"}>
                     <Grid item>
                         <Typography style={{ color: "#828282" }} variant="body2">

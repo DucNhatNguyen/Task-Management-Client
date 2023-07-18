@@ -5,6 +5,7 @@ export const CreateNewList = (body) =>
                 method: "POST",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(body),
             });
@@ -13,7 +14,6 @@ export const CreateNewList = (body) =>
             reject(err);
         }
     });
-
 export const RenameColumn = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -21,6 +21,7 @@ export const RenameColumn = (body) =>
                 method: "PUT",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(body),
             });
@@ -29,7 +30,6 @@ export const RenameColumn = (body) =>
             reject(err);
         }
     });
-
 export const DeleteColumn = (body) =>
     new Promise(async (resolve, reject) => {
         try {
@@ -37,6 +37,7 @@ export const DeleteColumn = (body) =>
                 method: "DELETE",
                 headers: new Headers({
                     "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": `${localStorage.getItem("pmt_token")}`
                 }),
                 body: JSON.stringify(body),
             });
