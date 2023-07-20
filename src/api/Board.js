@@ -24,10 +24,10 @@ export const GetUserRelatedBoards = (userid) =>
           "Authorization": `${localStorage.getItem("pmt_token")}`
         }
       })
-        .then(res => res.json())
-        .then(async data => {
-          resolve(data)
-        })
+      .then(res => res.json())
+      .then(async data => {
+        resolve(data)
+      })
     } catch (err) {
       reject(err);
     }

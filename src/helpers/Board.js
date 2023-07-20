@@ -51,17 +51,6 @@ const HandleUserRelatedBoards = (
                     UIHelpers.HandleBackdropClose(setOpenBackdrop);
                     reject(err);
                 });
-            // ParseBoardId(Object.values(userData.boards))
-            //     .then((response) => {
-            //         const userid = {
-            //             boardList: response,
-            //         };
-
-            //     })
-            //     .catch((err) => {
-            //         UIHelpers.HandleBackdropClose(setOpenBackdrop);
-            //         reject(err);
-            //     });
         } else {
             if (userData !== undefined) {
                 UIHelpers.HandleBackdropClose(setOpenBackdrop);
