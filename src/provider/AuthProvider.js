@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AuthMethods } from "authentication/AuthMethod";
+import InjectAxiosInterceptors from "helpers/InjectAxiosInterceptors";
 
 export const Authentication = React.createContext();
 
@@ -14,6 +15,7 @@ const AuthProvider = ({
     const [token, setToken] = useState(localStorage.getItem("pmt_token"));
 
     useEffect(() => {
+        //InjectAxiosInterceptors(setToken)
         if (!token) {
             setOpenBackdrop(false);
         }

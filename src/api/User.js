@@ -1,41 +1,32 @@
 import { UIHelpers } from "helpers";
+import api from 'helpers/Interceptors'
 
-export const FetchUserData = (userid, setUserData, setOpenBackdrop) =>
+export const FetchUserData = (userid, setUserData, setOpenBackdrop) => 
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}user/${userid}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-type": "application/json",
-                        "Access-Control-Allow-Origin": "*",
-                        "Authorization": `${localStorage.getItem("pmt_token")}`
-                    }
-                });
-
-            const data = await response.json();
-            if (setUserData){
-            setUserData(data.responseData);
-            UIHelpers.HandleBackdropClose(setOpenBackdrop);
-            resolve(data.responseData);
-            }
-            return data.responseData;
-
+            api.get(`${process.env.REACT_APP_ROOT_API_PATH}user/${userid}`)
+            .then((res) => {
+                var data = res.data;
+                if (setUserData){
+                    setUserData(data.responseData);
+                    UIHelpers.HandleBackdropClose(setOpenBackdrop);
+                    resolve(data.responseData);
+                }
+            })
         } catch (err) {
-        console.log(err);
+            console.log(err);
         reject(err);
         }
     });
+
+
 export const GetUserAll = () =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}user/all`, {
-                method: "GET",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                })
-            });
-            resolve(await response.json());
+            api.get(`${process.env.REACT_APP_ROOT_API_PATH}user/all`)
+            .then((res) => {
+                resolve(res);
+            })
         } catch (err) {
             reject(err);
         }

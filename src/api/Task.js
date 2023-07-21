@@ -1,15 +1,12 @@
+import api from 'helpers/Interceptors'
+
 export const CreateNewTask = (boardData) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task`, {
-                method: "POST",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(boardData),
-            });
-            resolve(await response.json());
+            api.post(`${process.env.REACT_APP_ROOT_API_PATH}task`, boardData)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -17,14 +14,10 @@ export const CreateNewTask = (boardData) =>
 export const GetTaskByColumnId = (columnId) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/${columnId}`, {
-                method: "GET",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                })
-            });
-            resolve(await response.json());
+            api.get(`${process.env.REACT_APP_ROOT_API_PATH}task/${columnId}`)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -32,15 +25,10 @@ export const GetTaskByColumnId = (columnId) =>
 export const ReorderTaskList = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/order`, {
-                method: "POST",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(body),
-            });
-            resolve(await response.json());
+            api.post(`${process.env.REACT_APP_ROOT_API_PATH}task/order`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -48,14 +36,10 @@ export const ReorderTaskList = (body) =>
 export const GetTaskByBoardId = (boardId) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/board/${boardId}`, {
-                method: "GET",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
+            api.get(`${process.env.REACT_APP_ROOT_API_PATH}task/board/${boardId}`)
+                .then(({data}) => {
+                    resolve(data);
                 })
-            });
-            resolve(await response.json());
         } catch (err) {
             reject(err);
         }
@@ -63,18 +47,10 @@ export const GetTaskByBoardId = (boardId) =>
 export const SwitchTasks = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(
-                `${process.env.REACT_APP_ROOT_API_PATH}task/task-switch`,
-                {
-                    method: "PUT",
-                    headers: new Headers({
-                        "Content-type": "application/json; charset=UTF-8",
-                        "Authorization": `${localStorage.getItem("pmt_token")}`
-                    }),
-                    body: JSON.stringify(body),
-                }
-            );
-            resolve(await response.json());
+            api.put(`${process.env.REACT_APP_ROOT_API_PATH}task/task-switch`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -82,15 +58,10 @@ export const SwitchTasks = (body) =>
 export const ActionLabel = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/action-label`, {
-                method: "POST",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(body),
-            });
-            resolve(await response.json());
+            api.post(`${process.env.REACT_APP_ROOT_API_PATH}task/action-label`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -98,15 +69,10 @@ export const ActionLabel = (body) =>
 export const EditTask = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task`, {
-                method: "PUT",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(body),
-            });
-            resolve(await response.json());
+            api.put(`${process.env.REACT_APP_ROOT_API_PATH}task`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -114,14 +80,14 @@ export const EditTask = (body) =>
 export const Attachments = (formData, taskid) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/${taskid}/attachments`, {
-                method: "POST",
-                headers: new Headers({
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: formData,
-            });
-            resolve(await response.json());
+            api.post(`${process.env.REACT_APP_ROOT_API_PATH}task/${taskid}/attachments`, formData, 
+            {
+                headers: {
+                "Content-type": "multipart/form-data"
+            }})
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -129,13 +95,10 @@ export const Attachments = (formData, taskid) =>
 export const RemoveAttachments = (fileid) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/attachments/${fileid}`, {
-                method: "DELETE",
-                headers: new Headers({
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-            });
-            resolve(await response.json());
+            api.delete(`${process.env.REACT_APP_ROOT_API_PATH}task/attachments/${fileid}`)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -143,15 +106,10 @@ export const RemoveAttachments = (fileid) =>
 export const AddComment = (body, taskid) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}task/${taskid}/add-comment`, {
-                method: "POST",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(body),
-            });
-            resolve(await response.json());
+            api.post(`${process.env.REACT_APP_ROOT_API_PATH}task/${taskid}/add-comment`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }

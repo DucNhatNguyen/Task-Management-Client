@@ -1,14 +1,12 @@
+import api from 'helpers/Interceptors'
+
 export const CreateNewBoard = (boardData) =>
   new Promise(async (resolve, reject) => {
     try {
-      let response = await fetch(process.env.REACT_APP_ROOT_API_PATH + `boards`, {
-        method: "POST",
-        headers: new Headers({
-          "Content-type": "application/json; charset=UTF-8",
-        }),
-        body: JSON.stringify(boardData),
-      });
-      resolve(await response.json());
+      api.post(process.env.REACT_APP_ROOT_API_PATH + 'boards', boardData)
+      .then(({data}) => {
+        resolve(data);
+      })
     } catch (err) {
       reject(err);
     }
@@ -17,17 +15,10 @@ export const CreateNewBoard = (boardData) =>
 export const GetUserRelatedBoards = (userid) =>
   new Promise(async (resolve, reject) => {
     try {
-      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}user/${userid}/boards`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          "Authorization": `${localStorage.getItem("pmt_token")}`
-        }
-      })
-      .then(res => res.json())
-      .then(async data => {
-        resolve(data)
-      })
+      api.get(`${process.env.REACT_APP_ROOT_API_PATH}user/${userid}/boards`)
+            .then(({data}) => {
+                resolve(data);
+            })
     } catch (err) {
       reject(err);
     }
@@ -36,17 +27,10 @@ export const GetUserRelatedBoards = (userid) =>
 export const GetBoardAdmin = (boardId) =>
   new Promise(async (resolve, reject) => {
     try {
-      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}boards/${boardId}/admin`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        }
-      })
-        .then(res => res.json())
-        .then(async data => {
-          resolve(data)
-        })
+      api.get(`${process.env.REACT_APP_ROOT_API_PATH}boards/${boardId}/admin`)
+            .then(({data}) => {
+                resolve(data);
+            })
     } catch (err) {
       reject(err);
     }
@@ -55,17 +39,10 @@ export const GetBoardAdmin = (boardId) =>
 export const GetBoardColumnsDict = (boardid) =>
 new Promise(async (resolve, reject) => {
     try {
-      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column/list-dict?boardid=${boardid}`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        }
-      })
-        .then(res => res.json())
-        .then(async data => {
-          resolve(data)
-        })
+      api.get(`${process.env.REACT_APP_ROOT_API_PATH}column/list-dict?boardid=${boardid}`)
+            .then(({data}) => {
+                resolve(data);
+            })
     } catch (err) {
       reject(err);
     }
@@ -74,15 +51,10 @@ new Promise(async (resolve, reject) => {
 export const ReorderColumnLists = (body) =>
   new Promise(async (resolve, reject) => {
     try {
-      let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column/order`, {
-        method: "PUT",
-        headers: new Headers({
-          "Content-type": "application/json; charset=UTF-8",
-          "Authorization": `${localStorage.getItem("pmt_token")}`
-        }),
-        body: JSON.stringify(body),
-      });
-      resolve(await response.json());
+      api.put(`${process.env.REACT_APP_ROOT_API_PATH}column/order`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
     } catch (err) {
       reject(err);
     }
@@ -90,18 +62,10 @@ export const ReorderColumnLists = (body) =>
 export const GetBoardColumns = (boardid) =>
 new Promise(async (resolve, reject) => {
     try {
-      await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column/list?boardid=${boardid}`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Authorization": `${localStorage.getItem("pmt_token")}`
-        }
-      })
-        .then(res => res.json())
-        .then(async data => {
-          resolve(data)
-        })
+      api.get(`${process.env.REACT_APP_ROOT_API_PATH}column/list?boardid=${boardid}`)
+            .then(({data}) => {
+                resolve(data);
+            })
     } catch (err) {
       reject(err);
     }
@@ -109,15 +73,10 @@ new Promise(async (resolve, reject) => {
 export const ChangeVisibilityBoard = (body) =>
   new Promise(async (resolve, reject) => {
     try {
-      let response = await fetch(process.env.REACT_APP_ROOT_API_PATH + `boards/change-visibility`, {
-        method: "POST",
-        headers: new Headers({
-          "Content-type": "application/json; charset=UTF-8",
-          "Authorization": `${localStorage.getItem("pmt_token")}`
-        }),
-        body: JSON.stringify(body),
-      });
-      resolve(await response.json());
+      api.post(process.env.REACT_APP_ROOT_API_PATH + `boards/change-visibility`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
     } catch (err) {
       reject(err);
     }

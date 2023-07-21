@@ -1,15 +1,12 @@
+import api from 'helpers/Interceptors'
+
 export const CreateNewList = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column`, {
-                method: "POST",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(body),
-            });
-            resolve(await response.json());
+            api.post(`${process.env.REACT_APP_ROOT_API_PATH}column`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -17,15 +14,10 @@ export const CreateNewList = (body) =>
 export const RenameColumn = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column/rename`, {
-                method: "PUT",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(body),
-            });
-            resolve(await response.json());
+            api.put(`${process.env.REACT_APP_ROOT_API_PATH}column/rename`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
@@ -33,15 +25,10 @@ export const RenameColumn = (body) =>
 export const DeleteColumn = (body) =>
     new Promise(async (resolve, reject) => {
         try {
-            let response = await fetch(`${process.env.REACT_APP_ROOT_API_PATH}column`, {
-                method: "DELETE",
-                headers: new Headers({
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": `${localStorage.getItem("pmt_token")}`
-                }),
-                body: JSON.stringify(body),
-            });
-            resolve(await response.json());
+            api.delete(`${process.env.REACT_APP_ROOT_API_PATH}column`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
         } catch (err) {
             reject(err);
         }
