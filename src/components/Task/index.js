@@ -2,7 +2,7 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { withStyles } from "@mui/styles";
 import { Add, AttachFile, Comment } from "@mui/icons-material";
-import { Paper, Grid, Typography, IconButton } from "@mui/material";
+import { Paper, Grid, Typography, IconButton, Snackbar, Alert } from "@mui/material";
 import { UserAvatar, EditTaskModal } from "components";
 import { UIContext } from "provider/UIProvider";
 import { TaskHelpers } from "helpers";
@@ -22,6 +22,8 @@ class Task extends React.Component {
             attachments: [],
             labels: [],
             members: [],
+            open: false,
+            messageAlert: ""
         };
     }
     static contextType = UIContext;
@@ -32,17 +34,24 @@ class Task extends React.Component {
     closeEditModal = () => {
         this.setState({ modalVisible: false });
     };
+    handleClose = () => {
+        this.setState({ open: false, messageAlert: "" });
+    };
     handleTitleChange = (title) => {
-        this.setState({ title: title });
+        this.setState({ title: title, open: true, messageAlert: "Đã cập nhật tiêu đề cho công việc" });
         TaskHelpers.HandleTaskPropertyUpdate(
             this.context.renderedBoard,
             this.props.task.id,
             "Title",
             title
-        ).catch((err) => console.log(err));
+        )
+            .catch((err) => console.log(err));
+
+
     };
+
     handleDescriptionChange = (description) => {
-        this.setState({ description: description });
+        this.setState({ description: description, open: true, messageAlert: "mô tả" });
         TaskHelpers.HandleTaskPropertyUpdate(
             this.context.renderedBoard,
             this.props.task.id,
@@ -91,7 +100,7 @@ class Task extends React.Component {
             if (comments[i].id === commentId) {
                 // remove id matched comment
                 comments[i].text = comment;
-                const newArrComment = this.state.comments.map(({user, ...rest}) => {
+                const newArrComment = this.state.comments.map(({ user, ...rest }) => {
                     return rest;
                 });
                 console.log('objectdsdsd', newArrComment);
@@ -112,9 +121,9 @@ class Task extends React.Component {
         }));
     }
     addAttachment = (formData) => {
-        new Promise(async (resolve, reject) => {
-            
-        });
+        this.setState({ open: true, messageAlert: "Đã thêm file cho công việc" });
+        // new Promise(async (resolve, reject) => {
+        // });
     }
 
     deleteAttachment = (attachmentId) => {
@@ -130,6 +139,7 @@ class Task extends React.Component {
                 });
             }
         }
+        this.setState({ open: true, messageAlert: "Đã xóa file cho công việc" });
     };
     handleSearchedImageClick = (regular) => {
         this.setState(
@@ -156,6 +166,8 @@ class Task extends React.Component {
                     taskid: this.props.task.id,
                     title: label.input
                 }],
+                open: true,
+                messageAlert: "Đã thêm nhãn gán cho công việc"
             },
             () => {
                 ActionLabel({
@@ -175,7 +187,7 @@ class Task extends React.Component {
             if (label.id === labelId) {
                 // remove id matched label
                 labels.splice(i, 1);
-                this.setState({ labels: labels }, () => {
+                this.setState({ labels: labels, open: true, messageAlert: "Đã xóa nhãn gán cho công việc" }, () => {
                     ActionLabel({
                         taskId: label.taskid,
                         id: label.id,
@@ -194,6 +206,8 @@ class Task extends React.Component {
         this.setState(
             {
                 members: [...this.state.members, assignedUser],
+                open: true,
+                messageAlert: `Đã thêm ${assignedUser.fullname} vào công việc`
             },
             () => {
                 TaskHelpers.HandleTaskPropertyUpdate(
@@ -205,19 +219,21 @@ class Task extends React.Component {
             }
         );
     }
-    removeAssignedMember = (uid) => {
-        let assigments = this.state.assigments;
-        for (let i = 0; i < assigments.length; i++) {
-            assigments = assigments.filter((id) => id !== uid);
-            this.setState({ assigments: assigments }, () => {
-                TaskHelpers.HandleTaskPropertyUpdate(
-                    this.context.renderedBoard,
-                    this.props.task.id,
-                    "Assigments",
-                    this.state.assigments
-                ).catch((err) => console.log(err));
-            });
-        }
+    removeAssignedMember = (user) => {
+        let assigments = this.state.members;
+        assigments = assigments.filter(x => x.id !== user.id);
+        this.setState({
+            members: assigments,
+            open: true,
+            messageAlert: `Đã xóa ${user.fullname} ra khỏi công việc`
+        }, () => {
+            TaskHelpers.HandleTaskPropertyUpdate(
+                this.context.renderedBoard,
+                this.props.task.id,
+                "RemoveMember",
+                user.id
+            ).catch((err) => console.log(err));
+        });
     };
     componentDidMount() {
         const {
@@ -459,6 +475,19 @@ class Task extends React.Component {
                             taskid={this.props.task.id}
                             addItem={this.addItem}
                         />
+                        <Snackbar
+                            open={this.state.open}
+                            autoHideDuration={6000}
+                            onClose={this.handleClose}
+                            message={this.state.messageAlert}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            severity="success"
+                        //action={action}
+                        >
+                            <Alert onClose={this.handleClose} severity="info" sx={{ width: '100%' }}>
+                                {this.state.messageAlert}
+                            </Alert>
+                        </Snackbar>
                     </div>
                 )}
             </Draggable>

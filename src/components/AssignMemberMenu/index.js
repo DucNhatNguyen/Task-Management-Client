@@ -141,6 +141,7 @@ const AssignMemberMenu = ({
                         }
                       }}
                       onClick={() => handleMemberClick(user.id)}
+                      key={index}
                     >
                       <Grid item xs style={{ maxWidth: "32px" }}>
                         <UserAvatar user={user} styles={{

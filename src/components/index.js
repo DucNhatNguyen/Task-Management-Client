@@ -29,4 +29,6 @@ export { default as GrayButton } from "./GrayButton";
 export { default as AssignMemberMenu } from "./AssignMemberMenu";
 export { default as LabelsMenu } from "./LabelsMenu";
 
+export { default as SnackBar } from "./SnackBar";
+
 

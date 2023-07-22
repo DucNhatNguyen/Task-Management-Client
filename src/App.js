@@ -18,19 +18,19 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userid){
+    if (userid) {
       UserHelpers.HandleUserData(
-            userid,
-            setUserData,
-            setBoards,
-            setOpenBackdrop,
-            userData
-          );
+        userid,
+        setUserData,
+        setBoards,
+        setOpenBackdrop,
+        userData
+      );
       navigate("/boards");
     } else {
       navigate("/login");
     }
-    
+
     // if (!userData) {
     //   if (userid){
     //     UserHelpers.HandleUserData(

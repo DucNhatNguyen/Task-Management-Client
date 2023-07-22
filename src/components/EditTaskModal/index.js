@@ -6,6 +6,7 @@ import {
   IconButton,
   LinearProgress,
   Avatar,
+  Snackbar,
 } from "@mui/material";
 import { Clear, Add, Edit } from "@mui/icons-material";
 import {
@@ -684,7 +685,7 @@ const EditTaskModal = ({
                         // },
                       }}
                       container
-                      onClick={() => removeAssignedMember(user.id)}
+                      onClick={() => removeAssignedMember(user)}
                     >
                       <Grid item container sm xs={8} sx={{
                         borderRadius: "8px",

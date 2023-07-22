@@ -1,5 +1,6 @@
 import axios from "axios";
-import {TokenService}from "services/tokenService";
+import { SnackBar } from "components";
+import { TokenService } from "services/tokenService";
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_ROOT_API_PATH,
@@ -22,8 +23,7 @@ instance.interceptors.request.use(
   }
 );
 
-export const setupInterceptors = (navigate, setToken) => {
-  instance.interceptors.response.use(
+instance.interceptors.response.use(
   (res) => {
     return res;
   },
@@ -35,19 +35,20 @@ export const setupInterceptors = (navigate, setToken) => {
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
-
-        navigate('/login')
-        localStorage.removeItem("pmt_userid");
-        localStorage.removeItem("pmt_token");
         try {
-        //   const rs = await instance.post("/user/refreshtoken", {
-        //     refreshToken: TokenService.getLocalRefreshToken(),
-        //   });
 
-        //   const { accessToken } = rs.data;
-        //   TokenService.updateLocalAccessToken(accessToken);
+          localStorage.removeItem("pmt_userid");
+          localStorage.removeItem("pmt_token");
+          window.location.href = '/login';
 
-        return instance(originalConfig);
+          //   const rs = await instance.post("/user/refreshtoken", {
+          //     refreshToken: TokenService.getLocalRefreshToken(),
+          //   });
+          //window.location = window.location.protocol + "//" + window.location.host + "/login"
+          //   const { accessToken } = rs.data;
+          //   TokenService.updateLocalAccessToken(accessToken);
+
+          //return instance(originalConfig);
         } catch (_error) {
           return Promise.reject(_error);
         }
@@ -57,6 +58,5 @@ export const setupInterceptors = (navigate, setToken) => {
     return Promise.reject(err);
   }
 );
-}
 
 export default instance;

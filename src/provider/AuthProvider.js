@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AuthMethods } from "authentication/AuthMethod";
-import InjectAxiosInterceptors from "helpers/InjectAxiosInterceptors";
+import { SnackBar } from "components";
 
 export const Authentication = React.createContext();
 
@@ -8,14 +8,13 @@ const AuthProvider = ({
     setOpenBackdrop,
     setUserData,
     setBoards,
-    children,
+    children
 }) => {
     const [inputs, setInputs] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("pmt_token"));
 
     useEffect(() => {
-        //InjectAxiosInterceptors(setToken)
         if (!token) {
             setOpenBackdrop(false);
         }
@@ -60,7 +59,7 @@ const AuthProvider = ({
                 inputs,
                 setInputs,
                 errors,
-                token,
+                token
             }}
         >
             {children}
