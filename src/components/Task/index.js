@@ -49,7 +49,6 @@ class Task extends React.Component {
 
 
     };
-
     handleDescriptionChange = (description) => {
         this.setState({ description: description, open: true, messageAlert: "mô tả" });
         TaskHelpers.HandleTaskPropertyUpdate(
@@ -108,8 +107,8 @@ class Task extends React.Component {
                     TaskHelpers.HandleTaskPropertyUpdate(
                         this.context.renderedBoard,
                         this.props.task.id,
-                        "Comments",
-                        newArrComment
+                        "EditComment",
+                        newArrComment.filter(i => i.id === commentId)
                     ).catch((err) => console.log(err));
                 });
             }
@@ -152,7 +151,7 @@ class Task extends React.Component {
                     this.props.task.id,
                     "Coverimage",
                     this.state.coverimage
-                );
+                ).then((res) => this.setState({ open: true, messageAlert: "Đã cập nhật ảnh bìa cho công việc" }));
             }
         );
     };
@@ -484,7 +483,7 @@ class Task extends React.Component {
                             severity="success"
                         //action={action}
                         >
-                            <Alert onClose={this.handleClose} severity="info" sx={{ width: '100%' }}>
+                            <Alert onClose={this.handleClose} severity="success" sx={{ width: '100%' }}>
                                 {this.state.messageAlert}
                             </Alert>
                         </Snackbar>
