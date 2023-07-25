@@ -1,6 +1,6 @@
 import { CreateNewTask, ReorderTaskList, SwitchTasks } from "api/Task";
 import { CreateNewList } from "api/List";
-import { GetBoardColumns, ReorderColumnLists } from "api/Board"
+import { GetBoardColumns, ReorderColumnLists, UpdateBoardProperty } from "api/Board"
 import { GetUserRelatedBoards } from "api/Board";
 import { UIHelpers, UserHelpers } from "helpers/";
 
@@ -236,13 +236,13 @@ const HandleTaskSwitching = (board, lists, source, target, draggableId) =>
 const HandleBoardPropertyUpdate = (boardId, property, data) =>
     new Promise((resolve, reject) => {
         if (boardId && property && data) {
-            // UpdateBoardProperty({
-            //     boardId: boardId,
-            //     property: property,
-            //     data: data || " ",
-            // })
-            //     .then(() => resolve(true))
-            //     .catch((err) => reject(err));
+            UpdateBoardProperty({
+                id: boardId,
+                property: property,
+                data: data || " ",
+            })
+                .then(() => resolve(true))
+                .catch((err) => reject(err));
         } else {
             reject("Missing parameters");
         }

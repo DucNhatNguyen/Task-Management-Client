@@ -6,7 +6,6 @@ import {
   IconButton,
   LinearProgress,
   Avatar,
-  Snackbar,
 } from "@mui/material";
 import { Clear, Add, Edit } from "@mui/icons-material";
 import {
@@ -21,7 +20,6 @@ import {
   EditInput,
   CommentInput,
   AssignMemberMenu,
-  UserAvatar,
 } from "components";
 import { UserContext } from "provider/UserProvider";
 import { Attachments } from "api/Task";
@@ -83,43 +81,33 @@ const EditTaskModal = ({
   const handleEditTitleButtonClick = () => {
     setDisplayEditTitle(!displayEditTitle);
   };
-
   const closeEditTitle = () => {
     setDisplayEditTitle(false);
   };
-
   const handleEditButtonClick = () => {
     setDisplayEditArea(!displayEditArea);
   };
-
   const closeEditArea = () => {
     setDisplayEditArea(false);
   };
-
   const handleCoverButtonClick = (event) => {
     setCoverAnchorEl(event.currentTarget);
   };
-
   const handleCoverMenuClose = () => {
     setCoverAnchorEl(null);
   };
-
   const handleLabelButtonClick = (event) => {
     setLabelAnchorEl(event.currentTarget);
   };
-
   const handleLabelMenuClose = () => {
     setLabelAnchorEl(null);
   };
-
   const handleMemberButtonClick = (event) => {
     setMemberAnchorEl(event.currentTarget);
   };
-
   const handleMemberMenuClose = () => {
     setMemberAnchorEl(null);
   };
-
   const handleFileUpload = async (e) => {
     const files = e.target.files;
     setUploadError();
@@ -160,7 +148,6 @@ const EditTaskModal = ({
       setUploadError();
     }, 5000);
   }, [uploadError]);
-
   useEffect(() => {
     if (renderedBoard) {
       const users = renderedBoard.members.filter((user) =>
@@ -672,6 +659,7 @@ const EditTaskModal = ({
                 {assignedUsers.map((user, index) => {
                   return (
                     <Grid
+                      key={index}
                       index={index}
                       sx={{
                         maxHeight: "60px",

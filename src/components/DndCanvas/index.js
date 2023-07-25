@@ -282,7 +282,7 @@ class DndCanvas extends React.Component {
                                     if (list) {
                                         return (
                                             <ListColumn
-                                                key={list.id}
+                                                key={i}
                                                 list={list}
                                                 taskMap={this.state.tasks}
                                                 index={i}
@@ -290,6 +290,7 @@ class DndCanvas extends React.Component {
                                             />
                                         );
                                     }
+                                    return null;
                                 })}
                             {provided.placeholder}
                             <div style={{ padding: "0px 8px" }}>

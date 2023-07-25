@@ -81,3 +81,27 @@ export const ChangeVisibilityBoard = (body) =>
       reject(err);
     }
   });
+
+export const GetCreatedByInfo = (userid) =>
+new Promise(async (resolve, reject) => {
+    try {
+      api.get(`${process.env.REACT_APP_ROOT_API_PATH}boards/created-by-info?userid=${userid}`)
+            .then(({data}) => {
+                resolve(data);
+            })
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+export const UpdateBoardProperty = (body) =>
+    new Promise(async (resolve, reject) => {
+        try {
+            api.put(`${process.env.REACT_APP_ROOT_API_PATH}boards`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
+        } catch (err) {
+            reject(err);
+        }
+    });

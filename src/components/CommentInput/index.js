@@ -86,7 +86,7 @@ const EditDescription = ({ handleButtonClick }) => {
             label="Write a comment..."
             variant="outlined"
             multiline
-            rowsMax={4}
+            //maxRows={4}
             rows={1}
           />
         </Grid>

@@ -8,7 +8,6 @@ import { UIContext } from "provider/UIProvider";
 import { TaskHelpers } from "helpers";
 import { taskStyles } from "./styles";
 import { ActionLabel, Attachments, RemoveAttachments, AddComment } from "api/Task";
-import { v4 as uuidv4 } from "uuid";
 
 class Task extends React.Component {
     constructor(props) {
@@ -70,6 +69,7 @@ class Task extends React.Component {
                     this.setState(
                         {
                             comments: [...this.state.comments, res.responseData],
+                            open: true, messageAlert: "Đã thêm bình luận cho công việc này"
                         })
                     resolve("Property updated successfully!")
                 })
@@ -82,12 +82,12 @@ class Task extends React.Component {
             if (comment.id === commentId) {
                 // remove id matched comment
                 comments.splice(i, 1);
-                this.setState({ comments: comments }, () => {
+                this.setState({ comments: comments, open: true, messageAlert: "Đã xóa bình luận khỏi công việc này" }, () => {
                     TaskHelpers.HandleTaskPropertyUpdate(
                         this.context.renderedBoard,
                         this.props.task.id,
-                        "Comments",
-                        this.state.comments
+                        "DeleteComment",
+                        comment.id
                     ).catch((err) => console.log(err));
                 });
             }
@@ -102,8 +102,7 @@ class Task extends React.Component {
                 const newArrComment = this.state.comments.map(({ user, ...rest }) => {
                     return rest;
                 });
-                console.log('objectdsdsd', newArrComment);
-                this.setState({ comments: comments }, () => {
+                this.setState({ comments: comments, open: true, messageAlert: "Đã sửa bình luận cho công việc này" }, () => {
                     TaskHelpers.HandleTaskPropertyUpdate(
                         this.context.renderedBoard,
                         this.props.task.id,
@@ -124,7 +123,6 @@ class Task extends React.Component {
         // new Promise(async (resolve, reject) => {
         // });
     }
-
     deleteAttachment = (attachmentId) => {
         let attachments = this.state.attachments;
         for (let i = 0; i < attachments.length; i++) {
@@ -254,7 +252,6 @@ class Task extends React.Component {
             members: members || [],
         });
     }
-
     render() {
         const { classes, task, index } = this.props;
         const {
@@ -337,6 +334,7 @@ class Task extends React.Component {
                                                     alignItems="center"
                                                     justifyContent="space-around"
                                                     index={index}
+                                                    key={index}
                                                 >
                                                     <Grid item xs={5}>
                                                         <Typography style={{
@@ -376,6 +374,8 @@ class Task extends React.Component {
                                                         height: "35px",
                                                         marginRight: "8px",
                                                     }}
+                                                    index={index}
+                                                    key={index}
                                                 >
                                                     <UserAvatar
                                                         user={user}
@@ -387,6 +387,7 @@ class Task extends React.Component {
                                         }
                                         if (index === renderedBoard.members.length - 1)
                                             avatarCounter = 0;
+                                        return null;
                                     })}
                                 {members && members.length > 2 ? (
                                     <Grid item className={classes.othersContainer}>
