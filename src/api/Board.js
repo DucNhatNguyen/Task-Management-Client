@@ -15,7 +15,7 @@ export const CreateNewBoard = (boardData) =>
 export const GetUserRelatedBoards = (userid) =>
   new Promise(async (resolve, reject) => {
     try {
-      api.get(`${process.env.REACT_APP_ROOT_API_PATH}user/${userid}/boards`)
+      api.get(`${process.env.REACT_APP_ROOT_API_PATH}boards/user/${userid}`)
             .then(({data}) => {
                 resolve(data);
             })
@@ -105,3 +105,27 @@ export const UpdateBoardProperty = (body) =>
             reject(err);
         }
     });
+
+export const SearchMembers = (keyword) =>
+new Promise(async (resolve, reject) => {
+    try {
+      api.get(`${process.env.REACT_APP_ROOT_API_PATH}user/search?keyword=${keyword}`)
+            .then(({data}) => {
+                resolve(data);
+            })
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+export const ActionMemberOnBoard = (body) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      api.post(`${process.env.REACT_APP_ROOT_API_PATH}boards/invite-member`, body)
+            .then(({data}) => {
+                resolve(data);
+            })
+    } catch (err) {
+      reject(err);
+    }
+  });

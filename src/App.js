@@ -7,6 +7,8 @@ import AuthProvider from "provider/AuthProvider";
 import UIProvider from "provider/UIProvider";
 import { UserHelpers } from "helpers";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [openBackdrop, setOpenBackdrop] = useState(false);
@@ -70,6 +72,18 @@ function App() {
           <div className="App">
             <Loading />
             <Routes />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+              />
           </div>
         </UserProvider>
       </AuthProvider>

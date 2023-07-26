@@ -1,6 +1,8 @@
 import axios from "axios";
-import { SnackBar } from "components";
 import { TokenService } from "services/tokenService";
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_ROOT_API_PATH,
@@ -28,7 +30,7 @@ instance.interceptors.response.use(
     return res;
   },
   async (err) => {
-
+    
     const originalConfig = err.config;
 
     if (originalConfig.url !== "/user/login" && err.response) {
@@ -47,6 +49,20 @@ instance.interceptors.response.use(
           //window.location = window.location.protocol + "//" + window.location.host + "/login"
           //   const { accessToken } = rs.data;
           //   TokenService.updateLocalAccessToken(accessToken);
+
+          //return instance(originalConfig);
+        } catch (_error) {
+          return Promise.reject(_error);
+        }
+      }
+
+      if (err.response.status === 500 && !originalConfig._retry) {
+        originalConfig._retry = true;
+        try {
+          toast.error('Da co loi xay ra', {
+              position: toast.POSITION.TOP_RIGHT
+          });
+          return Promise.reject(err)
 
           //return instance(originalConfig);
         } catch (_error) {

@@ -23,15 +23,23 @@ const AssignMemberMenu = ({
     handleClose();
   };
 
-  useEffect(() => {
-    if (input.length > 0) {
-      const list = memberList.filter((member) => {
-        const name = member.name.toUpperCase();
-        const text = input.toUpperCase();
-        return name.includes(text);
-      });
-      setMemberList(list);
+  const filterData = (query, data) => {
+    if (!query) {
+      return data;
+    } else {
+      return data.filter((d) => d.fullname.toLowerCase().includes(query));
     }
+  };
+  const dataFiltered = filterData(input, memberList)
+  useEffect(() => {
+    // if (input.length > 0) {
+    //   const list = memberList.filter((member) => {
+    //     const name = member.fullname.toUpperCase();
+    //     const text = input.toUpperCase();
+    //     return name.includes(text);
+    //   });
+    //   setMemberList(list);
+    // }
   }, [input]);
 
   useEffect(() => {
@@ -120,8 +128,8 @@ const AssignMemberMenu = ({
               marginBottom: "12px",
               padding: "8px",
             }} xs={11}>
-              {memberList &&
-                memberList.map((user, index) => {
+              {dataFiltered &&
+                dataFiltered.map((user, index) => {
                   return (
                     <Grid
                       index={index}

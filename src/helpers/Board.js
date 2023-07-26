@@ -1,27 +1,27 @@
 import { CreateNewTask, ReorderTaskList, SwitchTasks } from "api/Task";
 import { CreateNewList } from "api/List";
-import { GetBoardColumns, ReorderColumnLists, UpdateBoardProperty } from "api/Board"
+import { ActionMemberOnBoard, GetBoardColumns, ReorderColumnLists, UpdateBoardProperty } from "api/Board"
 import { GetUserRelatedBoards } from "api/Board";
 import { UIHelpers, UserHelpers } from "helpers/";
 
-const ParseBoardId = (
-    boards // structuring boardIds for api call --> ["id1", "id2"]
-) =>
-    new Promise((resolve, reject) => {
-        let body = [];
-        try {
-            for (let i = 0; i < boards.length; i++) {
-                if (boards[i].boardId !== undefined) {
-                    body.push(boards[i].boardId);
-                }
-                if (i === boards.length - 1) {
-                    resolve(body);
-                }
-            }
-        } catch (err) {
-            reject(err);
-        }
-    });
+// const ParseBoardId = (
+//     boards // structuring boardIds for api call --> ["id1", "id2"]
+// ) =>
+//     new Promise((resolve, reject) => {
+//         let body = [];
+//         try {
+//             for (let i = 0; i < boards.length; i++) {
+//                 if (boards[i].boardId !== undefined) {
+//                     body.push(boards[i].boardId);
+//                 }
+//                 if (i === boards.length - 1) {
+//                     resolve(body);
+//                 }
+//             }
+//         } catch (err) {
+//             reject(err);
+//         }
+//     });
 
 const HandleUserRelatedBoards = (
     // fetching user related boards and seting them to context
@@ -125,20 +125,24 @@ const HandleBoardCreation = (
 
 const HandleInvitingUser = (boardId, input) =>
     new Promise((resolve, reject) => {
-        // InviteUser({ boardId: boardId, address: input })
-        //     .then((response) => {
-        //         resolve(response);
-        //     })
-        //     .catch((err) => {
-        //         reject(err);
-        //     });
+        ActionMemberOnBoard({
+            boardId: boardId,
+            memberName: input,
+            Action: "Invite"
+        })
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((err) => {
+                reject(err);
+            });
     });
 
 const HandleListCreation = (board, lists, list, listOrder) =>
     new Promise((resolve, reject) => {
         if ((board && lists, list)) {
             board.lists = lists;
-            //board.listOrder = listOrder;
+            board.listOrder = listOrder;
             CreateNewList({
                 id: list.id,
                 boardid: board.id,

@@ -173,8 +173,9 @@ class DndCanvas extends React.Component {
         };
 
         updatedState.lists[listId] = list;
-
+        updatedState.listOrder.push(listId);
         this.setState(updatedState);
+
         BoardHelpers.HandleListCreation(
             board,
             updatedState.lists,
@@ -282,7 +283,7 @@ class DndCanvas extends React.Component {
                                     if (list) {
                                         return (
                                             <ListColumn
-                                                key={i}
+                                                key={list.id}
                                                 list={list}
                                                 taskMap={this.state.tasks}
                                                 index={i}

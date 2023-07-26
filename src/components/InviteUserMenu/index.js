@@ -3,6 +3,9 @@ import { Typography, Grid, Button } from "@mui/material";
 import { UserContext } from "provider/UserProvider";
 import { BoardHelpers } from "helpers";
 import { PopMenu } from "./styles";
+import useDebounce from "hooks/useDebounce";
+import { SearchMembers } from "api/Board";
+import UserAvatar from "components/UserAvatar";
 
 const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
     const { renderedBoard, setRenderedBoard } = useContext(UserContext);
@@ -11,25 +14,47 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
     const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
 
+    const [searchMember, setSearchMember] = useState();
+    
+    // DeBounce Function
+  useDebounce(() => {
+    if(input.trim().length > 0){
+        SearchMembers(input).then((res) => {
+        if (res.responseCode === 200){
+            if (res.responseData && res.responseData.length > 0){
+                setSearchMember(
+                    res.responseData.filter((d) => d.fullname.toLowerCase().includes(input.toLowerCase()))
+                );
+            } else {
+                setError("Không tìm thấy thông tin thành viên!");
+            }
+        }
+    })} else {
+        setSearchMember([])
+    }
+    }, [input], 800
+  );
+
     useEffect(() => {
         setError("");
     }, [input]);
 
     const handleInviteButtonClick = () => {
         if (!input.trim().length > 0) {
-            setError("Input cannot be empty!");
+            setError("Không được để trống!");
+        } else if (renderedBoard.members.filter(i => i.fullname.toLowerCase() === input.toLowerCase()).length > 0) {
+            setError("Thành viên này đã có trong board");
         } else {
             setLoading(true);
             BoardHelpers.HandleInvitingUser(boardId, input)
                 .then((response) => {
                     setLoading(false);
-                    if (response.statusCode === 500) {
-                        setError(response.error);
-                    } else if (response.statusCode === 200) {
+                    if (response.responseCode === 500) {
+                        setError("Có lỗi xảy ra!");
+                    } else if (response.responseCode === 200) {
                         let board = { ...renderedBoard };
-                        board.userData.push(response.data);
-                        board.users.push({ uid: response.data.uid });
-                        //setRenderedBoard(board);
+                        board.members.push(response.responseData);
+                        setRenderedBoard(board);
                         handleClose();
                         setError("");
                         setInput("");
@@ -47,6 +72,9 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
         }
     };
 
+    const handleMemberClick = (fullname) => {
+        setInput(fullname)
+    }
     return (
         <div>
             <PopMenu
@@ -78,7 +106,7 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
                             fontWeight: "600",
                             fontSize: "1rem"
                         }} component="p">
-                            Invite User
+                            Thêm thành viên
                         </Typography>
                     </Grid>
                     {/* <Grid item xs={12}>
@@ -107,7 +135,7 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
                         <input
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="User address"
+                            placeholder="Tên"
                             type="text"
                             style={{
                                 width: "100%",
@@ -139,7 +167,7 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
                                 paddingLeft: "24px",
                                 paddingRight: "24px"
                             }}>
-                                Not a valid user address!
+                                {error}
                             </Typography>
                         </Grid>
                     )}
@@ -166,10 +194,74 @@ const InviteUserMenu = ({ boardId, anchorEl, handleClose }) => {
                             color="primary"
                             disabled={loading}
                         >
-                            Invite
+                            Mời
                         </Button>
                     </Grid>
                 </Grid>
+
+                {searchMember &&
+          searchMember.length > 0 && (
+            <Grid item container style={{
+              background: "#FFFFFF",
+              border: "1px solid #E0E0E0",
+              borderRadius: "8px",
+              boxShadow: "0px 2px 8px rgb(0 0 0 / 10%)",
+              margin: "auto",
+              marginBottom: "12px",
+              padding: "8px",
+            }} xs={11}>
+              {searchMember &&
+                searchMember.map((user, index) => {
+                  return (
+                    <Grid
+                      index={index}
+                      item
+                      container
+                      xs={12}
+                      style={{
+                        padding: "8px",
+                        marginBottom: "8px",
+                        borderRadius: "8px",
+                        transition: "background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                      }}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#d7ffd9",
+                          cursor: "pointer",
+                        }
+                      }}
+                      onClick={() => handleMemberClick(user.fullname)}
+                      key={index}
+                    >
+                      <Grid item xs style={{ maxWidth: "32px" }}>
+                        <UserAvatar user={user} styles={{
+                          borderRadius: "8px",
+                          height: "2rem",
+                          width: "2rem"
+                        }} />
+                      </Grid>
+                      <Grid
+                        item
+                        container
+                        alignItems="center"
+                        xs
+                        style={{ maxWidth: "180px" }}
+                      >
+                        <Typography style={{
+                          fontWeight: 600,
+                          fontSize: "0.875rem",
+                          lineHeight: "18px",
+                          letterSpacing: "-0.035em",
+                          paddingLeft: "16px"
+                        }}>
+                          {user.fullname}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  );
+                })}
+            </Grid>
+          )}
             </PopMenu>
         </div>
     );
