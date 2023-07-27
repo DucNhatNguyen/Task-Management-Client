@@ -3,7 +3,7 @@ import {
     Route,
     Routes
 } from "react-router-dom";
-import { Boards, Login, SignUp } from "pages";
+import { Boards, Login, SignUp, Profile } from "pages";
 import Board from "pages/Board/Board";
 import { Authentication } from "provider/AuthProvider";
 
@@ -27,6 +27,16 @@ const Layout = (props) => {
                 element={<Boards />}
                 exact
                 path="/boards"
+            />
+            <Route
+                element={<Boards />}
+                exact
+                path="/"
+            />
+            <Route
+                element={<Profile />}
+                exact
+                path="/profile"
             />
             <Route
                 element={<Board />}

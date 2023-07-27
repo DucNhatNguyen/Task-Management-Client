@@ -38,10 +38,15 @@ instance.interceptors.response.use(
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
         try {
+          toast.error('Hết phiên đăng nhập. Vui lòng đăng nhập lại!', {
+              position: toast.POSITION.TOP_RIGHT
+          });
 
-          localStorage.removeItem("pmt_userid");
-          localStorage.removeItem("pmt_token");
-          window.location.href = '/login';
+          setTimeout(() => {
+            localStorage.removeItem("pmt_userid");
+            localStorage.removeItem("pmt_token");
+            window.location.href = '/login';
+          }, 3000);
 
           //   const rs = await instance.post("/user/refreshtoken", {
           //     refreshToken: TokenService.getLocalRefreshToken(),
@@ -59,7 +64,7 @@ instance.interceptors.response.use(
       if (err.response.status === 500 && !originalConfig._retry) {
         originalConfig._retry = true;
         try {
-          toast.error('Da co loi xay ra', {
+          toast.error('Đã có lỗi xảy ra!', {
               position: toast.POSITION.TOP_RIGHT
           });
           return Promise.reject(err)

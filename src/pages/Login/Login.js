@@ -45,12 +45,10 @@ const Login = () => {
         e.preventDefault();
         handleLogin();
     };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setInputs((prev) => ({ ...prev, [name]: value }));
     };
-
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
             return;

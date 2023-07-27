@@ -6,7 +6,7 @@ import {
     IconButton,
     InputAdornment,
 } from "@mui/material";
-import { LockOutlined, Mail, Lock, Twitter, GitHub, Google } from "@mui/icons-material";
+import { LockOutlined, Mail, Lock, Person } from "@mui/icons-material";
 import { AuthTheme } from "layouts";
 import {
     formStyles,
@@ -43,7 +43,7 @@ const AuthForm = ({
                             required
                             fullWidth
                             id="email"
-                            label="Email"
+                            label="Username"
                             name="email"
                             autoComplete="off"
                             InputProps={{
@@ -53,7 +53,7 @@ const AuthForm = ({
                                 },
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <Mail style={{ color: "#828282" }} />
+                                        <Person style={{ color: "#828282" }} />
                                     </InputAdornment>
                                 ),
                             }}
@@ -176,7 +176,7 @@ const AuthForm = ({
                             variant="body2"
                             style={{ marginTop: "24px", textAlign: "end", color: "#828282" }}
                         >
-                            email : test@gmail.com
+                            email : nhat
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
@@ -184,7 +184,7 @@ const AuthForm = ({
                             variant="body2"
                             style={{ marginTop: "8px", textAlign: "end", color: "#828282" }}
                         >
-                            password : Trellotest.
+                            password : 123
                         </Typography>
                     </Grid>
                 </StyledGridContainer>

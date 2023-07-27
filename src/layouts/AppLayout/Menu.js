@@ -88,7 +88,7 @@ const Menu = ({ navigate }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <PopMenuItem onClick={() => navigate("/")}>
+                <PopMenuItem onClick={() => navigate("/boards")}>
                     <ListItemIcon>
                         <Assignment fontSize="small" />
                     </ListItemIcon>

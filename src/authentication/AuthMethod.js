@@ -1,4 +1,6 @@
 import { handleSignIn } from "functions/UserFunction";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = (
     email,
@@ -37,9 +39,14 @@ const Login = (
                 const token = data.responseData.token;
                 handleSignIn(data.responseData.user, setUserData, setOpenBackdrop)
                 
+                toast.success('Đăng nhập thành công', {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+
                 await localStorage.setItem("pmt_token", token);
                 await localStorage.setItem("pmt_userid", data.responseData.user.id);
                 await setToken(token);
+                
                 resolve(data.responseData)
             })
         } catch (err) {
@@ -50,6 +57,9 @@ const Login = (
 };
 
 const Logout = (setErrors, setToken) => {
+    toast.success('Đăng xuất thành công', {
+              position: toast.POSITION.TOP_RIGHT
+          });
     localStorage.removeItem("pmt_token");
     localStorage.removeItem("pmt_userid");
     setToken(null);
